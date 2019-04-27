@@ -1,6 +1,6 @@
 from pympler import asizeof
 
-from solutions.full_graph.graph import Graph
+from sketches.full_graph.graph import Graph
 
 graph = None
 
