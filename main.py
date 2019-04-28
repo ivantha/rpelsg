@@ -1,6 +1,5 @@
 from _datetime import datetime
 
-from utils import *
 from sketches import full_graph
 
 if __name__ == '__main__':
@@ -8,36 +7,17 @@ if __name__ == '__main__':
 
     sketch = full_graph
 
-    sketch.init_environment()
+    sketch.init_environment(base_dir_path='./datasets/unicorn_wget/benign_base/',
+                            streaming_dir_path='./datasets/unicorn_wget/benign_streaming/')
 
-    # base graph
-    base_start_time = datetime.now()
-    base_data_files = get_files('./datasets/unicorn_wget/benign_base/')
-    for data_file in base_data_files:
-        for line in get_lines(data_file):
-            source_id, target_id, _ = line.split()
+    # construct base graph
+    base_start_time, base_end_time = sketch.construct_base_graph()
 
-            sketch.add_node(source_id)
-            sketch.add_node(target_id)
-            sketch.add_edge(source_id, target_id)
-    base_end_time = datetime.now()
-
-    # streaming graph
-    streaming_start_time = datetime.now()
-    streaming_data_files = get_files('./datasets/unicorn_wget/benign_streaming/')
-    for data_file in streaming_data_files:
-        for line in get_lines(data_file):
-            source_id, target_id, _ = line.split()
-
-            sketch.add_node(source_id)
-            sketch.add_node(target_id)
-            sketch.add_edge(source_id, target_id)
-    streaming_end_time = datetime.now()
+    # streaming edges
+    streaming_start_time, streaming_end_time = sketch.stream_edges()
 
     # print analytics
-    analytics_start_time = datetime.now()
-    sketch.print_analytics()
-    analytics_end_time = datetime.now()
+    analytics_start_time, analytics_end_time = sketch.print_analytics()
 
     # calculate time
     base_time = base_end_time - base_start_time
