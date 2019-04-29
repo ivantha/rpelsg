@@ -5,7 +5,7 @@ import numpy as np
 from pympler import asizeof
 
 from .sketch import Sketch
-from .utils import get_files, get_lines
+from utils import get_txt_files, get_lines
 
 
 class Table:
@@ -60,10 +60,10 @@ class GlobalSketch(Sketch):
     def _stream(self, path: str):
         start_time = datetime.now()
 
-        data_files = get_files(path)
+        data_files = get_txt_files(path)
         for data_file in data_files:
             for line in get_lines(data_file):
-                source_id, target_id, _ = line.split()
+                source_id, target_id = line.split()
                 self._table.add_edge('{},{}'.format(source_id, target_id))
 
         end_time = datetime.now()

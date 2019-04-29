@@ -1,7 +1,7 @@
 import glob
 
 
-def get_files(dir_path: str):
+def get_txt_files(dir_path: str):
     return [f for f in glob.glob(dir_path + '*.txt', recursive=True)]
 
 

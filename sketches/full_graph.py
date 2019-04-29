@@ -4,7 +4,7 @@ from typing import Dict, List
 from pympler import asizeof
 
 from sketches.sketch import Sketch
-from .utils import get_files, get_lines
+from utils import get_txt_files, get_lines
 
 
 class Node:
@@ -60,10 +60,10 @@ class FullGraph(Sketch):
     def _stream(self, path: str):
         start_time = datetime.now()
 
-        data_files = get_files(path)
+        data_files = get_txt_files(path)
         for data_file in data_files:
             for line in get_lines(data_file):
-                source_id, target_id, _ = line.split()
+                source_id, target_id = line.split()
 
                 self.graph.add_node(source_id)
                 self.graph.add_node(target_id)
