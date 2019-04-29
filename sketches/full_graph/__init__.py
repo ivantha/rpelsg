@@ -1,9 +1,7 @@
 from _datetime import datetime
 
-from pympler import asizeof
-
-from sketches.full_graph.graph import Graph
-from utils import get_files, get_lines
+from .graph import Graph
+from ..utils import get_files, get_lines
 
 graph: Graph = None
 base_path: str = None
@@ -29,18 +27,7 @@ def stream_edges():
 
 
 def print_analytics():
-    global graph
-
-    start_time = datetime.now()
-
-    print('Node count: {:,}'.format(graph._node_count))
-    print('Edge count: {:,}'.format(graph._edge_count))
-    print('Graph object size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(graph),
-                                                           asizeof.asizeof(graph) / 1024.0 / 1024.0))
-
-    end_time = datetime.now()
-
-    return start_time, end_time
+    return graph.print_analytics()
 
 
 def _stream(path: str):

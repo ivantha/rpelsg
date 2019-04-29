@@ -1,11 +1,11 @@
 from _datetime import datetime
 
-from sketches import full_graph
+from sketches import global_sketch
 
 if __name__ == '__main__':
     process_start_time = datetime.now()
 
-    sketch = full_graph
+    sketch = global_sketch
 
     sketch.init_environment(base_dir_path='./datasets/unicorn_wget/benign_base/',
                             streaming_dir_path='./datasets/unicorn_wget/benign_streaming/')
@@ -28,5 +28,5 @@ if __name__ == '__main__':
     print('')
     print('Base graph construction time: {} ({:.2f}%)'.format(base_time, (base_time / process_time * 100.0)))
     print('Streaming time: {} ({:.2f}%)'.format(streaming_time, (streaming_time / process_time * 100.0)))
-    print('Post analytics time: {} ({:.2f}%)'.format(analytics_time, (analytics_time / process_time * 100)))
+    print('Analytics time: {} ({:.2f}%)'.format(analytics_time, (analytics_time / process_time * 100)))
     print('Total process time: {}'.format(process_time))
