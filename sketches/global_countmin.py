@@ -1,11 +1,10 @@
 import hashlib
-from _datetime import datetime
 
 import numpy as np
 from pympler import asizeof
 
-from .sketch import Sketch
-from utils import get_txt_files, get_lines
+from common.utils import timeit
+from sketches.sketch import Sketch
 
 
 class Table:
@@ -13,7 +12,7 @@ class Table:
     def __init__(self, m: int, d: int):
         """
         :param m: Size of the hash tables
-        :param d: Number of hash tables
+        :param d: Number of hash functions
         """
         self.m = m
         self.d = d
@@ -33,7 +32,7 @@ class Table:
             yield int(x_hash.hexdigest(), 16) % self.m
 
 
-class GlobalSketch(Sketch):
+class GlobalCountMin(Sketch):
 
     def __init__(self, base_path: str, streaming_path: str, m: int = 1048576, d: int = 5):
         """
@@ -46,26 +45,19 @@ class GlobalSketch(Sketch):
 
         self._table = Table(m, d)
 
-    def print_analytics(self):
-        start_time = datetime.now()
+    @timeit
+    def construct_base_graph(self):
+        self._stream(self.base_path, self._edge_fun)
 
+    @timeit
+    def construct_stream_graph(self):
+        self._stream(self.streaming_path, self._edge_fun)
+
+    @timeit
+    def print_analytics(self):
         print('Edge count: {:,}'.format(self._table._edge_count))
         print('Table object size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self._table._tables),
                                                                asizeof.asizeof(self._table._tables) / 1024.0 / 1024.0))
 
-        end_time = datetime.now()
-
-        return start_time, end_time
-
-    def _stream(self, path: str):
-        start_time = datetime.now()
-
-        data_files = get_txt_files(path)
-        for data_file in data_files:
-            for line in get_lines(data_file):
-                source_id, target_id = line.split()
-                self._table.add_edge('{},{}'.format(source_id, target_id))
-
-        end_time = datetime.now()
-
-        return start_time, end_time
+    def _edge_fun(self, source_id, target_id):
+        self._table.add_edge('{},{}'.format(source_id, target_id))

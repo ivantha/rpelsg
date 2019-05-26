@@ -2,7 +2,7 @@ import os
 
 import requests
 
-from utils import get_txt_files, get_lines
+from common.utils import get_txt_files, get_lines
 
 dir = '../datasets/unicorn_wget'
 files = [
@@ -16,9 +16,9 @@ if __name__ == '__main__':
     os.makedirs(dir, exist_ok=True)
 
     for file_base in files:
-        # r = requests.get('https://ivantha.github.io/rpelsg-unicorn-wget-dataset/' + file_base)
-        # f = open('{}/{}.zip'.format(dir, file_base), 'wb')
-        # f.write(r.content)
+        r = requests.get('https://ivantha.github.io/rpelsg-unicorn-wget-dataset/' + file_base)
+        f = open('{}/{}.zip'.format(dir, file_base), 'wb')
+        f.write(r.content)
 
         # TODO : unzip files
 
@@ -37,7 +37,7 @@ if __name__ == '__main__':
                     new_f.write('{},{}\n'.format(source_id, target_id))
 
                     # start writing to a new file
-                    if line_counter == 10000:
+                    if line_counter == 100000:
                         new_f.close()
 
                         new_f_counter += 1
