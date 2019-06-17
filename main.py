@@ -3,12 +3,13 @@ from _datetime import datetime
 from sketches.full_graph import FullGraph
 from sketches.global_countmin import GlobalCountMin
 from sketches.gsketch import GSketch
+from sketches.tcm import TCM
 
 if __name__ == '__main__':
     process_start_time = datetime.now()
 
-    sketch = GSketch(base_path='./datasets/unicorn_wget/benign_base/',
-                     streaming_path='./datasets/unicorn_wget/benign_streaming/')
+    sketch = TCM(base_path='./datasets/unicorn_wget/benign_base/',
+                 streaming_path='./datasets/unicorn_wget/benign_streaming/')
 
     # construct base graph
     base_start_time, base_end_time = sketch.construct_base_graph()

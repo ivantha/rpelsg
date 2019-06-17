@@ -2,6 +2,7 @@ import hashlib
 import operator
 
 import numpy as np
+from pympler import asizeof
 
 from common import sampling
 from common.utils import timeit
@@ -220,7 +221,8 @@ class GSketch(Sketch):
 
     @timeit
     def print_analytics(self):
-        pass
+        print('Sketch-hash object size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self.bpt.sketch_hash),
+                                                               asizeof.asizeof(self.bpt.sketch_hash) / 1024.0 / 1024.0))
 
     def _edge_fun(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
