@@ -11,7 +11,7 @@ class Table:
 
     def __init__(self, w: int, d: int):
         """
-        :param w: Size of the hash tables
+        :param w: Size of the hash table
         :param d: Number of hash functions
         """
         self.w = w
@@ -45,7 +45,7 @@ class TCM(Sketch):
         :param base_path:
         :param streaming_path:
         :param w: Size of the hash tables (side width)
-        :param d: Number of hash tables
+        :param d: Number of hash functions
         """
         super().__init__(base_path, streaming_path)
 
