@@ -220,8 +220,8 @@ class GSketch(Sketch):
         self._stream(self.streaming_path, self._edge_fun)
 
     @timeit
-    def print_analytics(self):
-        print('Sketch-hash object size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self.bpt.sketch_hash),
+    def print_analytics(self, file):
+        file.write('\nSketch-hash object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.bpt.sketch_hash),
                                                                asizeof.asizeof(self.bpt.sketch_hash) / 1024.0 / 1024.0))
 
     def _edge_fun(self, source_id, target_id):

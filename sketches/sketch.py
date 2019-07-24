@@ -23,7 +23,7 @@ class Sketch(ABC):
         pass
 
     @abstractmethod
-    def print_analytics(self):
+    def print_analytics(self, file):
         pass
 
     @staticmethod

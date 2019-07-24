@@ -60,9 +60,9 @@ class TCM(Sketch):
         self._stream(self.streaming_path, self._edge_fun)
 
     @timeit
-    def print_analytics(self):
-        print('Edge count: {:,}'.format(self.table.edge_count))
-        print('Table object size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self.table.matrix),
+    def print_analytics(self, file):
+        file.write('\nEdge count: {:,}\n'.format(self.table.edge_count))
+        file.write('Table object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.table.matrix),
                                                                asizeof.asizeof(self.table.matrix) / 1024.0 / 1024.0))
 
     def _edge_fun(self, source_id, target_id):

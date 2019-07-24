@@ -54,9 +54,9 @@ class GlobalCountMin(Sketch):
         self._stream(self.streaming_path, self._edge_fun)
 
     @timeit
-    def print_analytics(self):
-        print('Edge count: {:,}'.format(self._table._edge_count))
-        print('Table object size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self._table._tables),
+    def print_analytics(self, file):
+        file.write('\nEdge count: {:,}\n'.format(self._table._edge_count))
+        file.write('Table object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self._table._tables),
                                                                asizeof.asizeof(self._table._tables) / 1024.0 / 1024.0))
 
     def _edge_fun(self, source_id, target_id):

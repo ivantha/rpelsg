@@ -49,14 +49,14 @@ class FullGraph(Sketch):
         self._stream(self.streaming_path, self._edge_fun)
 
     @timeit
-    def print_analytics(self):
-        print('Node count: {:,}'.format(self.graph._node_count))
-        print('Edge count: {:,}'.format(self.graph._edge_count))
-        print('Node store size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self.graph._nodes),
+    def print_analytics(self, file):
+        file.write('\nNode count: {:,}\n'.format(self.graph._node_count))
+        file.write('Edge count: {:,}\n'.format(self.graph._edge_count))
+        file.write('Node store size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.graph._nodes),
                                                              asizeof.asizeof(self.graph._nodes) / 1024.0 / 1024.0))
-        print('Edge store size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self.graph._edges),
+        file.write('Edge store size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.graph._edges),
                                                              asizeof.asizeof(self.graph._edges) / 1024.0 / 1024.0))
-        print('Graph object size: {} bytes ({:.4f} MB)'.format(asizeof.asizeof(self),
+        file.write('Graph object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self),
                                                                asizeof.asizeof(self) / 1024.0 / 1024.0))
 
     def _edge_fun(self, source_id, target_id):
