@@ -191,8 +191,8 @@ class GSketch(Sketch):
             w_0: int = 100,
             C: int = 10
     ):
-        super().__init__(base_path, streaming_path)
-
+        self.base_path = base_path
+        self.streaming_path = streaming_path
         self.sample_size = sample_size
         self.sketch_total_width = sketch_total_width
         self.sketch_depth = sketch_depth
@@ -202,7 +202,7 @@ class GSketch(Sketch):
         self.sample_stream = None
 
     @timeit
-    def construct_base_graph(self):
+    def initialize(self):
         # Reservoir sampling for k items as (i, j)
         self.sample_stream = sampling.select_k_items(self.base_path, self.sample_size)
 
@@ -213,19 +213,14 @@ class GSketch(Sketch):
         # Create outlier sketch
         self.bpt.sketch_hash.outliers = Table(self.sketch_total_width, self.sketch_depth)
 
-        self._stream(self.base_path, self._edge_fun)
-
-    @timeit
-    def construct_stream_graph(self):
-        self._stream(self.streaming_path, self._edge_fun)
+    def add_edge(self, source_id, target_id):
+        if source_id in self.bpt.sketch_hash.hash:
+            self.bpt.sketch_hash.tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge(
+                '{},{}'.format(source_id, target_id))
+        else:
+            self.bpt.sketch_hash.outliers.add_edge('{},{}'.format(source_id, target_id))
 
     @timeit
     def print_analytics(self, file):
         file.write('\nSketch-hash object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.bpt.sketch_hash),
                                                                asizeof.asizeof(self.bpt.sketch_hash) / 1024.0 / 1024.0))
-
-    def _edge_fun(self, source_id, target_id):
-        if source_id in self.bpt.sketch_hash.hash:
-            self.bpt.sketch_hash.tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge('{},{}'.format(source_id, target_id))
-        else:
-            self.bpt.sketch_hash.outliers.add_edge('{},{}'.format(source_id, target_id))

@@ -36,34 +36,27 @@ class TCM(Sketch):
 
     def __init__(
             self,
-            base_path: str,
-            streaming_path: str,
             w: int = 1024,
             d: int = 5
     ):
         """
-        :param base_path:
-        :param streaming_path:
         :param w: Size of the hash tables (side width)
         :param d: Number of hash functions
         """
-        super().__init__(base_path, streaming_path)
+        self.w = w
+        self.d = d
 
-        self.table = Table(w, d)
-
-    @timeit
-    def construct_base_graph(self):
-        self._stream(self.base_path, self._edge_fun)
+        self.table = None
 
     @timeit
-    def construct_stream_graph(self):
-        self._stream(self.streaming_path, self._edge_fun)
+    def initialize(self):
+        self.table = Table(self.w, self.d)
+
+    def add_edge(self, source_id, target_id):
+        self.table.add_edge(source_id, target_id)
 
     @timeit
     def print_analytics(self, file):
         file.write('\nEdge count: {:,}\n'.format(self.table.edge_count))
         file.write('Table object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.table.matrix),
                                                                asizeof.asizeof(self.table.matrix) / 1024.0 / 1024.0))
-
-    def _edge_fun(self, source_id, target_id):
-        self.table.add_edge(source_id, target_id)

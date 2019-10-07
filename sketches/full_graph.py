@@ -35,18 +35,20 @@ class Graph:
 
 class FullGraph(Sketch):
 
-    def __init__(self, base_path, streaming_path):
-        super().__init__(base_path, streaming_path)
+    def __init__(self):
+        self.graph = None
 
+    @timeit
+    def initialize(self):
         self.graph = Graph()
 
-    @timeit
-    def construct_base_graph(self):
-        self._stream(self.base_path, self._edge_fun)
+    def add_edge(self, source_id, target_id):
+        self.graph.add_node(source_id)
+        self.graph.add_node(target_id)
 
-    @timeit
-    def construct_stream_graph(self):
-        self._stream(self.streaming_path, self._edge_fun)
+        assert source_id in self.graph._nodes, 'source_id "{}" not found'.format(source_id)
+        assert target_id in self.graph._nodes, 'target_id "{}" not found'.format(target_id)
+        self.graph.add_edge(source_id, target_id)
 
     @timeit
     def print_analytics(self, file):
@@ -58,11 +60,3 @@ class FullGraph(Sketch):
                                                              asizeof.asizeof(self.graph._edges) / 1024.0 / 1024.0))
         file.write('Graph object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self),
                                                                asizeof.asizeof(self) / 1024.0 / 1024.0))
-
-    def _edge_fun(self, source_id, target_id):
-        self.graph.add_node(source_id)
-        self.graph.add_node(target_id)
-
-        assert source_id in self.graph._nodes, 'source_id "{}" not found'.format(source_id)
-        assert target_id in self.graph._nodes, 'target_id "{}" not found'.format(target_id)
-        self.graph.add_edge(source_id, target_id)

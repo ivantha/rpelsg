@@ -34,30 +34,25 @@ class Table:
 
 class GlobalCountMin(Sketch):
 
-    def __init__(self, base_path: str, streaming_path: str, m: int = 1048576, d: int = 5):
+    def __init__(self, m: int = 1048576, d: int = 5):
         """
-        :param base_path:
-        :param streaming_path:
         :param m: Size of the hash tables
         :param d: Number of hash tables
         """
-        super().__init__(base_path, streaming_path)
+        self.m = m
+        self.d = d
 
-        self._table = Table(m, d)
-
-    @timeit
-    def construct_base_graph(self):
-        self._stream(self.base_path, self._edge_fun)
+        self._table = None
 
     @timeit
-    def construct_stream_graph(self):
-        self._stream(self.streaming_path, self._edge_fun)
+    def initialize(self):
+        self._table = Table(self.m, self.d)
+
+    def add_edge(self, source_id, target_id):
+        self._table.add_edge('{},{}'.format(source_id, target_id))
 
     @timeit
     def print_analytics(self, file):
         file.write('\nEdge count: {:,}\n'.format(self._table._edge_count))
         file.write('Table object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self._table._tables),
                                                                asizeof.asizeof(self._table._tables) / 1024.0 / 1024.0))
-
-    def _edge_fun(self, source_id, target_id):
-        self._table.add_edge('{},{}'.format(source_id, target_id))

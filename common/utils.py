@@ -6,11 +6,6 @@ def get_txt_files(dir_path: str):
     return [f for f in glob.glob(dir_path + '*.txt', recursive=True)]
 
 
-def get_lines(file_path: str):
-    f = open(file_path)
-    return f.readlines()
-
-
 def timeit(func):
     def wrapper(*args, **kwargs):
         start_time = datetime.now()
