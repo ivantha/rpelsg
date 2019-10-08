@@ -221,6 +221,7 @@ class GSketch(Sketch):
             self.bpt.sketch_hash.outliers.add_edge('{},{}'.format(source_id, target_id))
 
     @timeit
-    def print_analytics(self, file):
-        file.write('\nSketch-hash object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.bpt.sketch_hash),
-                                                               asizeof.asizeof(self.bpt.sketch_hash) / 1024.0 / 1024.0))
+    def get_analytics(self):
+        return {
+            'sketch_hash_object_size': asizeof.asizeof(self.bpt.sketch_hash)
+        }

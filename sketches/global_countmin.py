@@ -52,7 +52,8 @@ class GlobalCountMin(Sketch):
         self._table.add_edge('{},{}'.format(source_id, target_id))
 
     @timeit
-    def print_analytics(self, file):
-        file.write('\nEdge count: {:,}\n'.format(self._table._edge_count))
-        file.write('Table object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self._table._tables),
-                                                               asizeof.asizeof(self._table._tables) / 1024.0 / 1024.0))
+    def get_analytics(self):
+        return {
+            'edge_count': self._table._edge_count,
+            'table_object_size': asizeof.asizeof(self._table._tables)
+        }

@@ -12,5 +12,5 @@ class Sketch(ABC):
         pass
 
     @abstractmethod
-    def print_analytics(self, file):
+    def get_analytics(self):
         pass

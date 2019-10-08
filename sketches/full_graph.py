@@ -51,12 +51,11 @@ class FullGraph(Sketch):
         self.graph.add_edge(source_id, target_id)
 
     @timeit
-    def print_analytics(self, file):
-        file.write('\nNode count: {:,}\n'.format(self.graph._node_count))
-        file.write('Edge count: {:,}\n'.format(self.graph._edge_count))
-        file.write('Node store size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.graph._nodes),
-                                                             asizeof.asizeof(self.graph._nodes) / 1024.0 / 1024.0))
-        file.write('Edge store size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self.graph._edges),
-                                                             asizeof.asizeof(self.graph._edges) / 1024.0 / 1024.0))
-        file.write('Graph object size: {} bytes ({:.4f} MB)\n'.format(asizeof.asizeof(self),
-                                                               asizeof.asizeof(self) / 1024.0 / 1024.0))
+    def get_analytics(self):
+        return {
+            'node_count': self.graph._node_count,
+            'edge_count': self.graph._edge_count,
+            'node_store_size': asizeof.asizeof(self.graph._nodes),
+            'edge_store_size': asizeof.asizeof(self.graph._edges),
+            'graph_object_size': asizeof.asizeof(self)
+        }

@@ -1,4 +1,4 @@
-# Building the base and the streaming part of the graph
+# Sketch construction time
 
 from _datetime import datetime
 import os
@@ -10,13 +10,15 @@ from sketches.global_countmin import GlobalCountMin
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
-
 if __name__ == '__main__':
     # base_path: Path of the sample vertices list that will be used to create the base graph
     base_path = '../datasets/unicorn_wget_small/benign_base/'
 
     # streaming_path: Path of the vertices list that will be streamed
     streaming_path = '../datasets/unicorn_wget_small/benign_streaming/'
+
+    base_edge_count = utils.get_edge_count(base_path)
+    streaming_edge_count = utils.get_edge_count(streaming_path)
 
     sketches = [
         (FullGraph(), 'FullGraph'),
@@ -51,19 +53,16 @@ if __name__ == '__main__':
 
         process_end_time = datetime.now()
 
-        # get analytics
-        analytics_start_time, analytics_end_time, analytics_output = sketch.get_analytics()
-
         output = {
             'sketch': name,
-            'analytics_output': analytics_output,
+            'base_edge_count': base_edge_count,
+            'streaming_edge_count': streaming_edge_count,
             'initialize_time': '{}'.format(initialize_end_time - initialize_start_time),
             'base_construction_time': '{}'.format(base_end_time - base_start_time),
             'streaming_time': '{}'.format(streaming_end_time - streaming_start_time),
             'process_time': '{}'.format(process_end_time - process_start_time),
-            'analytics_time': '{}'.format(analytics_end_time - analytics_start_time)
         }
 
-        os.makedirs(os.path.dirname('../output/build/{}.json'.format(name)), exist_ok=True)
-        with open('../output/build/{}.json'.format(name), 'w') as file:
+        os.makedirs(os.path.dirname('../output/sketch_time/{}.json'.format(name)), exist_ok=True)
+        with open('../output/sketch_time/{}.json'.format(name), 'w') as file:
             json.dump(output, file, indent=4)
