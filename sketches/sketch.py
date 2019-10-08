@@ -12,5 +12,9 @@ class Sketch(ABC):
         pass
 
     @abstractmethod
+    def get_edge_frequency(self, source_id, target_id):
+        pass
+
+    @abstractmethod
     def get_analytics(self):
         pass

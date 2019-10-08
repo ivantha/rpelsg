@@ -220,6 +220,9 @@ class GSketch(Sketch):
         else:
             self.bpt.sketch_hash.outliers.add_edge('{},{}'.format(source_id, target_id))
 
+    def get_edge_frequency(self, source_id, target_id):
+        pass
+
     @timeit
     def get_analytics(self):
         return {

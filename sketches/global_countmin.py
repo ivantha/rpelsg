@@ -51,6 +51,9 @@ class GlobalCountMin(Sketch):
     def add_edge(self, source_id, target_id):
         self._table.add_edge('{},{}'.format(source_id, target_id))
 
+    def get_edge_frequency(self, source_id, target_id):
+        pass
+
     @timeit
     def get_analytics(self):
         return {

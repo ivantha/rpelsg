@@ -55,6 +55,9 @@ class TCM(Sketch):
     def add_edge(self, source_id, target_id):
         self.table.add_edge(source_id, target_id)
 
+    def get_edge_frequency(self, source_id, target_id):
+        pass
+
     @timeit
     def get_analytics(self):
         return {

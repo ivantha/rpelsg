@@ -50,6 +50,9 @@ class FullGraph(Sketch):
         assert target_id in self.graph._nodes, 'target_id "{}" not found'.format(target_id)
         self.graph.add_edge(source_id, target_id)
 
+    def get_edge_frequency(self, source_id, target_id):
+        pass
+
     @timeit
     def get_analytics(self):
         return {
