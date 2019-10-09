@@ -8,12 +8,14 @@ import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 
+from sketches import Sketches
+
 if __name__ == '__main__':
     sketches = [
-        # 'FullGraph',
-        'GlobalCountMin',
-        'GSketch',
-        'TCM',
+        # Sketches.full_graph.name,
+        Sketches.global_countmin.name,
+        Sketches.gsketch.name,
+        Sketches.tcm.name,
     ]
 
     results = []

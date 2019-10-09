@@ -27,6 +27,9 @@ class Table:
             self._tables[i][x_hash] += 1
         self._edge_count += 1
 
+    def get_edge_frequency(self, x: str):
+        return min([self._tables[i][x_hash] for i, x_hash in zip(range(self.d), self._hash(x))])
+
     def _hash(self, x: str):
         x_hash = hashlib.md5(str(hash(x)).encode('utf-8'))
         for i in range(self.d):
@@ -63,7 +66,7 @@ class BinaryPartitionTree:
             w_0: int,
             C: int
     ):
-        # Initial parameters
+        # initial parameters
         self.sample_stream = sample_stream
         self.sketch_total_width = sketch_total_width
         self.sketch_depth = sketch_depth
@@ -73,7 +76,7 @@ class BinaryPartitionTree:
         self.root = None  # Root node
         self.sketch_hash = SketchHash()  # Hash-structure for edge-sketch in a dictionary
 
-        # Vertex properties
+        # vertex properties
         self.vertices = []
         self.vertex_relative_frequency = {}
         self.vertex_out_degree = {}
@@ -200,6 +203,7 @@ class GSketch(Sketch):
         self.C = C
 
         self.sample_stream = None
+        self.bpt = None
 
     @timeit
     def initialize(self):
@@ -215,13 +219,17 @@ class GSketch(Sketch):
 
     def add_edge(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            self.bpt.sketch_hash.tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge(
-                '{},{}'.format(source_id, target_id))
+            self.bpt.sketch_hash.tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge('{},{}'.format(source_id, target_id))
         else:
             self.bpt.sketch_hash.outliers.add_edge('{},{}'.format(source_id, target_id))
 
     def get_edge_frequency(self, source_id, target_id):
-        pass
+        if source_id in self.bpt.sketch_hash.hash:
+            return self.bpt.sketch_hash.tables[self.bpt.sketch_hash.hash.get(source_id)]\
+                .get_edge_frequency('{},{}'.format(source_id, target_id))
+        else:
+            return self.bpt.sketch_hash.outliers\
+                .get_edge_frequency('{},{}'.format(source_id, target_id))
 
     @timeit
     def get_analytics(self):

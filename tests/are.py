@@ -4,7 +4,8 @@ from _datetime import datetime
 import os
 import json
 
-from common import utils
+from common import utils, sampling
+from sketches import Sketches
 from sketches.full_graph import FullGraph
 from sketches.global_countmin import GlobalCountMin
 from sketches.gsketch import GSketch
@@ -21,53 +22,57 @@ if __name__ == '__main__':
     streaming_edge_count = utils.get_edge_count(streaming_path)
 
     memory_profiles = [
-        # TODO
+        # TODO : enforce memory profile sizes and "change sketch sizes"
         # 512, 1024 etc.
         # (name, info...)
         # (512, info...)
+        ('512', 512),
+        # ('1024', 1024)
     ]
 
-    for name, info in memory_profiles:  # sketches are recreated with increasing memories
-        # TODO : compute full graph
+    for profile_id, info in memory_profiles:  # sketches are recreated with increasing memories
+        # construct a FUllGraph
+        full_graph = FullGraph()
+        full_graph.initialize()
+
+        full_graph.stream(base_path)  # FullGraph - construct base graph
+        full_graph.stream(streaming_path)  # FullGraph - streaming edges
+
+        # Reservoir sampling for 1000 items as (i, j) => 1000 queries
+        sample_size = 1000
+        sample_stream = sampling.select_k_items(base_path, sample_size)
 
         sketches = [
-            (GlobalCountMin(), 'GlobalCountMin'),
-            (GSketch(base_path, streaming_path), 'GSketch'),
-            (TCM(), 'TCM'),
+            (GlobalCountMin(), Sketches.global_countmin.name),
+            (GSketch(base_path, streaming_path), Sketches.gsketch.name),
+            (TCM(), Sketches.tcm.name),
         ]
 
         output = {
-            'name' : name,
+            'profile_id' : profile_id,
             'results': []
         }
 
         for sketch, name in sketches:
-            # initialize the sketch
-            sketch.initialize()
+            initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
+            base_start_time, base_end_time = sketch.stream(base_path)  # construct base graph
+            streaming_start_time, streaming_end_time = sketch.stream(streaming_path)  # streaming edges
 
-            # construct base graph
-            for data_file in utils.get_txt_files(base_path):
-                with open(data_file) as file:
-                    for line in file.readlines():
-                        source_id, target_id = line.strip().split(',')
-                        sketch.add_edge(source_id, target_id)
-
-            # streaming edges
-            for data_file in utils.get_txt_files(streaming_path):
-                with open(data_file) as file:
-                    for line in file.readlines():
-                        source_id, target_id = line.strip().split(',')
-                        sketch.add_edge(source_id, target_id)
-
-            # TODO : QUERY
+            # query
+            relative_error_sum = 0
+            for source_id, target_id in sample_stream:
+                true_frequency = full_graph.get_edge_frequency(source_id, target_id)
+                estimated_frequency = sketch.get_edge_frequency(source_id, target_id)
+                relative_error = (estimated_frequency - true_frequency) / true_frequency * 1.0
+                relative_error_sum += relative_error
 
             result = {
                 'sketch': name,
-                # TODO : value
+                'average_relative_error': relative_error_sum / sample_size
             }
 
             output['results'].append(result)
 
-        os.makedirs(os.path.dirname('../output/are/{}.json'.format(name)), exist_ok=True)
-        with open('../output/are/{}.json'.format(name), 'w') as file:
+        os.makedirs(os.path.dirname('../output/are/{}.json'.format(profile_id)), exist_ok=True)
+        with open('../output/are/{}.json'.format(profile_id), 'w') as file:
             json.dump(output, file, indent=4)

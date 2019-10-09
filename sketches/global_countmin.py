@@ -11,8 +11,8 @@ class Table:
 
     def __init__(self, m: int, d: int):
         """
-        :param m: Size of the hash tables
-        :param d: Number of hash functions
+        :param m: Size of the hash table (➡️)
+        :param d: Number of hash functions (⬇️)
         """
         self.m = m
         self.d = d
@@ -25,6 +25,9 @@ class Table:
             self._tables[i][x_hash] += 1
         self._edge_count += 1
 
+    def get_edge_frequency(self, x: str):
+        return min([self._tables[i][x_hash] for i, x_hash in zip(range(self.d), self._hash(x))])
+
     def _hash(self, x: str):
         x_hash = hashlib.md5(str(hash(x)).encode('utf-8'))
         for i in range(self.d):
@@ -36,8 +39,8 @@ class GlobalCountMin(Sketch):
 
     def __init__(self, m: int = 1048576, d: int = 5):
         """
-        :param m: Size of the hash tables
-        :param d: Number of hash tables
+        :param m: Size of the hash table (➡️)
+        :param d: Number of hash functions (⬇️)
         """
         self.m = m
         self.d = d
@@ -52,7 +55,7 @@ class GlobalCountMin(Sketch):
         self._table.add_edge('{},{}'.format(source_id, target_id))
 
     def get_edge_frequency(self, source_id, target_id):
-        pass
+        return self._table.get_edge_frequency('{},{}'.format(source_id, target_id))
 
     @timeit
     def get_analytics(self):
