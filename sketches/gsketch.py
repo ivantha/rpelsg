@@ -1,52 +1,23 @@
-import hashlib
 import operator
 
-import numpy as np
 from pympler import asizeof
 
 from common import sampling
 from common.utils import timeit
+from sketches.countmin import CountMinTable
 from sketches.sketch import Sketch
-
-
-class Table:
-
-    def __init__(self, m: int, d: int):
-        """
-        :param m: Size of the hash tables
-        :param d: Number of hash functions
-        """
-        self.m = m
-        self.d = d
-        self._edge_count: int = 0
-
-        self._tables = np.zeros((d, m))  # d rows ; m cols
-
-    def add_edge(self, x: str):
-        for i, x_hash in zip(range(self.d), self._hash(x)):
-            self._tables[i][x_hash] += 1
-        self._edge_count += 1
-
-    def get_edge_frequency(self, x: str):
-        return min([self._tables[i][x_hash] for i, x_hash in zip(range(self.d), self._hash(x))])
-
-    def _hash(self, x: str):
-        x_hash = hashlib.md5(str(hash(x)).encode('utf-8'))
-        for i in range(self.d):
-            x_hash.update(str(i).encode('utf-8'))
-            yield int(x_hash.hexdigest(), 16) % self.m
 
 
 class SketchHash:
 
     def __init__(self):
-        self.tables = []
+        self.countmin_tables = []
         self.hash = {}
 
         self.outliers = None
 
 
-class Node:
+class BptNode:
 
     def __init__(self, vertices: [], width: int):
         # self.left = None
@@ -60,7 +31,8 @@ class Node:
 class BinaryPartitionTree:
 
     def __init__(
-            self, sample_stream: [(str, str)],
+            self,
+            sample_stream: [(str, str)],
             sketch_total_width,
             sketch_depth,
             w_0: int,
@@ -116,7 +88,7 @@ class BinaryPartitionTree:
         sorted_vertices = [vertex for (vertex, average_frequency) in sorted_vertices]
 
         # Create a root node => O(1)
-        self.root = Node(sorted_vertices, self.sketch_total_width)
+        self.root = BptNode(sorted_vertices, self.sketch_total_width)
 
         # Push the root node to the stack => O(1)
         stack = [self.root]
@@ -135,11 +107,11 @@ class BinaryPartitionTree:
 
             if c1 or c2:  # Enough partitioning
                 # Append the current sketch to the list of sketches => O(1)
-                table = Table(current_sketch.width, self.sketch_depth)
-                self.sketch_hash.tables.append(table)
+                table = CountMinTable(current_sketch.width, self.sketch_depth)
+                self.sketch_hash.countmin_tables.append(table)
 
                 # Save index of leaf(sketch) at leaves in sketch_hash => O(n)
-                idx = len(self.sketch_hash.tables) - 1
+                idx = len(self.sketch_hash.countmin_tables) - 1
                 for vertex in current_sketch.vertices:
                     self.sketch_hash.hash[vertex] = idx
             else:  # Partition some more
@@ -178,8 +150,8 @@ class BinaryPartitionTree:
                         min_E = [i, E_val]
 
                 # Create two new partition nodes
-                stack.append(Node(current_sketch.vertices[:min_E[0]], int(current_sketch.width / 2)))
-                stack.append(Node(current_sketch.vertices[min_E[0]:], int(current_sketch.width / 2)))
+                stack.append(BptNode(current_sketch.vertices[:min_E[0]], int(current_sketch.width / 2)))
+                stack.append(BptNode(current_sketch.vertices[min_E[0]:], int(current_sketch.width / 2)))
 
 
 class GSketch(Sketch):
@@ -188,17 +160,23 @@ class GSketch(Sketch):
             self,
             base_path: str,
             streaming_path: str,
+
             sample_size: int = 10000,
-            sketch_total_width=1024,
-            sketch_depth=10,
+            sketch_total_width: int = 1024 * 16,  # m: Total width of the hash table (➡️) [2 bytes * (1024 * 16) * 8 = 256 KB]
+            sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
+            outlier_sketch_width: int = 1024 * 16,  # Width of the outlier hash table (➡️) [2 bytes * (1024 * 16) * 8 = 256 KB]
+
             w_0: int = 100,
             C: int = 10
     ):
         self.base_path = base_path
         self.streaming_path = streaming_path
+
         self.sample_size = sample_size
         self.sketch_total_width = sketch_total_width
         self.sketch_depth = sketch_depth
+        self.outlier_sketch_width = outlier_sketch_width
+
         self.w_0 = w_0
         self.C = C
 
@@ -207,15 +185,15 @@ class GSketch(Sketch):
 
     @timeit
     def initialize(self):
-        # Reservoir sampling for k items as (i, j)
+        # reservoir sampling for k items as (i, j)
         self.sample_stream = sampling.select_k_items(self.base_path, self.sample_size)
 
-        # Partition sketches
+        # partition sketches
         self.bpt = BinaryPartitionTree(self.sample_stream, self.sketch_total_width, self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
-        # Create outlier sketch
-        self.bpt.sketch_hash.outliers = Table(self.sketch_total_width, self.sketch_depth)
+        # create outlier sketch
+        self.bpt.sketch_hash.outliers = CountMinTable(self.outlier_sketch_width, self.sketch_depth)
 
     def add_edge(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:

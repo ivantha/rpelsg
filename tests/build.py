@@ -7,7 +7,7 @@ import json
 from common import utils
 from sketches import Sketches
 from sketches.full_graph import FullGraph
-from sketches.global_countmin import GlobalCountMin
+from sketches.countmin import CountMin
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
@@ -18,7 +18,7 @@ if __name__ == '__main__':
 
     sketches = [
         (FullGraph(), Sketches.full_graph.name),
-        (GlobalCountMin(), Sketches.global_countmin.name),
+        (CountMin(), Sketches.global_countmin.name),
         (GSketch(base_path, streaming_path), Sketches.gsketch.name),
         (TCM(), Sketches.tcm.name),
     ]

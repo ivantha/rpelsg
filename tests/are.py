@@ -1,13 +1,12 @@
 # Average Relative Error
 
-from _datetime import datetime
-import os
 import json
+import os
 
 from common import utils, sampling
 from sketches import Sketches
+from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
-from sketches.global_countmin import GlobalCountMin
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
@@ -43,7 +42,7 @@ if __name__ == '__main__':
         sample_stream = sampling.select_k_items(base_path, sample_size)
 
         sketches = [
-            (GlobalCountMin(), Sketches.global_countmin.name),
+            (CountMin(), Sketches.countmin.name),
             (GSketch(base_path, streaming_path), Sketches.gsketch.name),
             (TCM(), Sketches.tcm.name),
         ]
