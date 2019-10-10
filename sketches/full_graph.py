@@ -3,17 +3,16 @@ from typing import Dict, List
 from pympler import asizeof
 
 from common.utils import timeit
+from sketches import Sketches
 from sketches.sketch import Sketch
 
 
 class Node:
-
     def __init__(self, id: str):
         self._id = id
 
 
 class Graph:
-
     def __init__(self):
         self._nodes: Dict[str, Node] = {}
         self._node_count: int = 0
@@ -36,6 +35,7 @@ class Graph:
 
 
 class FullGraph(Sketch):
+    name = Sketches.full_graph.name
 
     def __init__(self):
         self.graph = None

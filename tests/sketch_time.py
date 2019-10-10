@@ -1,13 +1,12 @@
 # Sketch construction time
 
-from datetime import datetime
-import os
 import json
+import os
+from datetime import datetime
 
 from common import utils
-from sketches import Sketches
-from sketches.full_graph import FullGraph
 from sketches.countmin import CountMin
+from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
@@ -19,13 +18,13 @@ if __name__ == '__main__':
     streaming_edge_count = utils.get_edge_count(streaming_path)
 
     sketches = [
-        (FullGraph(), Sketches.full_graph.name),
-        (CountMin(), Sketches.global_countmin.name),
-        (GSketch(base_path, streaming_path), Sketches.gsketch.name),
-        (TCM(), Sketches.tcm.name),
+        (FullGraph()),
+        (CountMin()),
+        (GSketch(base_path, streaming_path)),
+        (TCM()),
     ]
 
-    for sketch, name in sketches:
+    for sketch in sketches:
         process_start_time = datetime.now()
 
         initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
@@ -35,7 +34,7 @@ if __name__ == '__main__':
         process_end_time = datetime.now()
 
         output = {
-            'sketch': name,
+            'sketch': sketch.name,
             'base_edge_count': base_edge_count,
             'streaming_edge_count': streaming_edge_count,
             'initialize_time': '{}'.format(initialize_end_time - initialize_start_time),
@@ -44,6 +43,6 @@ if __name__ == '__main__':
             'process_time': '{}'.format(process_end_time - process_start_time),
         }
 
-        os.makedirs(os.path.dirname('../output/sketch_time/{}.json'.format(name)), exist_ok=True)
-        with open('../output/sketch_time/{}.json'.format(name), 'w') as file:
+        os.makedirs(os.path.dirname('../output/sketch_time/{}.json'.format(sketch.name)), exist_ok=True)
+        with open('../output/sketch_time/{}.json'.format(sketch.name), 'w') as file:
             json.dump(output, file, indent=4)

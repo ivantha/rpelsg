@@ -5,6 +5,7 @@ from common.utils import timeit
 
 
 class Sketch(ABC):
+    name: str
 
     @abstractmethod
     def initialize(self):

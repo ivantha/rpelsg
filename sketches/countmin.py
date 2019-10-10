@@ -4,11 +4,11 @@ import numpy as np
 from pympler import asizeof
 
 from common.utils import timeit
+from sketches import Sketches
 from sketches.sketch import Sketch
 
 
 class CountMinTable:
-
     def __init__(
             self,
             m: int,  # m: Size of the hash table (➡️)
@@ -36,10 +36,12 @@ class CountMinTable:
 
 
 class CountMin(Sketch):
+    name = Sketches.countmin.name
 
     def __init__(
             self,
-            m: int = 1024 * 32,  # m: Size of the hash table (➡️) [2 bytes * (1024 * 32) * 8 = 512 KB]
+            # [2 bytes * (1024 * 32) * 8 = 512 KB]
+            m: int = 1024 * 32,  # m: Size of the hash table (➡️)
             d: int = 8  # d: Number of hash functions (⬇️)
     ):
         self._m = m

@@ -4,12 +4,12 @@ from pympler import asizeof
 
 from common import sampling
 from common.utils import timeit
+from sketches import Sketches
 from sketches.countmin import CountMinTable
 from sketches.sketch import Sketch
 
 
 class SketchHash:
-
     def __init__(self):
         self.countmin_tables = []
         self.hash = {}
@@ -18,7 +18,6 @@ class SketchHash:
 
 
 class BptNode:
-
     def __init__(self, vertices: [], width: int):
         # self.left = None
         # self.right = None
@@ -29,7 +28,6 @@ class BptNode:
 
 
 class BinaryPartitionTree:
-
     def __init__(
             self,
             sample_stream: [(str, str)],
@@ -155,28 +153,32 @@ class BinaryPartitionTree:
 
 
 class GSketch(Sketch):
+    name = Sketches.gsketch.name
 
     def __init__(
             self,
             base_path: str,
             streaming_path: str,
 
-            sample_size: int = 10000,
-            sketch_total_width: int = 1024 * 16,  # m: Total width of the hash table (➡️) [2 bytes * (1024 * 16) * 8 = 256 KB]
+            # partitioned sketch => [2 bytes * (1024 * 16) * 8 = 256 KB]
+            sketch_total_width: int = 1024 * 16,  # m: Total width of the hash table (➡️)
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
-            outlier_sketch_width: int = 1024 * 16,  # Width of the outlier hash table (➡️) [2 bytes * (1024 * 16) * 8 = 256 KB]
 
+            # outliers => [2 bytes * (1024 * 16) * 8 = 256 KB]
+            outlier_sketch_width: int = 1024 * 16,  # Width of the outlier hash table (➡️)
+
+            sample_size: int = 10000,
             w_0: int = 100,
             C: int = 10
     ):
         self.base_path = base_path
         self.streaming_path = streaming_path
 
-        self.sample_size = sample_size
         self.sketch_total_width = sketch_total_width
         self.sketch_depth = sketch_depth
         self.outlier_sketch_width = outlier_sketch_width
 
+        self.sample_size = sample_size
         self.w_0 = w_0
         self.C = C
 
@@ -197,13 +199,13 @@ class GSketch(Sketch):
 
     def add_edge(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            self.bpt.sketch_hash.tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge('{},{}'.format(source_id, target_id))
+            self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge('{},{}'.format(source_id, target_id))
         else:
             self.bpt.sketch_hash.outliers.add_edge('{},{}'.format(source_id, target_id))
 
     def get_edge_frequency(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            return self.bpt.sketch_hash.tables[self.bpt.sketch_hash.hash.get(source_id)]\
+            return self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash.get(source_id)]\
                 .get_edge_frequency('{},{}'.format(source_id, target_id))
         else:
             return self.bpt.sketch_hash.outliers\
