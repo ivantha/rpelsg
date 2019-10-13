@@ -160,11 +160,11 @@ class GSketch(Sketch):
             base_path: str,
             streaming_path: str,
 
-            # partitioned sketch => [2 bytes * (1024 * 16) * 8 = 256 KB]
-            total_sketch_width: int = 1024 * 16,  # m: Total width of the hash table (➡️)
+            # partitioned sketch => [2 bytes * (1024 * 24) * 8 = 384 KB]
+            total_sketch_width: int = 1024 * 24,  # m: Total width of the hash table (➡️)
 
-            # outliers => [2 bytes * (1024 * 16) * 8 = 256 KB]
-            outlier_sketch_width: int = 1024 * 16,  # Width of the outlier hash table (➡️)
+            # outliers => [2 bytes * (1024 * 8) * 8 = 128 KB]
+            outlier_sketch_width: int = 1024 * 8,  # Width of the outlier hash table (➡️)
 
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 

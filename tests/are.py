@@ -85,6 +85,8 @@ if __name__ == '__main__':
     for sketch_name, profiles in memory_profiles:  # sketches are recreated with increasing memories
         output = {
             'sketch_name': sketch_name,
+            'base_edge_count': base_edge_count,
+            'streaming_edge_count': streaming_edge_count,
             'results': []
         }
 

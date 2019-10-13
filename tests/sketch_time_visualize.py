@@ -12,8 +12,8 @@ from sketches import Sketches
 
 if __name__ == '__main__':
     sketches = [
-        # Sketches.full_graph.name,
-        Sketches.global_countmin.name,
+        Sketches.full_graph.name,
+        Sketches.countmin.name,
         Sketches.gsketch.name,
         Sketches.tcm.name,
     ]
@@ -41,20 +41,22 @@ if __name__ == '__main__':
     ]
 
     fig = plt.figure()
-    ax = fig.add_axes((0.1, 0.15, 0.8, 0.75))
+    ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
     # ax.yaxis.grid(True)
 
-    p1 = plt.bar(ind, dataset[0], width, color='#00BCD4')
-    p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='#f44336')
+    p1 = plt.bar(ind, dataset[0], width, color='#f44336')
+    p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='#00BCD4')
     p3 = plt.bar(ind, dataset[2], width, bottom=np.array(dataset[0]) + np.array(dataset[1]), color='#4CAF50')
 
     plt.title('Sketch construction and streaming times')
     plt.ylabel('Time (s)')
+    plt.xlabel('Sketches')
     plt.xticks(ind, ('Full graph', 'CountMin', 'gSketch', 'TCM'))
     plt.legend((p1[0], p2[0], p3[0]), ('Initialization', 'Base construction', 'Streaming'))
 
-    fig.text(0.1, 0.03, '# base edges : {:,}'.format(results[0]['base_edge_count']))
-    fig.text(0.5, 0.03, '# streaming edges : {:,}'.format(results[0]['streaming_edge_count']))
+    fig.text(0.1, 0.06, '# base edges : {:,}'.format(results[0]['base_edge_count']))
+    fig.text(0.5, 0.06, '# streaming edges : {:,}'.format(results[0]['streaming_edge_count']))
+    fig.text(0.1, 0.03, 'Sketch size : 512 KB')
 
     plt.savefig('../output/sketch_time/sketch_time.png')
     plt.show()

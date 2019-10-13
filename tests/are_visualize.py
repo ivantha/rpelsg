@@ -2,41 +2,43 @@
 
 import json
 import os
-from datetime import datetime as dtt
 
-import matplotlib.pyplot as plt
 import matplotlib
-import numpy as np
+import matplotlib.pyplot as plt
 
 from sketches import Sketches
 
 if __name__ == '__main__':
-    profiles = [
-        (
-            '512kb'
-        ),
-        (
-            '2mb'
-        ),
-        (
-            '8mb'
-        ),
-        (
-            '32mb'
-        )
-    ]
-
-    results = []
-
-    for profile_id, sketches in profiles:
-        os.makedirs(os.path.dirname('../output/are/{}.json'.format(profile_id)), exist_ok=True)
-        with open('../output/are/{}.json'.format(profile_id)) as file:
-            output = json.load(file)
-            results.append(output)
+    sketches = (
+        (Sketches.countmin.name, 'CountMin'),
+        (Sketches.gsketch.name, 'gSketch'),
+        (Sketches.tcm.name, 'TCM')
+    )
 
     matplotlib.rcParams['figure.dpi'] = 500
 
+    fig = plt.figure()
+    ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
 
+    for sketch_name, pretty_name in sketches:
+        os.makedirs(os.path.dirname('../output/are/{}.json'.format(sketch_name)), exist_ok=True)
+        with open('../output/are/{}.json'.format(sketch_name)) as file:
+            output = json.load(file)
+            results = output['results']
+            plt.plot(
+                [result['memory_allocation'] for result in results],
+                [result['average_relative_error'] for result in results],
+                label=pretty_name
+            )
 
-    plt.savefig('../output/sketch_time/sketch_time.png')
+    plt.title('Memory vs Average Relative Error')
+    plt.ylabel('Average relative error (%)')
+    plt.xlabel('Memory')
+    plt.xticks([512, 1024, 2048, 4096, 8192], ('512\nKB', '1\nMB', '2\nMB', '4\nMB', '8\nMB'))
+    plt.legend()
+
+    # fig.text(0.1, 0.045, '# base edges : {:,}'.format(results[0]['base_edge_count']))
+    # fig.text(0.5, 0.045, '# streaming edges : {:,}'.format(results[0]['streaming_edge_count']))
+
+    plt.savefig('../output/are/are.png')
     plt.show()

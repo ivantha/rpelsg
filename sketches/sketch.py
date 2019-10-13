@@ -39,4 +39,13 @@ class Sketch(ABC):
 
             # update progress bar
             utils.print_progress_bar(i + 1, total_file_count, prefix='Progress:', suffix=self.__class__.__name__, length=50)
+
             time.sleep(0.1)
+
+    @timeit
+    def time_critical_stream(self, path: str):
+        for i, data_file in enumerate(utils.get_txt_files(path)):
+            with open(data_file) as file:
+                for line in file.readlines():
+                    source_id, target_id = line.strip().split(',')
+                    self.add_edge(source_id, target_id)
