@@ -4,6 +4,7 @@ import json
 import os
 
 from common import utils, sampling
+from sketches import Sketches
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
@@ -16,126 +17,78 @@ if __name__ == '__main__':
     base_edge_count = utils.get_edge_count(base_path)
     streaming_edge_count = utils.get_edge_count(streaming_path)
 
-    memory_profiles = [
+    memory_profiles = (
         (
-            '512kb',
+            Sketches.countmin.name,
             (
-                CountMin(
-                    # [2 bytes * (1024 * 32) * 8 = 512 KB]
-                    m=1024 * 32,  # m: Size of the hash table (➡️)
-                    d=8  # d: Number of hash functions (⬇️)
-                ),
-                GSketch(
-                    base_path,
-                    streaming_path,
-
-                    # partitioned sketch => [2 bytes * (1024 * 16) * 8 = 256 KB]
-                    sketch_total_width=1024 * 16,  # m: Total width of the hash table (➡️)
-                    sketch_depth=8,  # d: Number of hash functions (⬇️)
-
-                    # outliers => [2 bytes * (1024 * 16) * 8 = 256 KB]
-                    outlier_sketch_width=1024 * 16,  # Width of the outlier hash table (➡️)
-                ),
-                TCM(
-                    # [2 bytes * (256 * 256) * 4 = 512 KB)]
-                    w=256,  # w: Side width of the hash tables (size = ↓w * →w)
-                    d=4  # d: Number of hash functions
-                ),
+                (512, CountMin(m=1024 * 32, d=8)),  # 512KB
+                (1024, CountMin(m=1024 * 32 * 2, d=8),),  # 1MB
+                (2048, CountMin(m=1024 * 32 * 4, d=8),),  # 2MB
+                (4096, CountMin(m=1024 * 32 * 8, d=8),),  # 4MB
+                (8192, CountMin(m=1024 * 32 * 16, d=8)),  # 8MB
+                (16384, CountMin(m=1024 * 32 * 32, d=8)),  # 16MB
+                (32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32MB
+                (65536, CountMin(m=1024 * 32 * 128, d=8)),  # 64MB
             )
         ),
         (
-            '2mb',
+            Sketches.gsketch.name,
             (
-                CountMin(
-                    m=1024 * 32 * 4,
-                    d=8
-                ),
-                GSketch(
-                    base_path,
-                    streaming_path,
-                    sketch_total_width=1024 * 16 * 2,
-                    sketch_depth=8,
-                    outlier_sketch_width=1024 * 16 * 2,
-                ),
-                TCM(
-                    w=256 * 2,
-                    d=4
-                ),
-                TCM(
-                    w=256,
-                    d=4 * 4
-                ),
+                (512, GSketch(base_path, streaming_path,
+                              total_sketch_width=1024 * 24, outlier_sketch_width=1024 * 8,
+                              sketch_depth=8)),  # 512KB
+                (1024, GSketch(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
+                               sketch_depth=8)),  # 1MB
+                (2048, GSketch(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 4, outlier_sketch_width=1024 * 8 * 4,
+                               sketch_depth=8)),  # 2MB
+                (4096, GSketch(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 8, outlier_sketch_width=1024 * 8 * 8,
+                               sketch_depth=8)),  # 4MB
+                (8192, GSketch(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 16, outlier_sketch_width=1024 * 8 * 16,
+                               sketch_depth=8)),  # 8MB
+                (16384, GSketch(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
+                                sketch_depth=8)),  # 16MB
+                (32768, GSketch(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 64, outlier_sketch_width=1024 * 8 * 64,
+                                sketch_depth=8)),  # 32MB
+                (65536, GSketch(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 128, outlier_sketch_width=1024 * 8 * 128,
+                                sketch_depth=8)),  # 64MB
             )
         ),
         (
-            '8mb',
+            Sketches.tcm.name,
             (
-                CountMin(
-                    m=1024 * 32 * 8,
-                    d=8 * 2
-                ),
-                GSketch(
-                    base_path,
-                    streaming_path,
-                    sketch_total_width=1024 * 16 * 4,
-                    sketch_depth=8,
-                    outlier_sketch_width=1024 * 16 * 4,
-                ),
-                TCM(
-                    w=256 * 2,
-                    d=4 * 4
-                ),
+                (512, TCM(w=256, d=8)),  # 1MB
+                (4096, TCM(w=256 * 2, d=8)),  # 4MB
+                (16384, TCM(w=256 * 4, d=8)),  # 16MB
+                (65536, TCM(w=256 * 8, d=8)),  # 64MB
             )
-        ),
-        (
-            '32mb',
-            (
-                CountMin(
-                    m=1024 * 32 * 32,
-                    d=8 * 2
-                ),
-                GSketch(
-                    base_path,
-                    streaming_path,
-                    sketch_total_width=1024 * 16 * 8,
-                    sketch_depth=8 * 2,
-                    outlier_sketch_width=1024 * 16 * 8,
-                ),
-                TCM(
-                    w=256 * 4,
-                    d=4 * 4
-                ),
-            )
-        ),
-        (
-            '128mb',
-            (
-                TCM(
-                    w=256 * 8,
-                    d=4 * 4
-                ),
-            )
-        ),
-    ]
+        )
+    )
 
-    for profile_id, sketches in memory_profiles:  # sketches are recreated with increasing memories
-        # construct a FullGraph
-        full_graph = FullGraph()
-        full_graph.initialize()
+    # construct a FullGraph
+    full_graph = FullGraph()
+    full_graph.initialize()
 
-        full_graph.stream(base_path)  # FullGraph - construct base graph
-        full_graph.stream(streaming_path)  # FullGraph - streaming edges
+    full_graph.stream(base_path)  # FullGraph - construct base graph
+    full_graph.stream(streaming_path)  # FullGraph - streaming edges
 
-        # reservoir sampling for 1000 items as (i, j) => 1000 queries
-        sample_size = 1000
-        sample_stream = sampling.select_k_items(base_path, sample_size)
+    # reservoir sampling for 1000 items as (i, j) => 1000 queries
+    sample_size = 1000
+    sample_stream = sampling.select_k_items(base_path, sample_size)
 
+    for sketch_name, profiles in memory_profiles:  # sketches are recreated with increasing memories
         output = {
-            'profile_id': profile_id,
+            'sketch_name': sketch_name,
             'results': []
         }
 
-        for sketch in sketches:
+        for memory_allocation, sketch in profiles:
             initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
             base_start_time, base_end_time = sketch.stream(base_path)  # construct base graph
             streaming_start_time, streaming_end_time = sketch.stream(streaming_path)  # streaming edges
@@ -149,19 +102,18 @@ if __name__ == '__main__':
                 relative_error_sum += relative_error
 
             result = {
-                'sketch': sketch.name,
+                'memory_allocation': memory_allocation,
                 'average_relative_error': relative_error_sum / sample_size
             }
 
             output['results'].append(result)
 
-            # TODO : Properly dereference the object
             # free memory - remove reference to the sketch
-            sketch = None
+            del sketch
 
         # free memory - call garbage collector
         gc.collect()
 
-        os.makedirs(os.path.dirname('../output/are/{}.json'.format(profile_id)), exist_ok=True)
-        with open('../output/are/{}.json'.format(profile_id), 'w') as file:
+        os.makedirs(os.path.dirname('../output/are/{}.json'.format(sketch_name)), exist_ok=True)
+        with open('../output/are/{}.json'.format(sketch_name), 'w') as file:
             json.dump(output, file, indent=4)

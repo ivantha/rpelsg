@@ -161,11 +161,12 @@ class GSketch(Sketch):
             streaming_path: str,
 
             # partitioned sketch => [2 bytes * (1024 * 16) * 8 = 256 KB]
-            sketch_total_width: int = 1024 * 16,  # m: Total width of the hash table (➡️)
-            sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
+            total_sketch_width: int = 1024 * 16,  # m: Total width of the hash table (➡️)
 
             # outliers => [2 bytes * (1024 * 16) * 8 = 256 KB]
             outlier_sketch_width: int = 1024 * 16,  # Width of the outlier hash table (➡️)
+
+            sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
             sample_size: int = 10000,
             w_0: int = 100,
@@ -174,9 +175,9 @@ class GSketch(Sketch):
         self.base_path = base_path
         self.streaming_path = streaming_path
 
-        self.sketch_total_width = sketch_total_width
-        self.sketch_depth = sketch_depth
+        self.total_sketch_width = total_sketch_width
         self.outlier_sketch_width = outlier_sketch_width
+        self.sketch_depth = sketch_depth
 
         self.sample_size = sample_size
         self.w_0 = w_0
@@ -191,7 +192,7 @@ class GSketch(Sketch):
         self.sample_stream = sampling.select_k_items(self.base_path, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, self.sketch_total_width, self.sketch_depth, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, self.total_sketch_width, self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch

@@ -1,29 +1,26 @@
 # Building the base and the streaming part of the graph
 
-from _datetime import datetime
-import os
 import json
+import os
+from _datetime import datetime
 
-from common import utils
-from sketches import Sketches
-from sketches.full_graph import FullGraph
 from sketches.countmin import CountMin
+from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
-
 
 if __name__ == '__main__':
     base_path = '../datasets/unicorn_wget_small/benign_base/'  # base_path: Path to edges in the base graph
     streaming_path = '../datasets/unicorn_wget_small/benign_streaming/'  # streaming_path: Path to streaming edges
 
     sketches = [
-        (FullGraph(), Sketches.full_graph.name),
-        (CountMin(), Sketches.global_countmin.name),
-        (GSketch(base_path, streaming_path), Sketches.gsketch.name),
-        (TCM(), Sketches.tcm.name),
+        FullGraph(),
+        CountMin(),
+        GSketch(base_path, streaming_path),
+        TCM(),
     ]
 
-    for sketch, name in sketches:
+    for sketch in sketches:
         process_start_time = datetime.now()
 
         initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
@@ -35,7 +32,7 @@ if __name__ == '__main__':
         analytics_start_time, analytics_end_time, analytics_output = sketch.get_analytics()  # get analytics
 
         output = {
-            'sketch': name,
+            'sketch': sketch.name,
             'analytics_output': analytics_output,
             'initialize_time': '{}'.format(initialize_end_time - initialize_start_time),
             'base_construction_time': '{}'.format(base_end_time - base_start_time),
@@ -44,6 +41,6 @@ if __name__ == '__main__':
             'analytics_time': '{}'.format(analytics_end_time - analytics_start_time)
         }
 
-        os.makedirs(os.path.dirname('../output/build/{}.json'.format(name)), exist_ok=True)
-        with open('../output/build/{}.json'.format(name), 'w') as file:
+        os.makedirs(os.path.dirname('../output/build/{}.json'.format(sketch.name)), exist_ok=True)
+        with open('../output/build/{}.json'.format(sketch.name), 'w') as file:
             json.dump(output, file, indent=4)

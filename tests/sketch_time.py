@@ -18,10 +18,10 @@ if __name__ == '__main__':
     streaming_edge_count = utils.get_edge_count(streaming_path)
 
     sketches = [
-        (FullGraph()),
-        (CountMin()),
-        (GSketch(base_path, streaming_path)),
-        (TCM()),
+        FullGraph(),
+        CountMin(),
+        GSketch(base_path, streaming_path),
+        TCM(),
     ]
 
     for sketch in sketches:
