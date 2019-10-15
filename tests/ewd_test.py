@@ -29,7 +29,6 @@ if __name__ == '__main__':
     vertices = set()
     edges = set()
 
-    # finding degree counts
     for path in (base_path, streaming_path):
         for i, data_file in enumerate(utils.get_txt_files(path)):
             with open(data_file) as file:

@@ -22,9 +22,9 @@ if __name__ == '__main__':
             Sketches.countmin.name,
             (
                 (512, CountMin(m=1024 * 32, d=8)),  # 512KB
-                (1024, CountMin(m=1024 * 32 * 2, d=8),),  # 1MB
-                (2048, CountMin(m=1024 * 32 * 4, d=8),),  # 2MB
-                (4096, CountMin(m=1024 * 32 * 8, d=8),),  # 4MB
+                (1024, CountMin(m=1024 * 32 * 2, d=8)),  # 1MB
+                (2048, CountMin(m=1024 * 32 * 4, d=8)),  # 2MB
+                (4096, CountMin(m=1024 * 32 * 8, d=8)),  # 4MB
                 (8192, CountMin(m=1024 * 32 * 16, d=8)),  # 8MB
                 (16384, CountMin(m=1024 * 32 * 32, d=8)),  # 16MB
                 # (32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32MB

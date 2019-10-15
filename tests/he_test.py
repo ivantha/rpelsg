@@ -1,4 +1,4 @@
-# Degree distribution
+# Heavy edges (Top 1000)
 
 import gc
 import json
@@ -19,15 +19,21 @@ if __name__ == '__main__':
 
     sketches = (
         FullGraph(),
-        CountMin(m=1024 * 32 * 2, d=8),  # 1MB
+        # CountMin(m=1024 * 32 * 8, d=8),  # 4MB
+        # GSketch(base_path, streaming_path,
+        #         total_sketch_width=1024 * 24 * 8, outlier_sketch_width=1024 * 8 * 8,
+        #         sketch_depth=8),  # 4MB
+        # TCM(w=256 * 2, d=8),  # 4MB
+        CountMin(m=1024 * 32 * 32, d=8),  # 16MB
         GSketch(base_path, streaming_path,
-                total_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
-                sketch_depth=8),  # 1MB
-        TCM(w=256, d=8),  # 1MB
+                total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
+                sketch_depth=8),  # 16MB
+        TCM(w=256 * 4, d=8),  # 16MB
     )
 
     vertices = set()
     edges = set()
+    edge_weights = {}
 
     for path in (base_path, streaming_path):
         for i, data_file in enumerate(utils.get_txt_files(path)):
@@ -39,50 +45,54 @@ if __name__ == '__main__':
                     vertices.add(target_id)
                     edges.add((source_id, target_id))
 
+                    if '{},{}'.format(source_id, target_id) not in edge_weights:
+                        edge_weights['{},{}'.format(source_id, target_id)] = 1
+                    else:
+                        edge_weights['{},{}'.format(source_id, target_id)] += 1
+
+    # sort the edge weights
+    sorted_edge_weights = sorted(edge_weights.items(), key=lambda kv: (kv[1], kv[0]))
+
     number_of_vertices = len(vertices)
     number_of_edges = len(edges)
 
     for sketch in sketches:  # sketches are recreated with increasing memories
-        degrees = {}
+        sketch_edge_weights = {}
 
         sketch.initialize()  # initialize the sketch
         sketch.stream(base_path)  # construct base graph
         sketch.stream(streaming_path)  # streaming edges
 
-        # add all vertices
-        for vertex in vertices:
-            degrees[vertex] = 0
-
         i = 0
         chunk = number_of_edges / 100
         for source_id, target_id in edges:
             f = sketch.get_edge_frequency(source_id, target_id)
-            degrees[source_id] += f
-            degrees[target_id] += f
+            sketch_edge_weights['{},{}'.format(source_id, target_id)] = f
 
             # update progress bar
             i += 1
             if i % chunk == 0:
                 utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
 
-        degree_distribution = {}
-        for edge_frequency in degrees.values():
-            if edge_frequency not in degree_distribution:
-                degree_distribution[edge_frequency] = 1
-            else:
-                degree_distribution[edge_frequency] += 1
+        sorted_sketch_edge_weights = sorted(sketch_edge_weights.items(), key=lambda kv: (kv[1], kv[0]))
+
+        # compare top-k results
+        k = 1000
+        set1 = set([i[0] for i in sorted_edge_weights[:k]])
+        set2 = set([i[0] for i in sorted_sketch_edge_weights[:k]])
+        intersection_count = len(set1.intersection(set2))
 
         output = {
             'sketch_name': sketch.name,
             'base_edge_count': base_edge_count,
             'streaming_edge_count': streaming_edge_count,
+            'number_of_edges': number_of_edges,
             'number_of_vertices': number_of_vertices,
-            'degrees': degrees,
-            'degree_distribution': degree_distribution
+            'inter_accuracy': intersection_count / k
         }
 
-        os.makedirs(os.path.dirname('../output/dd/{}.json'.format(sketch.name)), exist_ok=True)
-        with open('../output/dd/{}.json'.format(sketch.name), 'w') as file:
+        os.makedirs(os.path.dirname('../output/he/{}.json'.format(sketch.name)), exist_ok=True)
+        with open('../output/he/{}.json'.format(sketch.name), 'w') as file:
             json.dump(output, file, indent=4)
 
         # free memory - remove reference to the sketch
