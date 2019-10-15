@@ -1,4 +1,5 @@
 # Degree distribution
+
 import gc
 import json
 import os
@@ -65,17 +66,12 @@ if __name__ == '__main__':
             if i % chunk == 0:
                 utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
 
-        sorted_distribution = sorted(degree_count.values())
-        distribution_min = sorted_distribution[0]
-        distribution_max = sorted_distribution[len(sorted_distribution) - 1]
-        distribution_range = distribution_max - distribution_min
-
         degree_distribution = {}
-        for f in degree_count.values():
-            if f not in degree_distribution:
-                degree_distribution[f] = 1
+        for edge_weight in degree_count.values():
+            if edge_weight not in degree_distribution:
+                degree_distribution[edge_weight] = 1
             else:
-                degree_distribution[f] += 1
+                degree_distribution[edge_weight] += 1
 
         output = {
             'sketch_name': sketch.name,
