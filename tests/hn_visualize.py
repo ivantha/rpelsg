@@ -1,4 +1,4 @@
-# Heavy edges charts
+# Heavy nodes charts
 
 import json
 import os
@@ -19,8 +19,8 @@ if __name__ == '__main__':
     results = []
 
     for sketch_name, pretty_name in sketches:
-        os.makedirs(os.path.dirname('../output/he/{}.json'.format(sketch_name)), exist_ok=True)
-        with open('../output/he/{}.json'.format(sketch_name)) as file:
+        os.makedirs(os.path.dirname('../output/hn/{}.json'.format(sketch_name)), exist_ok=True)
+        with open('../output/hn/{}.json'.format(sketch_name)) as file:
             output = json.load(file)
             results.append(output)
 
@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     plt.bar(ind, dataset, color='#00BCD4')
 
-    plt.title('Heavy edges')
+    plt.title('Heavy nodes')
     plt.ylabel('Inter-accuracy')
     plt.xlabel('Sketches')
     plt.xticks(ind, [pretty_name for sketch_name, pretty_name in sketches])
@@ -46,5 +46,5 @@ if __name__ == '__main__':
     fig.text(0.1, 0.03, '# vertices : {:,}'.format(results[0]['number_of_vertices']))
     fig.text(0.5, 0.03, '# edges : {:,}'.format(results[0]['number_of_edges']))
 
-    plt.savefig('../output/he/he.png')
+    plt.savefig('../output/hn/hn.png')
     plt.show()
