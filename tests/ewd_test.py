@@ -1,4 +1,4 @@
-# Degree distribution
+# Edge weight distribution
 
 import gc
 import json
@@ -44,46 +44,45 @@ if __name__ == '__main__':
     number_of_edges = len(edges)
 
     for sketch in sketches:  # sketches are recreated with increasing memories
-        degrees = {}
+        edge_weights = {}
 
         sketch.initialize()  # initialize the sketch
         sketch.stream(base_path)  # construct base graph
         sketch.stream(streaming_path)  # streaming edges
 
-        # add all vertices
-        for vertex in vertices:
-            degrees[vertex] = 0
+        # add all edges
+        for source_id, target_id in edges:
+            edge_weights['{},{}'.format(source_id, target_id)] = 0
 
         i = 0
         chunk = number_of_edges / 100
         for source_id, target_id in edges:
             f = sketch.get_edge_frequency(source_id, target_id)
-            degrees[source_id] += f
-            degrees[target_id] += f
+            edge_weights['{},{}'.format(source_id, target_id)] = f
 
             # update progress bar
             i += 1
             if i % chunk == 0:
                 utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
 
-        degree_distribution = {}
-        for edge_frequency in degrees.values():
-            if edge_frequency not in degree_distribution:
-                degree_distribution[edge_frequency] = 1
+        edge_weight_distribution = {}
+        for edge_weight in edge_weights.values():
+            if edge_weight not in edge_weight_distribution:
+                edge_weight_distribution[edge_weight] = edge_weight
             else:
-                degree_distribution[edge_frequency] += 1
+                edge_weight_distribution[edge_weight] += edge_weight
 
         output = {
             'sketch_name': sketch.name,
             'base_edge_count': base_edge_count,
             'streaming_edge_count': streaming_edge_count,
             'number_of_vertices': number_of_vertices,
-            'degrees': degrees,
-            'degree_distribution': degree_distribution
+            'edge_weights': edge_weights,
+            'edge_weight_distribution': edge_weight_distribution
         }
 
-        os.makedirs(os.path.dirname('../output/dd/{}.json'.format(sketch.name)), exist_ok=True)
-        with open('../output/dd/{}.json'.format(sketch.name), 'w') as file:
+        os.makedirs(os.path.dirname('../output/ewd/{}.json'.format(sketch.name)), exist_ok=True)
+        with open('../output/ewd/{}.json'.format(sketch.name), 'w') as file:
             json.dump(output, file, indent=4)
 
         # free memory - remove reference to the sketch
