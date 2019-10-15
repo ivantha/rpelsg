@@ -92,9 +92,9 @@ if __name__ == '__main__':
         }
 
         for memory_allocation, sketch in profiles:
-            initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
-            base_start_time, base_end_time = sketch.stream(base_path)  # construct base graph
-            streaming_start_time, streaming_end_time = sketch.stream(streaming_path)  # streaming edges
+            sketch.initialize()  # initialize the sketch
+            sketch.stream(base_path)  # construct base graph
+            sketch.stream(streaming_path)  # streaming edges
 
             # query
             effective_query_count = 0
