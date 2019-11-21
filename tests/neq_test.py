@@ -5,6 +5,7 @@ import os
 
 from common import utils, sampling
 from sketches import Sketches
+from sketches.alpha import Alpha
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
@@ -68,7 +69,30 @@ if __name__ == '__main__':
                 (16384, TCM(w=256 * 4, d=8)),  # 16MB
                 # (65536, TCM(w=256 * 8, d=8)),  # 64MB
             )
-        )
+        ),
+        (
+            Sketches.gsketch.name,
+            (
+                (512, Alpha(base_path, streaming_path,
+                              total_sketch_width=1024 * 24, outlier_sketch_width=1024 * 8,
+                              sketch_depth=8)),  # 512KB
+                (1024, Alpha(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
+                               sketch_depth=8)),  # 1MB
+                (2048, Alpha(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 4, outlier_sketch_width=1024 * 8 * 4,
+                               sketch_depth=8)),  # 2MB
+                (4096, Alpha(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 8, outlier_sketch_width=1024 * 8 * 8,
+                               sketch_depth=8)),  # 4MB
+                (8192, Alpha(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 16, outlier_sketch_width=1024 * 8 * 16,
+                               sketch_depth=8)),  # 8MB
+                (16384, Alpha(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
+                                sketch_depth=8)),  # 16MB
+            )
+        ),
     )
 
     # construct a FullGraph

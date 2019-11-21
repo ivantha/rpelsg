@@ -16,6 +16,7 @@ if __name__ == '__main__':
         Sketches.countmin.name,
         Sketches.gsketch.name,
         Sketches.tcm.name,
+        Sketches.alpha.name,
     ]
 
     results = []

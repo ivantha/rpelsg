@@ -12,7 +12,8 @@ if __name__ == '__main__':
     sketches = (
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),
-        (Sketches.tcm.name, 'TCM')
+        (Sketches.tcm.name, 'TCM'),
+        (Sketches.alpha.name, 'Alpha'),
     )
 
     matplotlib.rcParams['figure.dpi'] = 500

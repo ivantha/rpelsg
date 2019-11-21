@@ -5,6 +5,7 @@ import json
 import os
 
 from common import utils
+from sketches.alpha import Alpha
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
@@ -29,6 +30,9 @@ if __name__ == '__main__':
                 total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
                 sketch_depth=8),  # 16MB
         TCM(w=256 * 4, d=8),  # 16MB
+        Alpha(base_path, streaming_path,
+                total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
+                sketch_depth=8),  # 16MB
     )
 
     vertices = set()

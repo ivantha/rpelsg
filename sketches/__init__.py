@@ -6,3 +6,4 @@ class Sketches(enum.Enum):
     countmin = 'countmin'
     gsketch = 'gsketch'
     tcm = 'tcm'
+    alpha = 'alpha'

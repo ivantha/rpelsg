@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 
 from common import utils
+from sketches.alpha import Alpha
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
@@ -22,7 +23,8 @@ if __name__ == '__main__':
         FullGraph(),
         CountMin(),  # default - 512KB
         GSketch(base_path, streaming_path),  # default - 512KB
-        TCM()  # default - 512KB
+        TCM(),  # default - 512KB
+        Alpha(base_path, streaming_path),  # default - 512KB
     ]
 
     # 4MB

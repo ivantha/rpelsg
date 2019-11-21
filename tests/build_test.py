@@ -4,6 +4,7 @@ import json
 import os
 from _datetime import datetime
 
+from sketches.alpha import Alpha
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
@@ -18,6 +19,7 @@ if __name__ == '__main__':
         CountMin(),
         GSketch(base_path, streaming_path),
         TCM(),
+        Alpha(base_path, streaming_path)
     ]
 
     for sketch in sketches:
