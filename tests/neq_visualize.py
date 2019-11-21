@@ -35,7 +35,7 @@ if __name__ == '__main__':
     plt.title('Memory vs Number of Effective Queries')
     plt.ylabel('# Effective Queries')
     plt.xlabel('Memory')
-    plt.xticks([512, 1024, 2048, 4096], ('512\nKB', '1\nMB', '2\nMB', '4\nMB'))
+    plt.xticks([1024], ('1\nMB'))
     plt.legend()
 
     os.makedirs(os.path.dirname('../output/neq/{}.json'.format(Sketches.countmin.name)), exist_ok=True)

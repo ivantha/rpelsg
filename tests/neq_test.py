@@ -71,7 +71,7 @@ if __name__ == '__main__':
             )
         ),
         (
-            Sketches.gsketch.name,
+            Sketches.alpha.name,
             (
                 (512, Alpha(base_path, streaming_path,
                               total_sketch_width=1024 * 24, outlier_sketch_width=1024 * 8,

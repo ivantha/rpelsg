@@ -52,7 +52,7 @@ if __name__ == '__main__':
     plt.title('Sketch construction and streaming times')
     plt.ylabel('Time (s)')
     plt.xlabel('Sketches')
-    plt.xticks(ind, ('Full graph', 'CountMin', 'gSketch', 'TCM'))
+    plt.xticks(ind, ('Full graph', 'CountMin', 'gSketch', 'TCM', 'Alpha'))
     plt.legend((p1[0], p2[0], p3[0]), ('Initialization', 'Base construction', 'Streaming'))
 
     fig.text(0.1, 0.06, '# base edges : {:,}'.format(results[0]['base_edge_count']))

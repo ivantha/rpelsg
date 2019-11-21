@@ -26,10 +26,10 @@ if __name__ == '__main__':
                 (1024, CountMin(m=1024 * 32 * 2, d=8),),  # 1MB
                 (2048, CountMin(m=1024 * 32 * 4, d=8),),  # 2MB
                 (4096, CountMin(m=1024 * 32 * 8, d=8),),  # 4MB
-                # (8192, CountMin(m=1024 * 32 * 16, d=8)),  # 8MB
-                # (16384, CountMin(m=1024 * 32 * 32, d=8)),  # 16MB
-                # (32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32MB
-                # (65536, CountMin(m=1024 * 32 * 128, d=8)),  # 64MB
+                (8192, CountMin(m=1024 * 32 * 16, d=8)),  # 8MB
+                (16384, CountMin(m=1024 * 32 * 32, d=8)),  # 16MB
+                (32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32MB
+                (65536, CountMin(m=1024 * 32 * 128, d=8)),  # 64MB
             )
         ),
         (
@@ -47,18 +47,18 @@ if __name__ == '__main__':
                 (4096, GSketch(base_path, streaming_path,
                                total_sketch_width=1024 * 24 * 8, outlier_sketch_width=1024 * 8 * 8,
                                sketch_depth=8)),  # 4MB
-                # (8192, GSketch(base_path, streaming_path,
-                #                total_sketch_width=1024 * 24 * 16, outlier_sketch_width=1024 * 8 * 16,
-                #                sketch_depth=8)),  # 8MB
-                # (16384, GSketch(base_path, streaming_path,
-                #                 total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
-                #                 sketch_depth=8)),  # 16MB
-                # (32768, GSketch(base_path, streaming_path,
-                #                 total_sketch_width=1024 * 24 * 64, outlier_sketch_width=1024 * 8 * 64,
-                #                 sketch_depth=8)),  # 32MB
-                # (65536, GSketch(base_path, streaming_path,
-                #                 total_sketch_width=1024 * 24 * 128, outlier_sketch_width=1024 * 8 * 128,
-                #                 sketch_depth=8)),  # 64MB
+                (8192, GSketch(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 16, outlier_sketch_width=1024 * 8 * 16,
+                               sketch_depth=8)),  # 8MB
+                (16384, GSketch(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
+                                sketch_depth=8)),  # 16MB
+                (32768, GSketch(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 64, outlier_sketch_width=1024 * 8 * 64,
+                                sketch_depth=8)),  # 32MB
+                (65536, GSketch(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 128, outlier_sketch_width=1024 * 8 * 128,
+                                sketch_depth=8)),  # 64MB
             )
         ),
         (
@@ -66,8 +66,8 @@ if __name__ == '__main__':
             (
                 (512, TCM(w=256, d=8)),  # 1MB
                 (4096, TCM(w=256 * 2, d=8)),  # 4MB
-                # (16384, TCM(w=256 * 4, d=8)),  # 16MB
-                # (65536, TCM(w=256 * 8, d=8)),  # 64MB
+                (16384, TCM(w=256 * 4, d=8)),  # 16MB
+                (65536, TCM(w=256 * 8, d=8)),  # 64MB
             )
         ),
         (
@@ -85,6 +85,18 @@ if __name__ == '__main__':
                 (4096, Alpha(base_path, streaming_path,
                                total_sketch_width=1024 * 24 * 8, outlier_sketch_width=1024 * 8 * 8,
                                sketch_depth=8)),  # 4MB
+                (8192, Alpha(base_path, streaming_path,
+                               total_sketch_width=1024 * 24 * 16, outlier_sketch_width=1024 * 8 * 16,
+                               sketch_depth=8)),  # 8MB
+                (16384, Alpha(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
+                                sketch_depth=8)),  # 16MB
+                (32768, Alpha(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 64, outlier_sketch_width=1024 * 8 * 64,
+                                sketch_depth=8)),  # 32MB
+                (65536, Alpha(base_path, streaming_path,
+                                total_sketch_width=1024 * 24 * 128, outlier_sketch_width=1024 * 8 * 128,
+                                sketch_depth=8)),  # 64MB
             )
         ),
     )
