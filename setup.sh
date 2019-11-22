@@ -1,5 +1,5 @@
 # upgrade pip
-py -m pip install --upgrade pip
+python3 -m pip install --user --upgrade pip
 
 # install virtualenv
 python3 -m pip install --user virtualenv
