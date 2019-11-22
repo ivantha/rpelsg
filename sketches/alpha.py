@@ -160,13 +160,13 @@ class Alpha(Sketch):
             base_path: str,
             streaming_path: str,
 
-            # partitioned sketch => [2 bytes * (200 * 200) * 4 = 312.5 KB)]
-            total_sketch_width: int = 200,  # m: Total width of the hash table (➡️)
+            # partitioned sketch => [2 bytes * (157 * 157) * 8 = 385.1 KB)]
+            total_sketch_width: int = 157,  # m: Total width of the hash table (➡️)
 
-            # outliers => [2 bytes * (160 * 160) * 4 = 200 KB)]
-            outlier_sketch_width: int = 160,  # Width of the outlier hash table (➡️)
+            # outliers => [2 bytes * (91 * 91) * 8 = 129.4 KB)]
+            outlier_sketch_width: int = 91,  # Width of the outlier hash table (➡️)
 
-            sketch_depth: int = 4,  # d: Number of hash functions (⬇️)
+            sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
             sample_size: int = 10000,
             w_0: int = 100,
