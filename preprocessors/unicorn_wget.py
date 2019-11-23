@@ -1,4 +1,9 @@
 import os
+import sys
+
+# Path hack.
+
+sys.path.insert(0, os.path.abspath('..'))
 
 from google_drive_downloader import GoogleDriveDownloader as gdd
 
