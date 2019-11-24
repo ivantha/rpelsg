@@ -31,7 +31,7 @@ class Sketch(ABC):
 
     @timeit
     def stream(self, path: str):
-        pool = Pool(mp.cpu_count())
+        pool = Pool(mp.cpu_count())  # process pool
         total_file_count = len(utils.get_txt_files(path))
 
         def stream_edge(line):
@@ -40,8 +40,10 @@ class Sketch(ABC):
 
         for i, data_file in enumerate(utils.get_txt_files(path)):
             with open(data_file) as file:
+                # parallel edge streaming
                 pool.map(stream_edge, file.readlines())
 
+                # sequential edge streaming
                 # for line in file.readlines():
                 #     source_id, target_id = line.strip().split(',')
                 #     self.add_edge(source_id, target_id)

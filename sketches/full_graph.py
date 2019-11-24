@@ -50,7 +50,10 @@ class FullGraph(Sketch):
         self.graph.add_edge(source_id, target_id)
 
     def get_edge_frequency(self, source_id, target_id):
-        return self.graph._edges[source_id][target_id]
+        if source_id in self.graph._edges and target_id in self.graph._edges[source_id]:
+            return self.graph._edges[source_id][target_id]
+        else:
+            return 0
 
     @timeit
     def get_analytics(self):
