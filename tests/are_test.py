@@ -18,8 +18,11 @@ if __name__ == '__main__':
     base_path = '../datasets/unicorn_wget_small/benign_base/'  # base_path: Path to edges in the base graph
     streaming_path = '../datasets/unicorn_wget_small/benign_streaming/'  # streaming_path: Path to streaming edges
 
-    base_edge_count = utils.get_edge_count(base_path)
-    streaming_edge_count = utils.get_edge_count(streaming_path)
+    base_edges = utils.get_edges_in_path(base_path)
+    streaming_edges = utils.get_edges_in_path(streaming_path)
+
+    base_edge_count = len(base_edges)
+    streaming_edge_count = len(streaming_edges)
 
     memory_profiles = (
         (
@@ -120,12 +123,14 @@ if __name__ == '__main__':
     full_graph = FullGraph()
     full_graph.initialize()
 
-    full_graph.stream(base_path)  # FullGraph - construct base graph
-    full_graph.stream(streaming_path)  # FullGraph - streaming edges
+    full_graph.stream(base_edges)  # FullGraph - construct base graph
+    full_graph.stream(streaming_edges)  # FullGraph - streaming edges
+
+    print('Completed: full_graph')
 
     # reservoir sampling for 1000 items as (i, j) => 1000 queries
     sample_size = 1000
-    sample_stream = sampling.select_k_items(base_path, sample_size)
+    sample_stream = sampling.select_k_items(base_edges, sample_size)
 
     for sketch_name, profiles in memory_profiles:  # sketches are recreated with increasing memories
         output = {
@@ -137,8 +142,8 @@ if __name__ == '__main__':
 
         for memory_allocation, sketch in profiles:
             sketch.initialize()  # initialize the sketch
-            sketch.stream(base_path)  # construct base graph
-            sketch.stream(streaming_path)  # streaming edges
+            sketch.stream(base_edges)  # construct base graph
+            sketch.stream(streaming_edges)  # streaming edges
 
             # query
             relative_error_sum = 0
@@ -157,6 +162,8 @@ if __name__ == '__main__':
 
             # free memory - remove reference to the sketch
             del sketch
+
+            print('Completed: {}_{}'.format(sketch_name, memory_allocation))
 
         # free memory - call garbage collector
         gc.collect()
