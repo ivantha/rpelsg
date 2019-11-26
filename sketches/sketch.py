@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from p_tqdm import p_umap
-
 from common.utils import timeit
 
 
@@ -27,8 +25,5 @@ class Sketch(ABC):
 
     @timeit
     def stream(self, edges: List):
-        def stream_edge(edge):
+        for edge in edges:
             self.add_edge(edge[0], edge[1])
-
-        # parallel edge streaming
-        p_umap(stream_edge, edges)
