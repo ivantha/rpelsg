@@ -1,4 +1,5 @@
 import operator
+from typing import List
 
 from pympler import asizeof
 
@@ -157,8 +158,8 @@ class GSketch(Sketch):
 
     def __init__(
             self,
-            base_path: str,
-            streaming_path: str,
+            base_edges: List,
+            streaming_edges: List,
 
             # partitioned sketch => [2 bytes * (1024 * 24) * 8 = 384 KB]
             total_sketch_width: int = 1024 * 24,  # m: Total width of the hash table (➡️)
@@ -172,8 +173,8 @@ class GSketch(Sketch):
             w_0: int = 100,
             C: int = 10
     ):
-        self.base_path = base_path
-        self.streaming_path = streaming_path
+        self.base_edges = base_edges
+        self.streaming_edges = streaming_edges
 
         self.total_sketch_width = total_sketch_width
         self.outlier_sketch_width = outlier_sketch_width
@@ -189,7 +190,7 @@ class GSketch(Sketch):
     @timeit
     def initialize(self):
         # reservoir sampling for k items as (i, j)
-        self.sample_stream = sampling.select_k_items(self.base_path, self.sample_size)
+        self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
         # partition sketches
         self.bpt = BinaryPartitionTree(self.sample_stream, self.total_sketch_width, self.sketch_depth, self.w_0, self.C)

@@ -12,36 +12,34 @@ from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
 if __name__ == '__main__':
-    base_path = '../datasets/unicorn_wget_small/benign_base/'  # base_path: Path to edges in the base graph
-    streaming_path = '../datasets/unicorn_wget_small/benign_streaming/'  # streaming_path: Path to streaming edges
+    base_edges = utils.get_edges_in_path(
+        '../datasets/unicorn_wget_small/benign_base/')  # base_path: Path to edges in the base graph
+    streaming_edges = utils.get_edges_in_path(
+        '../datasets/unicorn_wget_small/benign_streaming/')  # streaming_path: Path to streaming edges
 
-    base_edge_count = utils.get_edge_count(base_path)
-    streaming_edge_count = utils.get_edge_count(streaming_path)
+    base_edge_count = len(base_edges)
+    streaming_edge_count = len(streaming_edges)
 
     sketches = (
         FullGraph(),
         CountMin(m=1024 * 32 * 2, d=8),  # 1MB
-        GSketch(base_path, streaming_path,
+        GSketch(base_edges, streaming_edges,
                 total_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
                 sketch_depth=8),  # 1MB
         TCM(w=256, d=8),  # 1MB
-        Alpha(base_path, streaming_path,
-                total_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
-                sketch_depth=8),  # 1MB
+        Alpha(base_edges, streaming_edges,
+              total_sketch_width=222,  # 770 KB
+              outlier_sketch_width=128,  # 256 KB
+              sketch_depth=8),  # 1MB
     )
 
     vertices = set()
     edges = set()
 
-    for path in (base_path, streaming_path):
-        for i, data_file in enumerate(utils.get_txt_files(path)):
-            with open(data_file) as file:
-                for line in file.readlines():
-                    source_id, target_id = line.strip().split(',')
-
-                    vertices.add(source_id)
-                    vertices.add(target_id)
-                    edges.add((source_id, target_id))
+    for edge in base_edges + streaming_edges:
+        vertices.add(edge[0])  # add source_id
+        vertices.add(edge[1])  # add target_id
+        edges.add(edge)
 
     number_of_vertices = len(vertices)
     number_of_edges = len(edges)
@@ -50,8 +48,8 @@ if __name__ == '__main__':
         edge_weights = {}
 
         sketch.initialize()  # initialize the sketch
-        sketch.stream(base_path)  # construct base graph
-        sketch.stream(streaming_path)  # streaming edges
+        sketch.stream(base_edges)  # construct base graph
+        sketch.stream(streaming_edges)  # streaming edges
 
         # add all edges
         for source_id, target_id in edges:
@@ -87,6 +85,8 @@ if __name__ == '__main__':
         os.makedirs(os.path.dirname('../output/ewd/{}.json'.format(sketch.name)), exist_ok=True)
         with open('../output/ewd/{}.json'.format(sketch.name), 'w') as file:
             json.dump(output, file, indent=4)
+
+        print('Completed: {}'.format(sketch.name))
 
         # free memory - remove reference to the sketch
         del sketch
