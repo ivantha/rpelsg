@@ -40,7 +40,7 @@ class TCM(Sketch):
 
     def __init__(
             self,
-            # [2 bytes * (181 * 181) * 4 = 511 KB)]
+            # [2 bytes * (181 * 181) * 8 = 511 KB)]
             w: int = 181,  # w: Side width of the hash tables (size = ↓w * →w)
             d: int = 8  # d: Number of hash functions
     ):

@@ -1,3 +1,4 @@
+import math
 import operator
 from typing import List
 
@@ -52,6 +53,9 @@ class BinaryPartitionTree:
         self.vertex_relative_frequency = {}
         self.vertex_out_degree = {}
         self.vertex_average_frequency = {}  # f_v(m) / d_(m)
+
+        # remaining sketch size
+        self.temp_remaining_sketch_size = 0  # temporary size of remaining sketch size after partitioning => root(x) = outlier_sketch_width
 
     def partition(self):
         # Calculate edges, vertices, vertex frequencies and out degrees => O(n)
@@ -152,6 +156,11 @@ class BinaryPartitionTree:
                 stack.append(BptNode(current_sketch.vertices[:min_E[0]], int(current_sketch.width / 2)))
                 stack.append(BptNode(current_sketch.vertices[min_E[0]:], int(current_sketch.width / 2)))
 
+                # add to remaining sketch size
+                x = current_sketch.width / 2.0
+                rem_quarter = 2.0 * x * x * self.sketch_depth / 1024.0
+                self.temp_remaining_sketch_size += (2 * rem_quarter)
+
 
 class Alpha(Sketch):
     name = Sketches.alpha.name
@@ -161,11 +170,8 @@ class Alpha(Sketch):
             base_edges: List,
             streaming_edges: List,
 
-            # partitioned sketch => [2 bytes * (157 * 157) * 8 = 385.1 KB)]
-            total_sketch_width: int = 157,  # m: Total width of the hash table (➡️)
-
-            # outliers => [2 bytes * (91 * 91) * 8 = 129.4 KB)]
-            outlier_sketch_width: int = 91,  # Width of the outlier hash table (➡️)
+            # total sketch => [2 bytes * (181 * 181) * 8 = 511.9 KB)]
+            total_sketch_width: int = 181,  # m: Total width of the hash table (➡️)
 
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
@@ -177,7 +183,6 @@ class Alpha(Sketch):
         self.streaming_edges = streaming_edges
 
         self.total_sketch_width = total_sketch_width
-        self.outlier_sketch_width = outlier_sketch_width
         self.sketch_depth = sketch_depth
 
         self.sample_size = sample_size
@@ -193,11 +198,14 @@ class Alpha(Sketch):
         self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, self.total_sketch_width, self.sketch_depth, self.w_0, self.C)
+        partitioned_sketch_width = self.total_sketch_width  # but the total width won't be used!!
+        self.bpt = BinaryPartitionTree(self.sample_stream, partitioned_sketch_width, self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        self.bpt.sketch_hash.outliers = TcmTable(self.outlier_sketch_width, self.sketch_depth)
+        outlier_sketch_width = round(math.sqrt(self.bpt.temp_remaining_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
+        print(outlier_sketch_width)
+        self.bpt.sketch_hash.outliers = TcmTable(outlier_sketch_width, self.sketch_depth)
 
     def add_edge(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:

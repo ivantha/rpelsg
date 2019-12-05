@@ -162,7 +162,7 @@ class GSketch(Sketch):
             streaming_edges: List,
 
             # partitioned sketch => [2 bytes * (1024 * 24) * 8 = 384 KB]
-            total_sketch_width: int = 1024 * 24,  # m: Total width of the hash table (➡️)
+            partitioned_sketch_width: int = 1024 * 24,  # m: Total width of the hash table (➡️)
 
             # outliers => [2 bytes * (1024 * 8) * 8 = 128 KB]
             outlier_sketch_width: int = 1024 * 8,  # Width of the outlier hash table (➡️)
@@ -176,7 +176,7 @@ class GSketch(Sketch):
         self.base_edges = base_edges
         self.streaming_edges = streaming_edges
 
-        self.total_sketch_width = total_sketch_width
+        self.partitioned_sketch_width = partitioned_sketch_width
         self.outlier_sketch_width = outlier_sketch_width
         self.sketch_depth = sketch_depth
 
@@ -193,7 +193,7 @@ class GSketch(Sketch):
         self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, self.total_sketch_width, self.sketch_depth, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, self.partitioned_sketch_width, self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch

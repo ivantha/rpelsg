@@ -24,7 +24,7 @@ if __name__ == '__main__':
         FullGraph(),
         CountMin(m=1024 * 32 * 32, d=8),  # 16MB
         GSketch(base_edges, streaming_edges,
-                total_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
+                partitioned_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
                 sketch_depth=8),  # 16MB
         TCM(w=256 * 4, d=8),  # 16MB
         Alpha(base_edges, streaming_edges,
