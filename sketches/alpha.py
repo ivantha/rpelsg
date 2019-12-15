@@ -197,14 +197,16 @@ class Alpha(Sketch):
         # reservoir sampling for k items as (i, j)
         self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
+        # set initial sketch sizes
+        partitioned_sketch_width = round(self.total_sketch_width * 3.0 / 4.0)  # but the total assignd width (3/4) won't be used!!
+        outlier_sketch_width = round(self.total_sketch_width / 4.0)
+
         # partition sketches
-        partitioned_sketch_width = self.total_sketch_width  # but the total width won't be used!!
         self.bpt = BinaryPartitionTree(self.sample_stream, partitioned_sketch_width, self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        outlier_sketch_width = round(math.sqrt(self.bpt.temp_remaining_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
-        print(outlier_sketch_width)
+        outlier_sketch_width += round(math.sqrt(self.bpt.temp_remaining_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
         self.bpt.sketch_hash.outliers = TcmTable(outlier_sketch_width, self.sketch_depth)
 
     def add_edge(self, source_id, target_id):
