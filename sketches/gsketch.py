@@ -159,7 +159,6 @@ class GSketch(Sketch):
     def __init__(
             self,
             base_edges: List,
-            streaming_edges: List,
 
             # partitioned sketch => [2 bytes * (1024 * 24) * 8 = 384 KB]
             partitioned_sketch_width: int = 1024 * 24,  # m: Total width of the hash table (➡️)
@@ -174,7 +173,6 @@ class GSketch(Sketch):
             C: int = 10
     ):
         self.base_edges = base_edges
-        self.streaming_edges = streaming_edges
 
         self.partitioned_sketch_width = partitioned_sketch_width
         self.outlier_sketch_width = outlier_sketch_width

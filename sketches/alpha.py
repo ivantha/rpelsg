@@ -176,7 +176,6 @@ class Alpha(Sketch):
     def __init__(
             self,
             base_edges: List,
-            streaming_edges: List,
 
             # total sketch => [2 bytes * (181 * 181) * 8 = 511.9 KB)]
             total_sketch_width: int = 181,  # m: Total width of the hash table (➡️)
@@ -188,7 +187,6 @@ class Alpha(Sketch):
             C: int = 10
     ):
         self.base_edges = base_edges
-        self.streaming_edges = streaming_edges
 
         self.total_sketch_width = total_sketch_width
         self.sketch_depth = sketch_depth

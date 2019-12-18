@@ -11,47 +11,41 @@ from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
-if __name__ == '__main__':
-    base_path = '../datasets/unicorn_wget_small/benign_base/'  # base_path: Path to edges in the base graph
-    streaming_path = '../datasets/unicorn_wget_small/benign_streaming/'  # streaming_path: Path to streaming edges
 
-    base_edge_count = utils.get_edge_count(base_path)
-    streaming_edge_count = utils.get_edge_count(streaming_path)
+def sketch_time_test(*argv):
+    print('sketch_time_test')
 
-    # 512KB
-    sketches = [
+    edge_lists = []
+    for arg in argv:
+        edge_lists.append(utils.get_edges_in_path(arg))
+
+    sketches = (
         FullGraph(),
-        CountMin(),  # default - 512KB
-        GSketch(base_path, streaming_path),  # default - 512KB
-        TCM(),  # default - 512KB
-        Alpha(base_path, streaming_path),  # default - 512KB
-    ]
-
-    # 4MB
-    # sketches = [
-    #     FullGraph(),
-    #     CountMin(m=1024 * 32 * 8, d=8),  # 4MB
-    #     GSketch(base_path, streaming_path,
-    #             total_sketch_width=1024 * 24 * 8, outlier_sketch_width=1024 * 8 * 8,
-    #             sketch_depth=8),  # 4MB
-    #     TCM(w=256 * 2, d=8)  # 4MB
-    # ]
+        CountMin(m=1024 * 32 * 2, d=8),  # 1MB
+        GSketch(edge_lists[0],
+                partitioned_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2, sketch_depth=8),  # 1MB
+        TCM(w=256, d=8),  # 1MB
+        Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8),  # 1MB
+    )
 
     for sketch in sketches:
         process_start_time = datetime.now()
 
         initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
-        base_start_time, base_end_time = sketch.time_critical_stream(base_path)  # construct base graph
-        streaming_start_time, streaming_end_time = sketch.time_critical_stream(streaming_path)  # streaming edges
+
+        streaming_times = []
+        for edge_list in edge_lists:
+            streaming_times.append(sketch.stream(edge_list))
+
+        streaming_start_time = streaming_times[0][0]
+        streaming_end_time = streaming_times[-1][1]
 
         process_end_time = datetime.now()
 
         output = {
             'sketch': sketch.name,
-            'base_edge_count': base_edge_count,
-            'streaming_edge_count': streaming_edge_count,
+            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'initialize_time': '{}'.format(initialize_end_time - initialize_start_time),
-            'base_construction_time': '{}'.format(base_end_time - base_start_time),
             'streaming_time': '{}'.format(streaming_end_time - streaming_start_time),
             'process_time': '{}'.format(process_end_time - process_start_time),
         }

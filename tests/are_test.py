@@ -14,12 +14,13 @@ from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
-if __name__ == '__main__':
-    base_edges = utils.get_edges_in_path('../datasets/unicorn_wget_small/benign_base/')  # base_path: Path to edges in the base graph
-    streaming_edges = utils.get_edges_in_path('../datasets/unicorn_wget_small/benign_streaming/')  # streaming_path: Path to streaming edges
 
-    base_edge_count = len(base_edges)
-    streaming_edge_count = len(streaming_edges)
+def are_test(*argv):
+    print('are_test')
+
+    edge_lists = []
+    for arg in argv:
+        edge_lists.append(utils.get_edges_in_path(arg))
 
     memory_profiles = (
         (
@@ -38,28 +39,28 @@ if __name__ == '__main__':
         (
             Sketches.gsketch.name,
             (
-                (512, GSketch(base_edges, streaming_edges,
+                (512, GSketch(edge_lists[0],
                               partitioned_sketch_width=1024 * 24, outlier_sketch_width=1024 * 8,
                               sketch_depth=8)),  # 512 KB
-                (1024, GSketch(base_edges, streaming_edges,
+                (1024, GSketch(edge_lists[0],
                                partitioned_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
                                sketch_depth=8)),  # 1 MB
-                (2048, GSketch(base_edges, streaming_edges,
+                (2048, GSketch(edge_lists[0],
                                partitioned_sketch_width=1024 * 24 * 4, outlier_sketch_width=1024 * 8 * 4,
                                sketch_depth=8)),  # 2 MB
-                (4096, GSketch(base_edges, streaming_edges,
+                (4096, GSketch(edge_lists[0],
                                partitioned_sketch_width=1024 * 24 * 8, outlier_sketch_width=1024 * 8 * 8,
                                sketch_depth=8)),  # 4 MB
-                (8192, GSketch(base_edges, streaming_edges,
+                (8192, GSketch(edge_lists[0],
                                partitioned_sketch_width=1024 * 24 * 16, outlier_sketch_width=1024 * 8 * 16,
                                sketch_depth=8)),  # 8 MB
-                (16384, GSketch(base_edges, streaming_edges,
+                (16384, GSketch(edge_lists[0],
                                 partitioned_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
                                 sketch_depth=8)),  # 16 MB
-                (32768, GSketch(base_edges, streaming_edges,
+                (32768, GSketch(edge_lists[0],
                                 partitioned_sketch_width=1024 * 24 * 64, outlier_sketch_width=1024 * 8 * 64,
                                 sketch_depth=8)),  # 32 MB
-                (65536, GSketch(base_edges, streaming_edges,
+                (65536, GSketch(edge_lists[0],
                                 partitioned_sketch_width=1024 * 24 * 128, outlier_sketch_width=1024 * 8 * 128,
                                 sketch_depth=8)),  # 64 MB
             )
@@ -80,30 +81,14 @@ if __name__ == '__main__':
         (
             Sketches.alpha.name,
             (
-                (512, Alpha(base_edges, streaming_edges,
-                            total_sketch_width=181,
-                            sketch_depth=8)),  # 512 KB
-                (1024, Alpha(base_edges, streaming_edges,
-                             total_sketch_width=256,
-                             sketch_depth=8)),  # 1 MB
-                (2048, Alpha(base_edges, streaming_edges,
-                             total_sketch_width=362,
-                             sketch_depth=8)),  # 2 MB
-                (4096, Alpha(base_edges, streaming_edges,
-                             total_sketch_width=512,
-                             sketch_depth=8)),  # 4 MB
-                (8192, Alpha(base_edges, streaming_edges,
-                             total_sketch_width=724,
-                             sketch_depth=8)),  # 8 MB
-                (16384, Alpha(base_edges, streaming_edges,
-                              total_sketch_width=1024,
-                              sketch_depth=8)),  # 16 MB
-                (32768, Alpha(base_edges, streaming_edges,
-                              total_sketch_width=1448,
-                              sketch_depth=8)),  # 32 MB
-                (65536, Alpha(base_edges, streaming_edges,
-                              total_sketch_width=2048,
-                              sketch_depth=8)),  # 64 MB
+                (512, Alpha(edge_lists[0], total_sketch_width=181, sketch_depth=8)),  # 512 KB
+                (1024, Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8)),  # 1 MB
+                (2048, Alpha(edge_lists[0], total_sketch_width=362, sketch_depth=8)),  # 2 MB
+                (4096, Alpha(edge_lists[0], total_sketch_width=512, sketch_depth=8)),  # 4 MB
+                (8192, Alpha(edge_lists[0], total_sketch_width=724, sketch_depth=8)),  # 8 MB
+                (16384, Alpha(edge_lists[0], total_sketch_width=1024, sketch_depth=8)),  # 16 MB
+                (32768, Alpha(edge_lists[0], total_sketch_width=1448, sketch_depth=8)),  # 32 MB
+                (65536, Alpha(edge_lists[0], total_sketch_width=2048, sketch_depth=8)),  # 64 MB
             )
         ),
     )
@@ -112,27 +97,28 @@ if __name__ == '__main__':
     full_graph = FullGraph()
     full_graph.initialize()
 
-    full_graph.stream(base_edges)  # FullGraph - construct base graph
-    full_graph.stream(streaming_edges)  # FullGraph - streaming edges
+    for edge_list in edge_lists:
+        full_graph.stream(edge_list)
 
     print('Completed: full_graph')
 
     # reservoir sampling for 1000 items as (i, j) => 1000 queries
     sample_size = 1000
-    sample_stream = sampling.select_k_items(base_edges, sample_size)
+    sample_stream = sampling.select_k_items(edge_lists[0], sample_size)
 
     for sketch_name, profiles in memory_profiles:  # sketches are recreated with increasing memories
         output = {
             'sketch_name': sketch_name,
-            'base_edge_count': base_edge_count,
-            'streaming_edge_count': streaming_edge_count,
+            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'results': []
         }
 
         for memory_allocation, sketch in profiles:
             sketch.initialize()  # initialize the sketch
-            sketch.stream(base_edges)  # construct base graph
-            sketch.stream(streaming_edges)  # streaming edges
+
+            # stream edges
+            for edge_list in edge_lists:
+                sketch.stream(edge_list)
 
             # query
             relative_error_sum = 0

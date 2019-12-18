@@ -10,7 +10,10 @@ import numpy as np
 
 from sketches import Sketches
 
-if __name__ == '__main__':
+
+def sketch_time_visualize():
+    print('sketch_time_visualize')
+
     sketches = [
         Sketches.full_graph.name,
         Sketches.countmin.name,
@@ -25,9 +28,11 @@ if __name__ == '__main__':
         os.makedirs(os.path.dirname('../output/sketch_time/{}.json'.format(sketch_name)), exist_ok=True)
         with open('../output/sketch_time/{}.json'.format(sketch_name)) as file:
             output = json.load(file)
-            output['initialize_time'] = (dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00","%H:%M")).total_seconds()
-            output['base_construction_time'] = (dtt.strptime(output['base_construction_time'], '%H:%M:%S.%f') - dtt.strptime("00:00","%H:%M")).total_seconds()
-            output['streaming_time'] = (dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00","%H:%M")).total_seconds()
+            output['initialize_time'] = (
+                    dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
+            ).total_seconds()
+            output['base_construction_time'] = (dtt.strptime(output['base_construction_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")).total_seconds()
+            output['streaming_time'] = (dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")).total_seconds()
             results.append(output)
 
     matplotlib.rcParams['figure.dpi'] = 500
@@ -60,4 +65,4 @@ if __name__ == '__main__':
     fig.text(0.1, 0.03, 'Sketch size : 512 KB')
 
     plt.savefig('../output/sketch_time/sketch_time.png')
-    plt.show()
+    # plt.show()

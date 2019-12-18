@@ -8,7 +8,10 @@ import matplotlib.pyplot as plt
 
 from sketches import Sketches
 
-if __name__ == '__main__':
+
+def dd_visualize():
+    print('dd_visualize')
+
     sketches = (
         (Sketches.full_graph.name, 'FullGraph'),
         (Sketches.countmin.name, 'CountMin'),
@@ -41,4 +44,4 @@ if __name__ == '__main__':
             fig.text(0.1, 0.03, '# vertices : {:,}'.format(output['number_of_vertices']))
 
             plt.savefig('../output/dd/dd_{}.png'.format(sketch_name))
-            plt.show()
+            # plt.show()

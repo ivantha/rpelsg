@@ -9,7 +9,8 @@ from common import utils
 from sketches.full_graph import FullGraph
 from sketches.tcm import TCM
 
-if __name__ == '__main__':
+
+def reachability_test():
     base_path = '../datasets/unicorn_wget_small/benign_base/'  # base_path: Path to edges in the base graph
     streaming_path = '../datasets/unicorn_wget_small/benign_streaming/'  # streaming_path: Path to streaming edges
 
@@ -50,15 +51,12 @@ if __name__ == '__main__':
 
     reservoir = list(zip(reservoir[:100], reservoir[100:]))
 
-
-
     for sketch in sketches:  # sketches are recreated with increasing memories
         sketch_edge_weights = {}
 
         sketch.initialize()  # initialize the sketch
         sketch.stream(base_path)  # construct base graph
         sketch.stream(streaming_path)  # streaming edges
-
 
         # compare top-k results
         k = 1000

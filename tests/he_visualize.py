@@ -9,7 +9,10 @@ import numpy as np
 
 from sketches import Sketches
 
-if __name__ == '__main__':
+
+def he_visualize():
+    print('he_visualize')
+
     sketches = (
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),
@@ -48,4 +51,4 @@ if __name__ == '__main__':
     fig.text(0.5, 0.03, '# edges : {:,}'.format(results[0]['number_of_edges']))
 
     plt.savefig('../output/he/he.png')
-    plt.show()
+    # plt.show()

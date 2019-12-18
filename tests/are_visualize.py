@@ -8,7 +8,10 @@ import matplotlib.pyplot as plt
 
 from sketches import Sketches
 
-if __name__ == '__main__':
+
+def are_visualize():
+    print('are_visualize')
+
     sketches = (
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),

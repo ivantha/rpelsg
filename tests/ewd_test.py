@@ -11,35 +11,31 @@ from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
-if __name__ == '__main__':
-    base_edges = utils.get_edges_in_path(
-        '../datasets/unicorn_wget_small/benign_base/')  # base_path: Path to edges in the base graph
-    streaming_edges = utils.get_edges_in_path(
-        '../datasets/unicorn_wget_small/benign_streaming/')  # streaming_path: Path to streaming edges
 
-    base_edge_count = len(base_edges)
-    streaming_edge_count = len(streaming_edges)
+def ewd_test(*argv):
+    print('ewd_test')
+
+    edge_lists = []
+    for arg in argv:
+        edge_lists.append(utils.get_edges_in_path(arg))
 
     sketches = (
         FullGraph(),
         CountMin(m=1024 * 32 * 2, d=8),  # 1MB
-        GSketch(base_edges, streaming_edges,
-                partitioned_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
-                sketch_depth=8),  # 1MB
+        GSketch(edge_lists[0],
+                partitioned_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2, sketch_depth=8),  # 1MB
         TCM(w=256, d=8),  # 1MB
-        Alpha(base_edges, streaming_edges,
-              total_sketch_width=222,  # 770 KB
-              outlier_sketch_width=128,  # 256 KB
-              sketch_depth=8),  # 1MB
+        Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8),  # 1MB
     )
 
     vertices = set()
     edges = set()
 
-    for edge in base_edges + streaming_edges:
-        vertices.add(edge[0])  # add source_id
-        vertices.add(edge[1])  # add target_id
-        edges.add(edge)
+    for edge_list in edge_lists:
+        for edge in edge_list:
+            vertices.add(edge[0])  # add source_id
+            vertices.add(edge[1])  # add target_id
+            edges.add(edge)
 
     number_of_vertices = len(vertices)
     number_of_edges = len(edges)
@@ -48,8 +44,10 @@ if __name__ == '__main__':
         edge_weights = {}
 
         sketch.initialize()  # initialize the sketch
-        sketch.stream(base_edges)  # construct base graph
-        sketch.stream(streaming_edges)  # streaming edges
+
+        # stream edges
+        for edge_list in edge_lists:
+            sketch.stream(edge_list)
 
         # add all edges
         for source_id, target_id in edges:
@@ -75,8 +73,7 @@ if __name__ == '__main__':
 
         output = {
             'sketch_name': sketch.name,
-            'base_edge_count': base_edge_count,
-            'streaming_edge_count': streaming_edge_count,
+            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_vertices': number_of_vertices,
             'edge_weights': edge_weights,
             'edge_weight_distribution': edge_weight_distribution

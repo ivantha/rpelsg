@@ -11,46 +11,42 @@ from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
-if __name__ == '__main__':
-    base_edges = utils.get_edges_in_path(
-        '../datasets/unicorn_wget_small/benign_base/')  # base_path: Path to edges in the base graph
-    streaming_edges = utils.get_edges_in_path(
-        '../datasets/unicorn_wget_small/benign_streaming/')  # streaming_path: Path to streaming edges
 
-    base_edge_count = len(base_edges)
-    streaming_edge_count = len(streaming_edges)
+def hn_test(*argv):
+    print('hn_test')
+
+    edge_lists = []
+    for arg in argv:
+        edge_lists.append(utils.get_edges_in_path(arg))
 
     sketches = (
         FullGraph(),
-        CountMin(m=1024 * 32 * 32, d=8),  # 16MB
-        GSketch(base_edges, streaming_edges,
-                partitioned_sketch_width=1024 * 24 * 32, outlier_sketch_width=1024 * 8 * 32,
-                sketch_depth=8),  # 16MB
-        TCM(w=256 * 4, d=8),  # 16MB
-        Alpha(base_edges, streaming_edges,
-              total_sketch_width=887,  # 12.0051 MB
-              outlier_sketch_width=512,  # 4 MB
-              sketch_depth=8),  # 16MB
+        CountMin(m=1024 * 32 * 2, d=8),  # 1MB
+        GSketch(edge_lists[0],
+                partitioned_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2, sketch_depth=8),  # 1MB
+        TCM(w=256, d=8),  # 1MB
+        Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8),  # 1MB
     )
 
     vertices = set()
     edges = set()
     degrees = {}
 
-    for edge in base_edges + streaming_edges:
-        vertices.add(edge[0])  # add source_id
-        vertices.add(edge[1])  # add target_id
-        edges.add(edge)
+    for edge_list in edge_lists:
+        for edge in edge_list:
+            vertices.add(edge[0])  # add source_id
+            vertices.add(edge[1])  # add target_id
+            edges.add(edge)
 
-        if edge[0] not in degrees:
-            degrees[edge[0]] = 1
-        else:
-            degrees[edge[0]] += 1
+            if edge[0] not in degrees:
+                degrees[edge[0]] = 1
+            else:
+                degrees[edge[0]] += 1
 
-        if edge[1] not in degrees:
-            degrees[edge[1]] = 1
-        else:
-            degrees[edge[1]] += 1
+            if edge[1] not in degrees:
+                degrees[edge[1]] = 1
+            else:
+                degrees[edge[1]] += 1
 
     # sort the degrees
     sorted_degrees = sorted(degrees.items(), key=lambda kv: (kv[1], kv[0]))
@@ -62,8 +58,10 @@ if __name__ == '__main__':
         sketch_degrees = {}
 
         sketch.initialize()  # initialize the sketch
-        sketch.stream(base_edges)  # construct base graph
-        sketch.stream(streaming_edges)  # streaming edges
+
+        # stream edges
+        for edge_list in edge_lists:
+            sketch.stream(edge_list)
 
         # add all vertices
         for vertex in vertices:
@@ -91,8 +89,7 @@ if __name__ == '__main__':
 
         output = {
             'sketch_name': sketch.name,
-            'base_edge_count': base_edge_count,
-            'streaming_edge_count': streaming_edge_count,
+            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_edges': number_of_edges,
             'number_of_vertices': number_of_vertices,
             'inter_accuracy': intersection_count / k
