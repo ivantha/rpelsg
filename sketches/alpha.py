@@ -13,7 +13,7 @@ from sketches.tcm import TcmTable
 
 class SketchHash:
     def __init__(self):
-        self.countmin_tables = []
+        self.tcm_tables = []
         self.hash = {}
 
         self.outliers = None
@@ -33,14 +33,14 @@ class BinaryPartitionTree:
     def __init__(
             self,
             sample_stream: [(str, str)],
-            sketch_total_width,
+            total_sketch_width,
             sketch_depth,
             w_0: int,
             C: int
     ):
         # initial parameters
         self.sample_stream = sample_stream
-        self.sketch_total_width = sketch_total_width
+        self.total_sketch_width = total_sketch_width
         self.sketch_depth = sketch_depth
         self.w_0 = w_0
         self.C = C
@@ -54,8 +54,13 @@ class BinaryPartitionTree:
         self.vertex_out_degree = {}
         self.vertex_average_frequency = {}  # f_v(m) / d_(m)
 
-        # remaining sketch size
-        self.temp_remaining_sketch_size = 0  # temporary size of remaining sketch size after partitioning => root(x) = outlier_sketch_width
+        # sketch sizes
+        total_sketch_size = 2 * total_sketch_width * total_sketch_width * self.sketch_depth / 1024.0
+        self.partitioned_sketch_size = 0
+        self.outlier_sketch_size = total_sketch_size * 0.25  # initial + remaining sketch size after partitioning => root(x) = outlier_sketch_width
+
+        initial_partitioned_sketch_size = total_sketch_size * 0.75  # but the total assigned width won't be used!!
+        self.partitionable_width = round(math.sqrt(initial_partitioned_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
 
     def partition(self):
         # Calculate edges, vertices, vertex frequencies and out degrees => O(n)
@@ -91,7 +96,7 @@ class BinaryPartitionTree:
         sorted_vertices = [vertex for (vertex, average_frequency) in sorted_vertices]
 
         # Create a root node => O(1)
-        self.root = BptNode(sorted_vertices, self.sketch_total_width)
+        self.root = BptNode(sorted_vertices, self.partitionable_width)
 
         # Push the root node to the stack => O(1)
         stack = [self.root]
@@ -111,12 +116,15 @@ class BinaryPartitionTree:
             if c1 or c2:  # Enough partitioning
                 # Append the current sketch to the list of sketches => O(1)
                 table = TcmTable(current_sketch.width, self.sketch_depth)
-                self.sketch_hash.countmin_tables.append(table)
+                self.sketch_hash.tcm_tables.append(table)
 
                 # Save index of leaf(sketch) at leaves in sketch_hash => O(n)
-                idx = len(self.sketch_hash.countmin_tables) - 1
+                idx = len(self.sketch_hash.tcm_tables) - 1
                 for vertex in current_sketch.vertices:
                     self.sketch_hash.hash[vertex] = idx
+
+                # report: partitioned size
+                self.partitioned_sketch_size += (2 * current_sketch.width * current_sketch.width * self.sketch_depth / 1024.0)
             else:  # Partition some more
                 # Calculate E
                 def calculate_E(vertices, pivot):
@@ -156,10 +164,10 @@ class BinaryPartitionTree:
                 stack.append(BptNode(current_sketch.vertices[:min_E[0]], int(current_sketch.width / 2)))
                 stack.append(BptNode(current_sketch.vertices[min_E[0]:], int(current_sketch.width / 2)))
 
-                # add to remaining sketch size
+                # add to outlier (remaining) sketch size
                 x = current_sketch.width / 2.0
                 rem_quarter = 2.0 * x * x * self.sketch_depth / 1024.0
-                self.temp_remaining_sketch_size += (2 * rem_quarter)
+                self.outlier_sketch_size += (2 * rem_quarter)
 
 
 class Alpha(Sketch):
@@ -176,7 +184,7 @@ class Alpha(Sketch):
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
             sample_size: int = 10000,
-            w_0: int = 100,
+            w_0: int = 200,
             C: int = 10
     ):
         self.base_edges = base_edges
@@ -197,27 +205,27 @@ class Alpha(Sketch):
         # reservoir sampling for k items as (i, j)
         self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
-        # set initial sketch sizes
-        partitioned_sketch_width = round(self.total_sketch_width * 3.0 / 4.0)  # but the total assignd width (3/4) won't be used!!
-        outlier_sketch_width = round(self.total_sketch_width / 4.0)
-
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, partitioned_sketch_width, self.sketch_depth, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, self.total_sketch_width, self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        outlier_sketch_width += round(math.sqrt(self.bpt.temp_remaining_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
+        outlier_sketch_width = round(math.sqrt(self.bpt.outlier_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
         self.bpt.sketch_hash.outliers = TcmTable(outlier_sketch_width, self.sketch_depth)
+
+        print('{}KB (Partitioned) : {}KB (Outlier)'.format(self.bpt.partitioned_sketch_size, self.bpt.outlier_sketch_size))
+        print('Outlier sketch width: {}'.format(outlier_sketch_width))
+        print('# partitions: {}'.format(len(self.bpt.sketch_hash.tcm_tables)))
 
     def add_edge(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge(source_id, target_id)
+            self.bpt.sketch_hash.tcm_tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge(source_id, target_id)
         else:
             self.bpt.sketch_hash.outliers.add_edge(source_id, target_id)
 
     def get_edge_frequency(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            return self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash.get(source_id)]\
+            return self.bpt.sketch_hash.tcm_tables[self.bpt.sketch_hash.hash.get(source_id)]\
                 .get_edge_frequency(source_id, target_id)
         else:
             return self.bpt.sketch_hash.outliers\
