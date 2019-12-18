@@ -35,11 +35,29 @@ if __name__ == '__main__':
     plt.title('Memory vs Average Relative Error')
     plt.ylabel('Average relative error (%)')
     plt.xlabel('Memory')
-    plt.xticks([512, 1024, 2048, 4096, 8192, 16384, 32768, 65536], ('512\nKB', '1\nMB', '2\nMB', '4\nMB', '8\nMB', '16\nMB', '32\nMB', '64\nMB'))
+    plt.xticks([
+        512,
+        1024,
+        2048,
+        4096,
+        8192,
+        16384,
+        32768,
+        65536
+    ], (
+        '512\nKB',
+        '1\nMB',
+        '2\nMB',
+        '4\nMB',
+        '8\nMB',
+        '16\nMB',
+        '32\nMB',
+        '64\nMB'
+    ))
     plt.legend()
 
     # fig.text(0.1, 0.045, '# base edges : {:,}'.format(results[0]['base_edge_count']))
     # fig.text(0.5, 0.045, '# streaming edges : {:,}'.format(results[0]['streaming_edge_count']))
 
     plt.savefig('../output/are/are.png')
-    plt.show()
+    # plt.show()

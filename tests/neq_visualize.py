@@ -38,12 +38,12 @@ if __name__ == '__main__':
     plt.xticks([1024], ('1\nMB'))
     plt.legend()
 
-    os.makedirs(os.path.dirname('../output/neq/{}.json'.format(Sketches.countmin.name)), exist_ok=True)
-    with open('../output/neq/{}.json'.format(Sketches.countmin.name)) as file:
+    os.makedirs(os.path.dirname('../output/neq/{}.json'.format(Sketches.tcm.name)), exist_ok=True)
+    with open('../output/neq/{}.json'.format(Sketches.tcm.name)) as file:
         output = json.load(file)
         fig.text(0.1, 0.06, '# base edges : {:,}'.format(output['base_edge_count']))
         fig.text(0.5, 0.06, '# streaming edges : {:,}'.format(output['streaming_edge_count']))
         fig.text(0.5, 0.03, '# queries : 10,000')
 
     plt.savefig('../output/neq/neq.png')
-    plt.show()
+    # plt.show()
