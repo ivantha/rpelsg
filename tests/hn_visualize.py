@@ -45,8 +45,7 @@ def hn_visualize():
     plt.xlabel('Sketches')
     plt.xticks(ind, [pretty_name for sketch_name, pretty_name in sketches])
 
-    fig.text(0.1, 0.06, '# base edges : {:,}'.format(results[0]['base_edge_count']))
-    fig.text(0.5, 0.06, '# streaming edges : {:,}'.format(results[0]['streaming_edge_count']))
+    fig.text(0.5, 0.06, '# streaming edges : {:,}'.format(results[0]['edge_count']))
     fig.text(0.1, 0.03, '# vertices : {:,}'.format(results[0]['number_of_vertices']))
     fig.text(0.5, 0.03, '# edges : {:,}'.format(results[0]['number_of_edges']))
 

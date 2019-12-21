@@ -38,7 +38,25 @@ def neq_visualize():
     plt.title('Memory vs Number of Effective Queries')
     plt.ylabel('# Effective Queries')
     plt.xlabel('Memory')
-    plt.xticks([1024], ('1\nMB'))
+    plt.xticks([
+        512,
+        1024,
+        2048,
+        4096,
+        8192,
+        16384,
+        32768,
+        65536
+    ], (
+        '512\nKB',
+        '1\nMB',
+        '2\nMB',
+        '4\nMB',
+        '8\nMB',
+        '16\nMB',
+        '32\nMB',
+        '64\nMB'
+    ))
     plt.legend()
 
     os.makedirs(os.path.dirname('../output/neq/{}.json'.format(Sketches.tcm.name)), exist_ok=True)

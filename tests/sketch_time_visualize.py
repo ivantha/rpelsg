@@ -31,7 +31,6 @@ def sketch_time_visualize():
             output['initialize_time'] = (
                     dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
             ).total_seconds()
-            output['base_construction_time'] = (dtt.strptime(output['base_construction_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")).total_seconds()
             output['streaming_time'] = (dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")).total_seconds()
             results.append(output)
 
@@ -42,7 +41,6 @@ def sketch_time_visualize():
 
     dataset = [
         [x['initialize_time'] for x in results],
-        [x['base_construction_time'] for x in results],
         [x['streaming_time'] for x in results]
     ]
 
@@ -52,16 +50,14 @@ def sketch_time_visualize():
 
     p1 = plt.bar(ind, dataset[0], width, color='#f44336')
     p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='#00BCD4')
-    p3 = plt.bar(ind, dataset[2], width, bottom=np.array(dataset[0]) + np.array(dataset[1]), color='#4CAF50')
 
     plt.title('Sketch construction and streaming times')
     plt.ylabel('Time (s)')
     plt.xlabel('Sketches')
     plt.xticks(ind, ('Full graph', 'CountMin', 'gSketch', 'TCM', 'Alpha'))
-    plt.legend((p1[0], p2[0], p3[0]), ('Initialization', 'Base construction', 'Streaming'))
+    plt.legend((p1[0], p2[0]), ('Initialization', 'Streaming'))
 
-    fig.text(0.1, 0.06, '# base edges : {:,}'.format(results[0]['base_edge_count']))
-    fig.text(0.5, 0.06, '# streaming edges : {:,}'.format(results[0]['streaming_edge_count']))
+    fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
     fig.text(0.1, 0.03, 'Sketch size : 512 KB')
 
     plt.savefig('../output/sketch_time/sketch_time.png')

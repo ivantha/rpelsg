@@ -39,8 +39,7 @@ def dd_visualize():
             plt.ylabel('Distribution')
             plt.xlabel('Degree')
 
-            fig.text(0.1, 0.06, '# base edges : {:,}'.format(output['base_edge_count']))
-            fig.text(0.5, 0.06, '# streaming edges : {:,}'.format(output['streaming_edge_count']))
+            fig.text(0.5, 0.06, '# streaming edges : {:,}'.format(output['edge_count']))
             fig.text(0.1, 0.03, '# vertices : {:,}'.format(output['number_of_vertices']))
 
             plt.savefig('../output/dd/dd_{}.png'.format(sketch_name))
