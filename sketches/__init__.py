@@ -2,7 +2,7 @@ import enum
 
 
 class Sketches(enum.Enum):
-    full_graph = 'full_graph'
+    fullgraph = 'fullgraph'
     countmin = 'countmin'
     gsketch = 'gsketch'
     tcm = 'tcm'

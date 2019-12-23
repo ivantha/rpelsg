@@ -293,3 +293,5 @@ $RECYCLE.BIN/
 # Project
 datasets
 output
+pickles
+reports

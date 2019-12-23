@@ -19,48 +19,51 @@ def are_visualize():
         (Sketches.alpha.name, 'Alpha'),
     )
 
-    matplotlib.rcParams['figure.dpi'] = 500
+    sketch_sizes = (
+        (512, '512 KB'),
+        (1024, '1 MB'),
+        (2048, '2 MB'),
+        (4096, '4 MB'),
+        (8192, '8 MB'),
+        (16384, '16 MB'),
+        (32768, '32 MB'),
+        (65536, '64 MB')
+    )
+
+    plt.rcParams['figure.dpi'] = 500
+    # plt.rcParams["figure.figsize"] = (20, 15)
 
     fig = plt.figure()
     ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+    ax.set_xscale("log")
+    ax.minorticks_off()
 
+    edge_count = 0
+    test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
     for sketch_name, pretty_name in sketches:
-        os.makedirs(os.path.dirname('../output/are/{}.json'.format(sketch_name)), exist_ok=True)
-        with open('../output/are/{}.json'.format(sketch_name)) as file:
-            output = json.load(file)
-            results = output['results']
-            plt.plot(
-                [result['memory_allocation'] for result in results],
-                [result['average_relative_error'] for result in results],
-                label=pretty_name
-            )
+        memory_allocation = []
+        average_relative_error = []
+
+        for sketch_size, pretty_size in sketch_sizes:
+            with open('{}/{}_{}.json'.format(test_output_dir, sketch_name, sketch_size)) as file:
+                output = json.load(file)
+                memory_allocation.append(output['memory_allocation'])
+                average_relative_error.append(output['average_relative_error'])
+                edge_count = output['edge_count']
+
+        plt.plot(memory_allocation, average_relative_error, label=pretty_name)
 
     plt.title('Memory vs Average Relative Error')
     plt.ylabel('Average relative error (%)')
     plt.xlabel('Memory')
-    plt.xticks([
-        512,
-        1024,
-        2048,
-        4096,
-        8192,
-        16384,
-        32768,
-        65536
-    ], (
-        '512\nKB',
-        '1\nMB',
-        '2\nMB',
-        '4\nMB',
-        '8\nMB',
-        '16\nMB',
-        '32\nMB',
-        '64\nMB'
-    ))
+    # plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes], rotation='vertical')
+    plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes])
     plt.legend()
 
-    # fig.text(0.1, 0.045, '# base edges : {:,}'.format(results[0]['base_edge_count']))
-    # fig.text(0.5, 0.045, '# streaming edges : {:,}'.format(results[0]['streaming_edge_count']))
+    fig.text(0.1, 0.045, '# edges : {:,}'.format(edge_count))
 
-    plt.savefig('../output/are/are.png')
+    os.makedirs('../reports', exist_ok=True)
+    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0]))
+
     # plt.show()
+    plt.close()

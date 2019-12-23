@@ -11,11 +11,11 @@ import numpy as np
 from sketches import Sketches
 
 
-def sketch_time_visualize():
+def buildtime_visualize():
     print('sketch_time_visualize')
 
     sketches = [
-        Sketches.full_graph.name,
+        Sketches.fullgraph.name,
         Sketches.countmin.name,
         Sketches.gsketch.name,
         Sketches.tcm.name,
@@ -24,14 +24,14 @@ def sketch_time_visualize():
 
     results = []
 
+    test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
     for sketch_name in sketches:
-        os.makedirs(os.path.dirname('../output/sketch_time/{}.json'.format(sketch_name)), exist_ok=True)
-        with open('../output/sketch_time/{}.json'.format(sketch_name)) as file:
+        with open('{}/{}.json'.format(test_output_dir, sketch_name)) as file:
             output = json.load(file)
-            output['initialize_time'] = (
-                    dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
-            ).total_seconds()
-            output['streaming_time'] = (dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")).total_seconds()
+            output['initialize_time'] = (dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00",
+                                                                                                               "%H:%M")).total_seconds()
+            output['streaming_time'] = (dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00",
+                                                                                                             "%H:%M")).total_seconds()
             results.append(output)
 
     matplotlib.rcParams['figure.dpi'] = 500
@@ -60,5 +60,8 @@ def sketch_time_visualize():
     fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
     fig.text(0.1, 0.03, 'Sketch size : 512 KB')
 
-    plt.savefig('../output/sketch_time/sketch_time.png')
+    os.makedirs('../reports', exist_ok=True)
+    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0]))
+
     # plt.show()
+    plt.close()

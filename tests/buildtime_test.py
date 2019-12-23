@@ -12,7 +12,7 @@ from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 
 
-def sketch_time_test(*argv):
+def buildtime_test(*argv):
     print('sketch_time_test')
 
     edge_lists = []
@@ -27,6 +27,9 @@ def sketch_time_test(*argv):
         TCM(w=256, d=8),  # 1MB
         Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8),  # 1MB
     )
+
+    test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
+    os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
     for sketch in sketches:
         process_start_time = datetime.now()
@@ -50,6 +53,5 @@ def sketch_time_test(*argv):
             'process_time': '{}'.format(process_end_time - process_start_time),
         }
 
-        os.makedirs(os.path.dirname('../output/sketch_time/{}.json'.format(sketch.name)), exist_ok=True)
-        with open('../output/sketch_time/{}.json'.format(sketch.name), 'w') as file:
+        with open('{}/{}.json'.format(test_output_dir, sketch.name), 'w') as file:
             json.dump(output, file, indent=4)

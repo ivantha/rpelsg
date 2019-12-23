@@ -35,7 +35,7 @@ class Graph:
 
 
 class FullGraph(Sketch):
-    name = Sketches.full_graph.name
+    name = Sketches.fullgraph.name
 
     def __init__(self):
         self.graph = None
