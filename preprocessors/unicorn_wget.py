@@ -1,10 +1,6 @@
 import os
-import sys
 
-# Path hack.
-
-sys.path.insert(0, os.path.abspath('..'))
-
+import shutil
 from google_drive_downloader import GoogleDriveDownloader as gdd
 
 from common.utils import get_txt_files
@@ -28,27 +24,50 @@ if __name__ == '__main__':
 
         data_files = get_txt_files('{}/{}/'.format(parent_dir, file_base))
 
-        new_f_counter = 0
-        line_counter = 0
-        new_f = open('{}/{}/{}.txt'.format(parent_dir, file_base, new_f_counter), 'w')
-
+        # read lines
+        lines = []
         for data_file in data_files:
             with open(data_file) as file:
-                for line in file.readlines():
-                    try:
-                        source_id, target_id, _ = line.split()
+                lines += file.readlines()
 
-                        line_counter += 1
-                        new_f.write('{},{}\n'.format(source_id, target_id))
+        shutil.rmtree('{}/{}/'.format(parent_dir, file_base))
 
-                        # start writing to a new file
-                        if line_counter == 100000:
-                            new_f.close()
+        subsets = [
+            (100, '100'),
+            (75, '75'),
+            (50, '50'),
+            (25, '25'),
+            (10, '10'),
+            (5, '5'),
+            (1, '1'),
+            (0.1, '01'),
+            (0.01, '001'),
+        ]
 
-                            new_f_counter += 1
-                            line_counter = 0
-                            new_f = open('{}/{}/{}.txt'.format(parent_dir, file_base, new_f_counter), 'w')
-                    except:
-                        print('{} > {}'.format(data_file, line))
+        num_lines = len(lines)
 
-                os.remove(data_file)
+        for percent, suffix in subsets:
+            line_counter = 0
+            new_f_counter = 0
+
+            os.makedirs('{}/{}_{}/'.format(parent_dir, file_base, suffix), exist_ok=True)
+            new_f = open('{}/{}_{}/{}.txt'.format(parent_dir, file_base, suffix, new_f_counter), 'w')
+
+            for line in lines:
+                if line_counter / num_lines * 100.0 > percent:
+                    print('{} / {} > {}%'.format(line_counter, num_lines, percent))
+                    break
+
+                try:
+                    source_id, target_id, _ = line.split(' ')
+
+                    line_counter += 1
+                    new_f.write('{},{}\n'.format(source_id, target_id))
+
+                    # start writing to a new file
+                    if line_counter % 100000 == 0:
+                        new_f.close()
+                        new_f_counter += 1
+                        new_f = open('{}/{}_{}/{}.txt'.format(parent_dir, file_base, suffix, new_f_counter), 'w')
+                except:
+                    print('Error in line > {}'.format(line))
