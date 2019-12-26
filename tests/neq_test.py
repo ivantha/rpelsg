@@ -6,7 +6,7 @@ import os
 import pickle
 
 from common import utils, sampling
-from tests._memory_profile import MemoryProfile
+from tests.memory_profile import MemoryProfile
 
 
 def neq_test(datasets):
@@ -54,45 +54,47 @@ def neq_test(datasets):
         MemoryProfile.alpha_65536,
     )
 
-    # load a FullGraph
-    full_graph = pickle.load(open("../pickles/{}.p".format(MemoryProfile.fullgraph.name), "rb"))
+    with open("../pickles/{}.p".format(MemoryProfile.fullgraph.name), "rb") as full_graph_pickle:
+        # load a FullGraph
+        full_graph = pickle.load(full_graph_pickle)
 
-    # reservoir sampling for 10000 items as (i, j) => 10000 queries
-    sample_size = 10000
-    sample_stream = sampling.select_k_items(edge_lists[0], sample_size)
+        # reservoir sampling for 10000 items as (i, j) => 10000 queries
+        sample_size = 10000
+        sample_stream = sampling.select_k_items(edge_lists[0], sample_size)
 
-    test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
-    os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
+        test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
+        os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
-    for profile in memory_profiles:  # sketches are recreated with increasing memories
-        # load the sketch
-        sketch = pickle.load(open("../pickles/{}.p".format(profile.name), "rb"))
+        for profile in memory_profiles:  # sketches are recreated with increasing memories
+            with open("../pickles/{}.p".format(profile.name), "rb") as pickled_sketch:
+                # load the sketch
+                sketch = pickle.load(pickled_sketch)
 
-        # query
-        effective_query_count = 0
-        for source_id, target_id in sample_stream:
-            true_frequency = full_graph.get_edge_frequency(source_id, target_id)
-            estimated_frequency = sketch.get_edge_frequency(source_id, target_id)
-            if estimated_frequency == true_frequency:
-                effective_query_count += 1
+                # query
+                effective_query_count = 0
+                for source_id, target_id in sample_stream:
+                    true_frequency = full_graph.get_edge_frequency(source_id, target_id)
+                    estimated_frequency = sketch.get_edge_frequency(source_id, target_id)
+                    if estimated_frequency == true_frequency:
+                        effective_query_count += 1
 
-        output = {
-            'sketch_id': profile.name,
-            'sketch_name': profile.name.split('_')[0],
-            'memory_allocation': int(profile.name.split('_')[1]),
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
-            'number_of_queries': sample_size,
-            'effective_query_count': effective_query_count,
-            'effective_query_percent': effective_query_count / sample_size
-        }
+                output = {
+                    'sketch_id': profile.name,
+                    'sketch_name': profile.name.split('_')[0],
+                    'memory_allocation': int(profile.name.split('_')[1]),
+                    'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+                    'number_of_queries': sample_size,
+                    'effective_query_count': effective_query_count,
+                    'effective_query_percent': effective_query_count / sample_size
+                }
 
-        with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
-            json.dump(output, file, indent=4)
+                with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
+                    json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(profile.name))
+                print('Completed: {}'.format(profile.name))
 
-        # free memory - remove reference to the sketch
-        del sketch
+                # free memory - remove reference to the sketch
+                # del sketch
 
-        # free memory - call garbage collector
-        gc.collect()
+                # free memory - call garbage collector
+                # gc.collect()

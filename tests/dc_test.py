@@ -6,7 +6,7 @@ import os
 import pickle
 
 from common import utils
-from tests._memory_profile import MemoryProfile
+from tests.memory_profile import MemoryProfile
 
 
 def dc_test(datasets):
@@ -72,35 +72,36 @@ def dc_test(datasets):
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
     for profile in memory_profiles:  # sketches are recreated with increasing memories
-        degrees = {}
+        with open("../pickles/{}.p".format(profile.name), "rb") as pickled_sketch:
+            # load the sketch
+            sketch = pickle.load(pickled_sketch)
 
-        # load the sketch
-        sketch = pickle.load(open("../pickles/{}.p".format(profile.name), "rb"))
+            degrees = {}
 
-        # add all vertices
-        for vertex in vertices:
-            degrees[vertex] = 0
+            # add all vertices
+            for vertex in vertices:
+                degrees[vertex] = 0
 
-        for source_id, target_id in edges:
-            f = sketch.get_edge_frequency(source_id, target_id)
-            degrees[source_id] += f
-            degrees[target_id] += f
+            for source_id, target_id in edges:
+                f = sketch.get_edge_frequency(source_id, target_id)
+                degrees[source_id] += f
+                degrees[target_id] += f
 
-        output = {
-            'sketch_id': profile.name,
-            'sketch_name': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
-            'number_of_vertices': number_of_vertices,
-            'degrees': degrees
-        }
+            output = {
+                'sketch_id': profile.name,
+                'sketch_name': sketch.name,
+                'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+                'number_of_vertices': number_of_vertices,
+                'degrees': degrees
+            }
 
-        with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
-            json.dump(output, file, indent=4)
+            with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
+                json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(profile.name))
+            print('Completed: {}'.format(profile.name))
 
-        # free memory - remove reference to the sketch
-        del sketch
+            # free memory - remove reference to the sketch
+            # del sketch
 
-        # free memory - call garbage collector
-        gc.collect()
+            # free memory - call garbage collector
+            # gc.collect()

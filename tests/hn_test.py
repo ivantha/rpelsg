@@ -6,7 +6,7 @@ import os
 import pickle
 
 from common import utils
-from tests._memory_profile import MemoryProfile
+from tests.memory_profile import MemoryProfile
 
 
 def hn_test(datasets):
@@ -86,51 +86,52 @@ def hn_test(datasets):
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
     for profile in memory_profiles:  # sketches are recreated with increasing memories
-        sketch_degrees = {}
+        with open("../pickles/{}.p".format(profile.name), "rb") as pickled_sketch:
+            # load the sketch
+            sketch = pickle.load(pickled_sketch)
 
-        # load the sketch
-        sketch = pickle.load(open("../pickles/{}.p".format(profile.name), "rb"))
+            sketch_degrees = {}
 
-        # add all vertices
-        for vertex in vertices:
-            sketch_degrees[vertex] = 0
+            # add all vertices
+            for vertex in vertices:
+                sketch_degrees[vertex] = 0
 
-        i = 0
-        chunk = number_of_edges / 100
-        for source_id, target_id in edges:
-            f = sketch.get_edge_frequency(source_id, target_id)
-            sketch_degrees[source_id] += f
-            sketch_degrees[target_id] += f
+            i = 0
+            chunk = number_of_edges / 100
+            for source_id, target_id in edges:
+                f = sketch.get_edge_frequency(source_id, target_id)
+                sketch_degrees[source_id] += f
+                sketch_degrees[target_id] += f
 
-            # update progress bar
-            i += 1
-            if i % chunk == 0:
-                utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
+                # update progress bar
+                i += 1
+                if i % chunk == 0:
+                    utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
 
-        sorted_sketch_degrees = sorted(sketch_degrees.items(), key=lambda kv: (kv[1], kv[0]))
+            sorted_sketch_degrees = sorted(sketch_degrees.items(), key=lambda kv: (kv[1], kv[0]))
 
-        # compare top-k results
-        k = 1000
-        set1 = set([i[0] for i in sorted_degrees[:k]])
-        set2 = set([i[0] for i in sorted_sketch_degrees[:k]])
-        intersection_count = len(set1.intersection(set2))
+            # compare top-k results
+            k = 1000
+            set1 = set([i[0] for i in sorted_degrees[:k]])
+            set2 = set([i[0] for i in sorted_sketch_degrees[:k]])
+            intersection_count = len(set1.intersection(set2))
 
-        output = {
-            'sketch_id': profile.name,
-            'sketch_name': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
-            'number_of_edges': number_of_edges,
-            'number_of_vertices': number_of_vertices,
-            'inter_accuracy': intersection_count / k
-        }
+            output = {
+                'sketch_id': profile.name,
+                'sketch_name': sketch.name,
+                'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+                'number_of_edges': number_of_edges,
+                'number_of_vertices': number_of_vertices,
+                'inter_accuracy': intersection_count / k
+            }
 
-        with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
-            json.dump(output, file, indent=4)
+            with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
+                json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(profile.name))
+            print('Completed: {}'.format(profile.name))
 
-        # free memory - remove reference to the sketch
-        del sketch
+            # free memory - remove reference to the sketch
+            # del sketch
 
-        # free memory - call garbage collector
-        gc.collect()
+            # free memory - call garbage collector
+            # gc.collect()

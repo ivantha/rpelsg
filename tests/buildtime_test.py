@@ -5,7 +5,7 @@ import os
 import pickle
 
 from common import utils
-from tests._memory_profile import MemoryProfile
+from tests.memory_profile import MemoryProfile
 
 
 def buildtime_test(datasets):
@@ -57,17 +57,18 @@ def buildtime_test(datasets):
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
     for profile in memory_profiles:
-        # load the sketch
-        sketch = pickle.load(open("../pickles/{}.p".format(profile.name), "rb"))
+        with open("../pickles/{}.p".format(profile.name), "rb") as pickled_sketch:
+            # load the sketch
+            sketch = pickle.load(pickled_sketch)
 
-        output = {
-            'sketch': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
-            'initialize_time': '{}'.format(sketch.initialize_time),
-            'streaming_time': '{}'.format(sketch.streaming_time),
-        }
+            output = {
+                'sketch': sketch.name,
+                'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+                'initialize_time': '{}'.format(sketch.initialize_time),
+                'streaming_time': '{}'.format(sketch.streaming_time),
+            }
 
-        with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
-            json.dump(output, file, indent=4)
+            with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
+                json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(profile.name))
+            print('Completed: {}'.format(profile.name))

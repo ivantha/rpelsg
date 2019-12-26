@@ -6,7 +6,7 @@ import os
 import pickle
 
 from common import utils
-from tests._memory_profile import MemoryProfile
+from tests.memory_profile import MemoryProfile
 
 
 def ewd_test(datasets):
@@ -72,48 +72,49 @@ def ewd_test(datasets):
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
     for profile in memory_profiles:  # sketches are recreated with increasing memories
-        edge_weights = {}
+        with open("../pickles/{}.p".format(profile.name), "rb") as pickled_sketch:
+            # load the sketch
+            sketch = pickle.load(pickled_sketch)
 
-        # load the sketch
-        sketch = pickle.load(open("../pickles/{}.p".format(profile.name), "rb"))
+            edge_weights = {}
 
-        # add all edges
-        for source_id, target_id in edges:
-            edge_weights['{},{}'.format(source_id, target_id)] = 0
+            # add all edges
+            for source_id, target_id in edges:
+                edge_weights['{},{}'.format(source_id, target_id)] = 0
 
-        i = 0
-        chunk = number_of_edges / 100
-        for source_id, target_id in edges:
-            f = sketch.get_edge_frequency(source_id, target_id)
-            edge_weights['{},{}'.format(source_id, target_id)] = f
+            i = 0
+            chunk = number_of_edges / 100
+            for source_id, target_id in edges:
+                f = sketch.get_edge_frequency(source_id, target_id)
+                edge_weights['{},{}'.format(source_id, target_id)] = f
 
-            # update progress bar
-            i += 1
-            if i % chunk == 0:
-                utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
+                # update progress bar
+                i += 1
+                if i % chunk == 0:
+                    utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
 
-        edge_weight_distribution = {}
-        for edge_weight in edge_weights.values():
-            if edge_weight not in edge_weight_distribution:
-                edge_weight_distribution[edge_weight] = edge_weight
-            else:
-                edge_weight_distribution[edge_weight] += edge_weight
+            edge_weight_distribution = {}
+            for edge_weight in edge_weights.values():
+                if edge_weight not in edge_weight_distribution:
+                    edge_weight_distribution[edge_weight] = edge_weight
+                else:
+                    edge_weight_distribution[edge_weight] += edge_weight
 
-        output = {
-            'sketch_name': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
-            'number_of_vertices': number_of_vertices,
-            'edge_weights': edge_weights,
-            'edge_weight_distribution': edge_weight_distribution
-        }
+            output = {
+                'sketch_name': sketch.name,
+                'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+                'number_of_vertices': number_of_vertices,
+                'edge_weights': edge_weights,
+                'edge_weight_distribution': edge_weight_distribution
+            }
 
-        with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
-            json.dump(output, file, indent=4)
+            with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
+                json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(profile.name))
+            print('Completed: {}'.format(profile.name))
 
-        # free memory - remove reference to the sketch
-        del sketch
+            # free memory - remove reference to the sketch
+            del sketch
 
-        # free memory - call garbage collector
-        gc.collect()
+            # free memory - call garbage collector
+            gc.collect()

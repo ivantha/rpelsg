@@ -8,7 +8,7 @@ from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
-from tests._memory_profile import MemoryProfile
+from tests.memory_profile import MemoryProfile
 
 
 def pickle_it(datasets):
@@ -81,7 +81,7 @@ def pickle_it(datasets):
     path = '../pickles'
     if os.path.exists(path):
         shutil.rmtree(path)
-    os.makedirs(path)
+    os.makedirs(path, exist_ok=True)
 
     for sketch_id, sketch in memory_profiles:
         initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
@@ -98,7 +98,8 @@ def pickle_it(datasets):
         sketch.initialize_time = initialize_end_time - initialize_start_time
         sketch.streaming_time = streaming_end_time - streaming_start_time
 
-        pickle.dump(sketch, open("../pickles/{}.p".format(sketch_id.name), "wb"))
+        with open("../pickles/{}.p".format(sketch_id.name), "wb") as pickled_sketch:
+            pickle.dump(sketch, pickled_sketch)
 
         print('Completed: {}'.format(sketch_id.name))
 

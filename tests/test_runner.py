@@ -1,9 +1,9 @@
-from tests._dc_test import dc_test
-from tests._dc_visualize import dc_visualize
-from tests._dd_test import dd_test
-from tests._dd_visualize import dd_visualize
-from tests._ewd_test import ewd_test
-from tests._ewd_visualize import ewd_visualize
+from tests.dc_test import dc_test
+from tests.dc_visualize import dc_visualize
+from tests.dd_test import dd_test
+from tests.dd_visualize import dd_visualize
+from tests.ewd_test import ewd_test
+from tests.ewd_visualize import ewd_visualize
 from tests.are_test import are_test
 from tests.are_visualize import are_visualize
 from tests.buildtime_test import buildtime_test
@@ -21,28 +21,28 @@ if __name__ == '__main__':
         '../datasets/unicorn_wget/benign_base_100/',
     ]
 
-    # pickle_it(datasets)
+    pickle_it(datasets)
 
     # buildtime_test(datasets)
     # buildtime_visualize()
 
-    # are_test(datasets)
-    # are_visualize()
+    are_test(datasets)
+    are_visualize()
 
-    # neq_test(datasets)
-    # neq_visualize()
+    neq_test(datasets)
+    neq_visualize()
 
     # dd_test(datasets)
     # dd_visualize()
-
+    #
     # ewd_test(datasets)
     # ewd_visualize()
 
     # dc_test(datasets)
     # dc_visualize()
 
-    hn_test(datasets)
-    hn_visualize()
-
-    he_test(datasets)
-    he_visualize()
+    # hn_test(datasets)
+    # hn_visualize()
+    #
+    # he_test(datasets)
+    # he_visualize()
