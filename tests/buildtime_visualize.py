@@ -1,11 +1,11 @@
-# Sketch construction time charts
+# Build time
 
 import json
 import os
 from datetime import datetime as dtt
 
-import matplotlib.pyplot as plt
 import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 
 from sketches import Sketches

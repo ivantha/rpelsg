@@ -1,4 +1,4 @@
-# Heavy nodes (Top 1000)
+# Heavy nodes
 
 import gc
 import json

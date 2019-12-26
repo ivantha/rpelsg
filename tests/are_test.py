@@ -1,4 +1,5 @@
-# Average Relative Error
+# Average relative error
+
 import gc
 import json
 import os

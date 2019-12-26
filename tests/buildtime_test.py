@@ -1,4 +1,4 @@
-# Sketch construction time
+# Build time
 
 import json
 import os

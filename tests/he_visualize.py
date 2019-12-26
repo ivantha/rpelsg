@@ -1,4 +1,4 @@
-# Heavy edges charts
+# Heavy edges
 
 import json
 import os
@@ -69,4 +69,3 @@ def he_visualize():
         plt.close()
 
         print('Completed visualization: {}'.format(sketch_size))
-

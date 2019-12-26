@@ -1,4 +1,4 @@
-# Edge weight distribution charts
+# Edge weight distribution
 
 import json
 import os

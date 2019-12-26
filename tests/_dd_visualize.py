@@ -1,4 +1,4 @@
-# Degree distribution charts
+# Degree distribution
 
 import json
 import os

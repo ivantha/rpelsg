@@ -1,4 +1,5 @@
-# Average Relative Error
+# Number of effective queries
+
 import gc
 import json
 import os

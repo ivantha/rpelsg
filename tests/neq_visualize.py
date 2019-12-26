@@ -1,4 +1,4 @@
-# Sketch construction time charts
+# Number of effective queries
 
 import json
 import os

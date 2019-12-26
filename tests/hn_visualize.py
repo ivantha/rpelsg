@@ -1,4 +1,4 @@
-# Heavy nodes charts
+# Heavy nodes
 
 import json
 import os

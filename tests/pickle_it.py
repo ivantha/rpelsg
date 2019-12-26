@@ -1,6 +1,5 @@
 import os
 import pickle
-
 import shutil
 
 from common import utils
@@ -23,9 +22,9 @@ def pickle_it(*argv):
         (MemoryProfile.fullgraph, FullGraph()),  # 512 KB
 
         (MemoryProfile.countmin_512, CountMin(m=1024 * 32, d=8)),  # 512 KB
-        (MemoryProfile.countmin_1024, CountMin(m=1024 * 32 * 2, d=8),),  # 1 MB
-        (MemoryProfile.countmin_2048, CountMin(m=1024 * 32 * 4, d=8),),  # 2 MB
-        (MemoryProfile.countmin_4096, CountMin(m=1024 * 32 * 8, d=8),),  # 4 MB
+        (MemoryProfile.countmin_1024, CountMin(m=1024 * 32 * 2, d=8)),  # 1 MB
+        (MemoryProfile.countmin_2048, CountMin(m=1024 * 32 * 4, d=8)),  # 2 MB
+        (MemoryProfile.countmin_4096, CountMin(m=1024 * 32 * 8, d=8)),  # 4 MB
         (MemoryProfile.countmin_8192, CountMin(m=1024 * 32 * 16, d=8)),  # 8 MB
         (MemoryProfile.countmin_16384, CountMin(m=1024 * 32 * 32, d=8)),  # 16 MB
         (MemoryProfile.countmin_32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32 MB

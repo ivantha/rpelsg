@@ -1,17 +1,11 @@
-# Heavy edges (Top 1000)
+# Heavy edges
 
 import gc
 import json
 import os
-
 import pickle
 
 from common import utils
-from sketches.alpha import Alpha
-from sketches.countmin import CountMin
-from sketches.full_graph import FullGraph
-from sketches.gsketch import GSketch
-from sketches.tcm import TCM
 from tests._memory_profile import MemoryProfile
 
 

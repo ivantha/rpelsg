@@ -1,9 +1,8 @@
-# Sketch construction time charts
+# Average relative error
 
 import json
 import os
 
-import matplotlib
 import matplotlib.pyplot as plt
 
 from sketches import Sketches
