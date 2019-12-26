@@ -11,12 +11,12 @@ from sketches.tcm import TCM
 from tests._memory_profile import MemoryProfile
 
 
-def pickle_it(*argv):
+def pickle_it(datasets):
     print('pickle_it')
 
     edge_lists = []
-    for arg in argv:
-        edge_lists.append(utils.get_edges_in_path(arg))
+    for dataset in datasets:
+        edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
         (MemoryProfile.fullgraph, FullGraph()),  # 512 KB
@@ -102,5 +102,6 @@ def pickle_it(*argv):
 
         print('Completed: {}'.format(sketch_id.name))
 
+        # TODO : Using "del sketch" here gives some weird drop in the accuracy after 4MB
         # free memory - remove reference to the sketch
-        del sketch
+        # del sketch

@@ -10,7 +10,7 @@ from sketches.full_graph import FullGraph
 from sketches.tcm import TCM
 
 
-def reachability_test():
+def reachability_test(datasets):
     base_path = '../datasets/unicorn_wget_small/benign_base/'  # base_path: Path to edges in the base graph
     streaming_path = '../datasets/unicorn_wget_small/benign_streaming/'  # streaming_path: Path to streaming edges
 

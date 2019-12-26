@@ -61,7 +61,7 @@ def neq_visualize():
     plt.legend()
 
     fig.text(0.1, 0.06, '# edges : {:,}'.format(edge_count))
-    fig.text(0.5, 0.03, '# queries : {:,}'.format(query_count))
+    fig.text(0.5, 0.06, '# queries : {:,}'.format(query_count))
 
     os.makedirs('../reports', exist_ok=True)
     plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0]))

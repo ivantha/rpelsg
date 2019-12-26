@@ -9,12 +9,12 @@ from common import utils
 from tests._memory_profile import MemoryProfile
 
 
-def he_test(*argv):
+def he_test(datasets):
     print('he_test')
 
     edge_lists = []
-    for arg in argv:
-        edge_lists.append(utils.get_edges_in_path(arg))
+    for dataset in datasets:
+        edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
         MemoryProfile.fullgraph,
@@ -120,7 +120,7 @@ def he_test(*argv):
         print('Completed: {}'.format(profile.name))
 
         # free memory - remove reference to the sketch
-        del sketch
+        # del sketch
 
         # free memory - call garbage collector
-        gc.collect()
+        # gc.collect()

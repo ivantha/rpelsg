@@ -9,12 +9,12 @@ from common import utils, sampling
 from tests._memory_profile import MemoryProfile
 
 
-def neq_test(*argv):
+def neq_test(datasets):
     print('neq_test')
 
     edge_lists = []
-    for arg in argv:
-        edge_lists.append(utils.get_edges_in_path(arg))
+    for dataset in datasets:
+        edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
         MemoryProfile.countmin_512,
@@ -57,7 +57,7 @@ def neq_test(*argv):
     # load a FullGraph
     full_graph = pickle.load(open("../pickles/{}.p".format(MemoryProfile.fullgraph.name), "rb"))
 
-    # reservoir sampling for 1000 items as (i, j) => 1000 queries
+    # reservoir sampling for 10000 items as (i, j) => 10000 queries
     sample_size = 10000
     sample_stream = sampling.select_k_items(edge_lists[0], sample_size)
 
@@ -82,7 +82,8 @@ def neq_test(*argv):
             'memory_allocation': int(profile.name.split('_')[1]),
             'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_queries': sample_size,
-            'effective_query_count': effective_query_count
+            'effective_query_count': effective_query_count,
+            'effective_query_percent': effective_query_count / sample_size
         }
 
         with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:

@@ -9,12 +9,12 @@ from common import utils
 from tests._memory_profile import MemoryProfile
 
 
-def hn_test(*argv):
+def hn_test(datasets):
     print('hn_test')
 
     edge_lists = []
-    for arg in argv:
-        edge_lists.append(utils.get_edges_in_path(arg))
+    for dataset in datasets:
+        edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
         MemoryProfile.fullgraph,

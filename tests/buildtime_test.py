@@ -8,12 +8,12 @@ from common import utils
 from tests._memory_profile import MemoryProfile
 
 
-def buildtime_test(*argv):
+def buildtime_test(datasets):
     print('buildtime_test')
 
     edge_lists = []
-    for arg in argv:
-        edge_lists.append(utils.get_edges_in_path(arg))
+    for dataset in datasets:
+        edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
         MemoryProfile.countmin_512,
@@ -67,7 +67,7 @@ def buildtime_test(*argv):
             'streaming_time': '{}'.format(sketch.streaming_time),
         }
 
-        with open('{}/{}.json'.format(test_output_dir, sketch.name), 'w') as file:
+        with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
             json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(sketch.name))
+        print('Completed: {}'.format(profile.name))

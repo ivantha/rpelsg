@@ -1,22 +1,24 @@
-# Average relative error
+# Degree centrality
 
 import gc
 import json
 import os
 import pickle
 
-from common import utils, sampling
+from common import utils
 from tests._memory_profile import MemoryProfile
 
 
-def are_test(datasets):
-    print('are_test')
+def dc_test(datasets):
+    print('dc_test')
 
     edge_lists = []
     for dataset in datasets:
         edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
+        MemoryProfile.fullgraph,
+
         MemoryProfile.countmin_512,
         MemoryProfile.countmin_1024,
         MemoryProfile.countmin_2048,
@@ -54,34 +56,42 @@ def are_test(datasets):
         MemoryProfile.alpha_65536,
     )
 
-    # load a FullGraph
-    full_graph = pickle.load(open("../pickles/{}.p".format(MemoryProfile.fullgraph.name), "rb"))
+    vertices = set()
+    edges = set()
 
-    # reservoir sampling for 1000 items as (i, j) => 1000 queries
-    sample_size = 1000
-    sample_stream = sampling.select_k_items(edge_lists[0], sample_size)
+    for edge_list in edge_lists:
+        for edge in edge_list:
+            vertices.add(edge[0])  # add source_id
+            vertices.add(edge[1])  # add target_id
+            edges.add(edge)
+
+    number_of_vertices = len(vertices)
+    number_of_edges = len(edges)
 
     test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
     for profile in memory_profiles:  # sketches are recreated with increasing memories
+        degrees = {}
+
         # load the sketch
         sketch = pickle.load(open("../pickles/{}.p".format(profile.name), "rb"))
 
-        # query
-        relative_error_sum = 0
-        for source_id, target_id in sample_stream:
-            true_frequency = full_graph.get_edge_frequency(source_id, target_id)
-            estimated_frequency = sketch.get_edge_frequency(source_id, target_id)
-            relative_error = (estimated_frequency - true_frequency) / true_frequency * 1.0
-            relative_error_sum += relative_error
+        # add all vertices
+        for vertex in vertices:
+            degrees[vertex] = 0
+
+        for source_id, target_id in edges:
+            f = sketch.get_edge_frequency(source_id, target_id)
+            degrees[source_id] += f
+            degrees[target_id] += f
 
         output = {
             'sketch_id': profile.name,
             'sketch_name': sketch.name,
-            'memory_allocation': int(profile.name.split('_')[1]),
             'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
-            'average_relative_error': relative_error_sum / sample_size
+            'number_of_vertices': number_of_vertices,
+            'degrees': degrees
         }
 
         with open('{}/{}.json'.format(test_output_dir, profile.name), 'w') as file:
