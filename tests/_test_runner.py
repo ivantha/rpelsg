@@ -32,32 +32,32 @@ if __name__ == '__main__':
     )
     are_visualize()
 
-    neq_test(
-        '../datasets/unicorn_wget_small/benign_base/',
-        '../datasets/unicorn_wget_small/benign_streaming/'
-    )
-    neq_visualize()
+    # neq_test(
+    #     '../datasets/unicorn_wget_small/benign_base/',
+    #     '../datasets/unicorn_wget_small/benign_streaming/'
+    # )
+    # neq_visualize()
 
-    dd_test(
-        '../datasets/unicorn_wget_small/benign_base/',
-        '../datasets/unicorn_wget_small/benign_streaming/'
-    )
-    dd_visualize()
+    # dd_test(
+    #     '../datasets/unicorn_wget_small/benign_base/',
+    #     '../datasets/unicorn_wget_small/benign_streaming/'
+    # )
+    # dd_visualize()
 
-    ewd_test(
-        '../datasets/unicorn_wget_small/benign_base/',
-        '../datasets/unicorn_wget_small/benign_streaming/'
-    )
-    ewd_visualize()
+    # ewd_test(
+    #     '../datasets/unicorn_wget_small/benign_base/',
+    #     '../datasets/unicorn_wget_small/benign_streaming/'
+    # )
+    # ewd_visualize()
 
-    hn_test(
-        '../datasets/unicorn_wget_small/benign_base/',
-        '../datasets/unicorn_wget_small/benign_streaming/'
-    )
-    hn_visualize()
+    # hn_test(
+    #     '../datasets/unicorn_wget_small/benign_base/',
+    #     '../datasets/unicorn_wget_small/benign_streaming/'
+    # )
+    # hn_visualize()
 
-    he_test(
-        '../datasets/unicorn_wget_small/benign_base/',
-        '../datasets/unicorn_wget_small/benign_streaming/'
-    )
-    he_visualize()
+    # he_test(
+    #     '../datasets/unicorn_wget_small/benign_base/',
+    #     '../datasets/unicorn_wget_small/benign_streaming/'
+    # )
+    # he_visualize()

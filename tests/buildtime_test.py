@@ -2,56 +2,72 @@
 
 import json
 import os
-from datetime import datetime
+import pickle
 
 from common import utils
-from sketches.alpha import Alpha
-from sketches.countmin import CountMin
-from sketches.full_graph import FullGraph
-from sketches.gsketch import GSketch
-from sketches.tcm import TCM
+from tests._memory_profile import MemoryProfile
 
 
 def buildtime_test(*argv):
-    print('sketch_time_test')
+    print('buildtime_test')
 
     edge_lists = []
     for arg in argv:
         edge_lists.append(utils.get_edges_in_path(arg))
 
-    sketches = (
-        FullGraph(),
-        CountMin(m=1024 * 32 * 2, d=8),  # 1MB
-        GSketch(edge_lists[0],
-                partitioned_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2, sketch_depth=8),  # 1MB
-        TCM(w=256, d=8),  # 1MB
-        Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8),  # 1MB
+    memory_profiles = (
+        MemoryProfile.countmin_512,
+        MemoryProfile.countmin_1024,
+        MemoryProfile.countmin_2048,
+        MemoryProfile.countmin_4096,
+        MemoryProfile.countmin_8192,
+        MemoryProfile.countmin_16384,
+        MemoryProfile.countmin_32768,
+        MemoryProfile.countmin_65536,
+
+        MemoryProfile.gsketch_512,
+        MemoryProfile.gsketch_1024,
+        MemoryProfile.gsketch_2048,
+        MemoryProfile.gsketch_4096,
+        MemoryProfile.gsketch_8192,
+        MemoryProfile.gsketch_16384,
+        MemoryProfile.gsketch_32768,
+        MemoryProfile.gsketch_65536,
+
+        MemoryProfile.tcm_512,
+        MemoryProfile.tcm_1024,
+        MemoryProfile.tcm_2048,
+        MemoryProfile.tcm_4096,
+        MemoryProfile.tcm_8192,
+        MemoryProfile.tcm_16384,
+        MemoryProfile.tcm_32768,
+        MemoryProfile.tcm_65536,
+
+        MemoryProfile.alpha_512,
+        MemoryProfile.alpha_1024,
+        MemoryProfile.alpha_2048,
+        MemoryProfile.alpha_4096,
+        MemoryProfile.alpha_8192,
+        MemoryProfile.alpha_16384,
+        MemoryProfile.alpha_32768,
+        MemoryProfile.alpha_65536,
     )
 
     test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
-    for sketch in sketches:
-        process_start_time = datetime.now()
-
-        initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
-
-        streaming_times = []
-        for edge_list in edge_lists:
-            streaming_times.append(sketch.stream(edge_list))
-
-        streaming_start_time = streaming_times[0][0]
-        streaming_end_time = streaming_times[-1][1]
-
-        process_end_time = datetime.now()
+    for profile in memory_profiles:
+        # load the sketch
+        sketch = pickle.load(open("../pickles/{}.p".format(profile.name), "rb"))
 
         output = {
             'sketch': sketch.name,
             'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
-            'initialize_time': '{}'.format(initialize_end_time - initialize_start_time),
-            'streaming_time': '{}'.format(streaming_end_time - streaming_start_time),
-            'process_time': '{}'.format(process_end_time - process_start_time),
+            'initialize_time': '{}'.format(sketch.initialize_time),
+            'streaming_time': '{}'.format(sketch.streaming_time),
         }
 
         with open('{}/{}.json'.format(test_output_dir, sketch.name), 'w') as file:
             json.dump(output, file, indent=4)
+
+        print('Completed: {}'.format(sketch.name))

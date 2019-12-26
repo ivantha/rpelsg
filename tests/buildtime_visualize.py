@@ -12,56 +12,72 @@ from sketches import Sketches
 
 
 def buildtime_visualize():
-    print('sketch_time_visualize')
+    print('buildtime_visualize')
 
-    sketches = [
-        Sketches.fullgraph.name,
-        Sketches.countmin.name,
-        Sketches.gsketch.name,
-        Sketches.tcm.name,
-        Sketches.alpha.name,
-    ]
+    sketches = (
+        (Sketches.countmin.name, 'CountMin'),
+        (Sketches.gsketch.name, 'gSketch'),
+        (Sketches.tcm.name, 'TCM'),
+        (Sketches.alpha.name, 'Alpha'),
+    )
 
-    results = []
+    sketch_sizes = (
+        (512, '512 KB'),
+        (1024, '1 MB'),
+        (2048, '2 MB'),
+        (4096, '4 MB'),
+        (8192, '8 MB'),
+        (16384, '16 MB'),
+        (32768, '32 MB'),
+        (65536, '64 MB')
+    )
 
     test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
-    for sketch_name in sketches:
-        with open('{}/{}.json'.format(test_output_dir, sketch_name)) as file:
-            output = json.load(file)
-            output['initialize_time'] = (dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00",
-                                                                                                               "%H:%M")).total_seconds()
-            output['streaming_time'] = (dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00",
-                                                                                                             "%H:%M")).total_seconds()
-            results.append(output)
 
-    matplotlib.rcParams['figure.dpi'] = 500
+    for sketch_size, pretty_size in sketch_sizes:
+        results = []
 
-    ind = np.arange(len(results))  # the x locations for the groups
-    width = 0.35  # the width of the bars
+        for sketch_name, pretty_name in sketches:
+            with open('{}/{}_{}.json'.format(test_output_dir, sketch_name, sketch_size)) as file:
+                output = json.load(file)
+                output['initialize_time'] = (
+                            dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
+                ).total_seconds()
+                output['streaming_time'] = (
+                            dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
+                ).total_seconds()
+                results.append(output)
 
-    dataset = [
-        [x['initialize_time'] for x in results],
-        [x['streaming_time'] for x in results]
-    ]
+        matplotlib.rcParams['figure.dpi'] = 500
 
-    fig = plt.figure()
-    ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
-    # ax.yaxis.grid(True)
+        ind = np.arange(len(results))  # the x locations for the groups
+        width = 0.35  # the width of the bars
 
-    p1 = plt.bar(ind, dataset[0], width, color='#f44336')
-    p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='#00BCD4')
+        dataset = [
+            [x['initialize_time'] for x in results],
+            [x['streaming_time'] for x in results]
+        ]
 
-    plt.title('Sketch construction and streaming times')
-    plt.ylabel('Time (s)')
-    plt.xlabel('Sketches')
-    plt.xticks(ind, ('Full graph', 'CountMin', 'gSketch', 'TCM', 'Alpha'))
-    plt.legend((p1[0], p2[0]), ('Initialization', 'Streaming'))
+        fig = plt.figure()
+        ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+        # ax.yaxis.grid(True)
 
-    fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
-    fig.text(0.1, 0.03, 'Sketch size : 512 KB')
+        p1 = plt.bar(ind, dataset[0], width, color='#f44336')
+        p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='#00BCD4')
 
-    os.makedirs('../reports', exist_ok=True)
-    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0]))
+        plt.title('Sketch construction and streaming times : {}'.format(pretty_size))
+        plt.ylabel('Time (s)')
+        plt.xlabel('Sketches')
+        plt.xticks(ind, [pretty_name for _, pretty_name in sketches])
+        plt.legend((p1[0], p2[0]), ('Initialization', 'Streaming'))
 
-    # plt.show()
-    plt.close()
+        fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
+        fig.text(0.1, 0.03, 'Sketch size : 512 KB')
+
+        os.makedirs('../reports', exist_ok=True)
+        plt.savefig('../reports/{}_{}.png'.format(os.path.basename(__file__).split('.')[0], sketch_size))
+
+        # plt.show()
+        plt.close()
+
+        print('Completed visualization: {}'.format(sketch_size))

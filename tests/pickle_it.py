@@ -84,11 +84,19 @@ def pickle_it(*argv):
     os.makedirs(path)
 
     for sketch_id, sketch in memory_profiles:
-        sketch.initialize()  # initialize the sketch
+        initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
 
         # stream edges
+        streaming_times = []
         for edge_list in edge_lists:
-            sketch.stream(edge_list)
+            streaming_times.append(sketch.stream(edge_list))
+
+        streaming_start_time = streaming_times[0][0]
+        streaming_end_time = streaming_times[-1][1]
+
+        # set time info
+        sketch.initialize_time = initialize_end_time - initialize_start_time
+        sketch.streaming_time = streaming_end_time - streaming_start_time
 
         pickle.dump(sketch, open("../pickles/{}.p".format(sketch_id.name), "wb"))
 

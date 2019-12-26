@@ -5,7 +5,9 @@ from common.utils import timeit
 
 
 class Sketch(ABC):
-    name: str
+    name: str = None
+    initialize_time = None
+    streaming_time = None
 
     @abstractmethod
     def initialize(self):
