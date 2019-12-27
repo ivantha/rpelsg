@@ -87,16 +87,9 @@ def he_test(datasets):
 
             sketch_edge_weights = {}
 
-            i = 0
-            chunk = number_of_edges / 100
             for source_id, target_id in edges:
                 f = sketch.get_edge_frequency(source_id, target_id)
                 sketch_edge_weights['{},{}'.format(source_id, target_id)] = f
-
-                # update progress bar
-                i += 1
-                if i % chunk == 0:
-                    utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
 
             sorted_sketch_edge_weights = sorted(sketch_edge_weights.items(), key=lambda kv: (kv[1], kv[0]))
 

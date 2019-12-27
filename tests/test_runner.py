@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
     pickle_it(datasets)
 
-    # buildtime_test(datasets)
-    # buildtime_visualize()
+    buildtime_test(datasets)
+    buildtime_visualize()
 
     are_test(datasets)
     are_visualize()
@@ -32,17 +32,17 @@ if __name__ == '__main__':
     neq_test(datasets)
     neq_visualize()
 
-    # dd_test(datasets)
-    # dd_visualize()
-    #
-    # ewd_test(datasets)
-    # ewd_visualize()
+    dd_test(datasets)
+    dd_visualize()
 
-    # dc_test(datasets)
-    # dc_visualize()
+    ewd_test(datasets)
+    ewd_visualize()
 
-    # hn_test(datasets)
-    # hn_visualize()
-    #
-    # he_test(datasets)
-    # he_visualize()
+    dc_test(datasets)
+    dc_visualize()
+
+    hn_test(datasets)
+    hn_visualize()
+
+    he_test(datasets)
+    he_visualize()

@@ -98,8 +98,8 @@ def pickle_it(datasets):
         sketch.initialize_time = initialize_end_time - initialize_start_time
         sketch.streaming_time = streaming_end_time - streaming_start_time
 
-        with open("../pickles/{}.p".format(sketch_id.name), "wb") as pickled_sketch:
-            pickle.dump(sketch, pickled_sketch)
+        with open("../pickles/{}.p".format(sketch_id.name), 'wb') as file:
+            pickle.dump(sketch, file, pickle.HIGHEST_PROTOCOL)
 
         print('Completed: {}'.format(sketch_id.name))
 

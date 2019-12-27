@@ -1,6 +1,5 @@
 # Average relative error
 
-import gc
 import json
 import os
 import pickle

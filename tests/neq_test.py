@@ -1,6 +1,5 @@
 # Number of effective queries
 
-import gc
 import json
 import os
 import pickle
