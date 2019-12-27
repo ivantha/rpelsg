@@ -105,17 +105,17 @@ def are_test(datasets):
             relative_error_sum += relative_error
 
         output = {
-            'sketch_id': sketch_id,
+            'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
-            'memory_allocation': int(sketch_id.split('_')[1]),
+            'memory_allocation': int(sketch_id.name.split('_')[1]),
             'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'average_relative_error': relative_error_sum / sample_size
         }
 
-        with open('{}/{}.json'.format(test_output_dir, sketch_id), 'w') as file:
+        with open('{}/{}.json'.format(test_output_dir, sketch_id.name), 'w') as file:
             json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(sketch.name))
+        print('Completed: {}'.format(sketch_id.name))
 
         # free memory - remove reference to the sketch
         del sketch

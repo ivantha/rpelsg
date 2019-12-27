@@ -98,16 +98,17 @@ def buildtime_test(datasets):
         sketch.streaming_time = streaming_end_time - streaming_start_time
 
         output = {
+            'sketch_id': sketch_id.name,
             'sketch': sketch.name,
             'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'initialize_time': '{}'.format(sketch.initialize_time),
             'streaming_time': '{}'.format(sketch.streaming_time),
         }
 
-        with open('{}/{}.json'.format(test_output_dir, sketch_id), 'w') as file:
+        with open('{}/{}.json'.format(test_output_dir, sketch_id.name), 'w') as file:
             json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(sketch.name))
+        print('Completed: {}'.format(sketch_id.name))
 
         # free memory - remove reference to the sketch
         del sketch

@@ -75,7 +75,7 @@ def buildtime_visualize():
         fig.text(0.1, 0.03, 'Sketch size : 512 KB')
 
         os.makedirs('../reports', exist_ok=True)
-        plt.savefig('../reports/{}_{}.png'.format(os.path.basename(__file__).split('.')[0], sketch_size))
+        plt.savefig('../reports/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], sketch_size))
 
         # plt.show()
         plt.close()

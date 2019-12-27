@@ -64,7 +64,8 @@ def dc_visualize():
 
             os.makedirs('../reports', exist_ok=True)
             plt.savefig(
-                '../reports/{}_{}_{}.png'.format(os.path.basename(__file__).split('.')[0], sketch_name, sketch_size))
+                '../reports/{}_{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], sketch_name,
+                                                 sketch_size))
 
             # plt.show()
             plt.close()

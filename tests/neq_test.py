@@ -105,19 +105,19 @@ def neq_test(datasets):
                 effective_query_count += 1
 
         output = {
-            'sketch_id': sketch_id,
+            'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
-            'memory_allocation': int(sketch_id.split('_')[1]),
+            'memory_allocation': int(sketch_id.name.split('_')[1]),
             'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_queries': sample_size,
             'effective_query_count': effective_query_count,
             'effective_query_percent': effective_query_count / sample_size
         }
 
-        with open('{}/{}.json'.format(test_output_dir, sketch_id), 'w') as file:
+        with open('{}/{}.json'.format(test_output_dir, sketch_id.name), 'w') as file:
             json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(sketch.name))
+        print('Completed: {}'.format(sketch_id.name))
 
         # free memory - remove reference to the sketch
         del sketch

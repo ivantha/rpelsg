@@ -63,7 +63,7 @@ def hn_visualize():
         fig.text(0.5, 0.03, '# edges : {:,}'.format(results[0]['number_of_edges']))
 
         os.makedirs('../reports', exist_ok=True)
-        plt.savefig('../reports/{}_{}.png'.format(os.path.basename(__file__).split('.')[0], sketch_size))
+        plt.savefig('../reports/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], sketch_size))
 
         # plt.show()
         plt.close()

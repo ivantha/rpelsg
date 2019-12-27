@@ -62,7 +62,7 @@ def are_visualize():
     fig.text(0.1, 0.045, '# edges : {:,}'.format(edge_count))
 
     os.makedirs('../reports', exist_ok=True)
-    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0]))
+    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0]))
 
     # plt.show()
     plt.close()

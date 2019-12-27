@@ -64,7 +64,7 @@ def neq_visualize():
     fig.text(0.5, 0.06, '# queries : {:,}'.format(query_count))
 
     os.makedirs('../reports', exist_ok=True)
-    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0]))
+    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0]))
 
     # plt.show()
     plt.close()

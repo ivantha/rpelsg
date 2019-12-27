@@ -113,17 +113,17 @@ def dc_test(datasets):
             degrees[target_id] += f
 
         output = {
-            'sketch_id': sketch_id,
+            'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
             'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_vertices': number_of_vertices,
             'degrees': degrees
         }
 
-        with open('{}/{}.json'.format(test_output_dir, sketch_id), 'w') as file:
+        with open('{}/{}.json'.format(test_output_dir, sketch_id.name), 'w') as file:
             json.dump(output, file, indent=4)
 
-        print('Completed: {}'.format(sketch.name))
+        print('Completed: {}'.format(sketch_id.name))
 
         # free memory - remove reference to the sketch
         del sketch
