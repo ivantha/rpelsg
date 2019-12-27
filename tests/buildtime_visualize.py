@@ -41,10 +41,10 @@ def buildtime_visualize():
             with open('{}/{}_{}.json'.format(test_output_dir, sketch_name, sketch_size)) as file:
                 output = json.load(file)
                 output['initialize_time'] = (
-                            dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
+                        dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
                 ).total_seconds()
                 output['streaming_time'] = (
-                            dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
+                        dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
                 ).total_seconds()
                 results.append(output)
 

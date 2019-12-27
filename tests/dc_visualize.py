@@ -63,7 +63,8 @@ def dc_visualize():
             fig.text(0.1, 0.03, '# vertices : {:,}'.format(output['number_of_vertices']))
 
             os.makedirs('../reports', exist_ok=True)
-            plt.savefig('../reports/{}_{}_{}.png'.format(os.path.basename(__file__).split('.')[0], sketch_name, sketch_size))
+            plt.savefig(
+                '../reports/{}_{}_{}.png'.format(os.path.basename(__file__).split('.')[0], sketch_name, sketch_size))
 
             # plt.show()
             plt.close()
