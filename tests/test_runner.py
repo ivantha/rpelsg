@@ -1,3 +1,5 @@
+import multiprocessing
+
 from tests.are_test import are_test
 from tests.are_visualize import are_visualize
 from tests.buildtime_test import buildtime_test
@@ -43,3 +45,22 @@ if __name__ == '__main__':
 
     # he_test(datasets)
     # he_visualize()
+
+    def run_test(funs):
+        test_fun, visualize_fun = funs[0], funs[1]
+        test_fun(datasets)
+        visualize_fun()
+
+
+    pool = multiprocessing.Pool()
+    pool.map(run_test, [
+        [buildtime_test, buildtime_visualize],
+        [are_test, are_visualize],
+        [neq_test, neq_visualize],
+        [dd_test, dd_visualize],
+        [ewd_test, ewd_visualize],
+        [dc_test, dc_visualize],
+        [hn_test, hn_visualize],
+        [he_test, he_visualize],
+    ])
+    pool.close()
