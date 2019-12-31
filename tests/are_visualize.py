@@ -12,8 +12,8 @@ def are_visualize():
     print('are_visualize')
 
     sketches = (
-        (Sketches.countmin.name, 'CountMin'),
-        (Sketches.gsketch.name, 'gSketch'),
+        # (Sketches.countmin.name, 'CountMin'),
+        # (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
         (Sketches.alpha.name, 'Alpha'),
     )
@@ -61,8 +61,9 @@ def are_visualize():
 
     fig.text(0.1, 0.045, '# edges : {:,}'.format(edge_count))
 
-    os.makedirs('../reports', exist_ok=True)
-    plt.savefig('../reports/{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0]))
+    test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+    os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
+    plt.savefig('../reports/{}/{}.png'.format(test_name, test_name))
 
     # plt.show()
     plt.close()

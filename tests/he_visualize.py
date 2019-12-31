@@ -62,8 +62,9 @@ def he_visualize():
         fig.text(0.1, 0.03, '# vertices : {:,}'.format(results[0]['number_of_vertices']))
         fig.text(0.5, 0.03, '# edges : {:,}'.format(results[0]['number_of_edges']))
 
-        os.makedirs('../reports', exist_ok=True)
-        plt.savefig('../reports/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], sketch_size))
+        test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+        os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
+        plt.savefig('../reports/{}/{}.png'.format(test_name, sketch_size))
 
         # plt.show()
         plt.close()

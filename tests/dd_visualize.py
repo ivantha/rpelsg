@@ -62,10 +62,9 @@ def dd_visualize():
             fig.text(0.5, 0.06, '# edges : {:,}'.format(output['edge_count']))
             fig.text(0.1, 0.03, '# vertices : {:,}'.format(output['number_of_vertices']))
 
-            os.makedirs('../reports', exist_ok=True)
-            plt.savefig(
-                '../reports/{}_{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], sketch_name,
-                                                 sketch_size))
+            test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+            os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
+            plt.savefig('../reports/{}/{}_{}.png'.format(test_name, sketch_name, sketch_size))
 
             # plt.show()
             plt.close()
