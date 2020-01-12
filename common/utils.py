@@ -21,15 +21,6 @@ def get_edges_in_path(path: str):
     return edges
 
 
-def get_edge_count(path: str):
-    graph_size = 0
-    for data_file in get_txt_files(path):
-        with open(data_file) as file:
-            graph_size += len(file.readlines())
-
-    return graph_size
-
-
 def timeit(func):
     def wrapper(*args, **kwargs):
         start_time = datetime.now()

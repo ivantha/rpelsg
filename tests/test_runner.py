@@ -1,5 +1,6 @@
 import multiprocessing
 
+from common.utils import get_edges_in_path
 from tests.are_test import are_test
 from tests.are_visualize import are_visualize
 from tests.buildtime_test import buildtime_test
@@ -21,6 +22,15 @@ if __name__ == '__main__':
     datasets = [
         '../datasets/unicorn_wget/benign_base_100/',
     ]
+
+    # analyze datasets
+    for dataset in datasets:
+        print('Analyzing : {}'.format(dataset))
+        edges = get_edges_in_path(dataset)
+        print('# edges : {:,}'.format(len(edges)))
+        nodes = set([edge[0] for edge in edges] + [edge[1] for edge in edges])
+        print('# nodes : {:,}'.format(len(nodes)))
+
 
     # buildtime_test(datasets)
     # buildtime_visualize()
@@ -51,16 +61,15 @@ if __name__ == '__main__':
         test_fun(datasets)
         visualize_fun()
 
-
     pool = multiprocessing.Pool()
     pool.map(run_test, [
-        [buildtime_test, buildtime_visualize],
+        # [buildtime_test, buildtime_visualize],
         [are_test, are_visualize],
         [neq_test, neq_visualize],
-        [dd_test, dd_visualize],
-        [ewd_test, ewd_visualize],
-        [dc_test, dc_visualize],
-        [hn_test, hn_visualize],
-        [he_test, he_visualize],
+        # [dd_test, dd_visualize],
+        # [ewd_test, ewd_visualize],
+        # [dc_test, dc_visualize],
+        # [hn_test, hn_visualize],
+        # [he_test, he_visualize],
     ])
     pool.close()

@@ -33,14 +33,14 @@ class BinaryPartitionTree:
     def __init__(
             self,
             sample_stream: [(str, str)],
-            total_sketch_width,
+            partitioned_sketch_width,
             sketch_depth,
             w_0: int,
             C: int
     ):
         # initial parameters
         self.sample_stream = sample_stream
-        self.total_sketch_width = total_sketch_width
+        self.partitioned_sketch_width = partitioned_sketch_width
         self.sketch_depth = sketch_depth
         self.w_0 = w_0
         self.C = C
@@ -53,14 +53,6 @@ class BinaryPartitionTree:
         self.vertex_relative_frequency = {}
         self.vertex_out_degree = {}
         self.vertex_average_frequency = {}  # f_v(m) / d_(m)
-
-        # sketch sizes
-        total_sketch_size = 2 * total_sketch_width * total_sketch_width * self.sketch_depth / 1024.0
-        self.partitioned_sketch_size = 0
-        self.outlier_sketch_size = total_sketch_size * 0.25  # initial + remaining sketch size after partitioning => root(x) = outlier_sketch_width
-
-        initial_partitioned_sketch_size = total_sketch_size * 0.75  # but the total assigned width won't be used!!
-        self.partitionable_width = round(math.sqrt(initial_partitioned_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
 
     def partition(self):
         # Calculate edges, vertices, vertex frequencies and out degrees => O(n)
@@ -96,7 +88,7 @@ class BinaryPartitionTree:
         sorted_vertices = [vertex for (vertex, average_frequency) in sorted_vertices]
 
         # Create a root node => O(1)
-        self.root = BptNode(sorted_vertices, self.partitionable_width)
+        self.root = BptNode(sorted_vertices, self.partitioned_sketch_width)
 
         # Push the root node to the stack => O(1)
         stack = [self.root]
@@ -123,8 +115,6 @@ class BinaryPartitionTree:
                 for vertex in current_sketch.vertices:
                     self.sketch_hash.hash[vertex] = idx
 
-                # report: partitioned size
-                self.partitioned_sketch_size += (2 * current_sketch.width * current_sketch.width * self.sketch_depth / 1024.0)
             else:  # Partition some more
                 # Calculate E
                 def calculate_E(vertices, pivot):
@@ -160,14 +150,14 @@ class BinaryPartitionTree:
                     if E_val < min_E[1]:
                         min_E = [i, E_val]
 
-                # Create two new partition nodes
-                stack.append(BptNode(current_sketch.vertices[:min_E[0]], int(current_sketch.width / 2)))
-                stack.append(BptNode(current_sketch.vertices[min_E[0]:], int(current_sketch.width / 2)))
+                # calculate half size
+                current_sketch_size = 2 * current_sketch.width * current_sketch.width * self.sketch_depth / 1024.0
+                new_partition_size = current_sketch_size / 2.0
+                new_partition_width = round(math.sqrt(new_partition_size * 1024.0 / 2.0 / self.sketch_depth))
 
-                # add to outlier (remaining) sketch size
-                x = current_sketch.width / 2.0
-                rem_quarter = 2.0 * x * x * self.sketch_depth / 1024.0
-                self.outlier_sketch_size += (2 * rem_quarter)
+                # create two new partition nodes
+                stack.append(BptNode(current_sketch.vertices[:min_E[0]], new_partition_width))
+                stack.append(BptNode(current_sketch.vertices[min_E[0]:], new_partition_width))
 
 
 class Alpha(Sketch):
@@ -182,13 +172,12 @@ class Alpha(Sketch):
 
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
-            sample_size: int = 10000,
-            w_0: int = 200,
+            sample_size: int = 30000,
+            w_0: int = 1000,
             C: int = 10
     ):
         self.base_edges = base_edges
 
-        self.total_sketch_width = total_sketch_width
         self.sketch_depth = sketch_depth
 
         self.sample_size = sample_size
@@ -198,21 +187,29 @@ class Alpha(Sketch):
         self.sample_stream = None
         self.bpt = None
 
+        # sketch sizes
+        total_sketch_size = 2 * total_sketch_width * total_sketch_width * self.sketch_depth / 1024.0
+
+        # partitioned sketch =>
+        partitioned_sketch_size = total_sketch_size * 0.9
+        self.partitioned_sketch_width: int = round(math.sqrt(partitioned_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
+
+        # outliers =>
+        outlier_sketch_size = total_sketch_size * 0.1
+        self.outlier_sketch_width: int = round(math.sqrt(outlier_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
+
     @timeit
     def initialize(self):
         # reservoir sampling for k items as (i, j)
         self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, self.total_sketch_width, self.sketch_depth, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, self.partitioned_sketch_width, self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        outlier_sketch_width = round(math.sqrt(self.bpt.outlier_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
-        self.bpt.sketch_hash.outliers = TcmTable(outlier_sketch_width, self.sketch_depth)
+        self.bpt.sketch_hash.outliers = TcmTable(self.outlier_sketch_width, self.sketch_depth)
 
-        print('{}KB (Partitioned) : {}KB (Outlier)'.format(self.bpt.partitioned_sketch_size, self.bpt.outlier_sketch_size))
-        print('Outlier sketch width: {}'.format(outlier_sketch_width))
         print('# partitions: {}'.format(len(self.bpt.sketch_hash.tcm_tables)))
 
     def add_edge(self, source_id, target_id):
