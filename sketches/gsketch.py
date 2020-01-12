@@ -35,7 +35,7 @@ class BinaryPartitionTree:
             sketch_total_width,
             sketch_depth,
             w_0: int,
-            C: int
+            C: float
     ):
         # initial parameters
         self.sample_stream = sample_stream
@@ -71,15 +71,14 @@ class BinaryPartitionTree:
         # Set vertices without out degree count to 1 instead of None to stop NoneType errors
         for vertex in self.vertices:
             if vertex not in self.vertex_out_degree:
-                self.vertex_out_degree[vertex] = 1
+                self.vertex_out_degree[vertex] = 0
 
         # Calculate average frequencies => O(n)
         for vertex in self.vertices:
             if self.vertex_out_degree.get(vertex) == 0:
-                self.vertex_average_frequency[vertex] = 0
+                self.vertex_average_frequency[vertex] = 1
             else:
-                self.vertex_average_frequency[vertex] = self.vertex_relative_frequency.get(
-                    vertex) / self.vertex_out_degree.get(vertex)
+                self.vertex_average_frequency[vertex] = self.vertex_relative_frequency.get(vertex) / self.vertex_out_degree.get(vertex)
 
         # Sort the vertices by average frequency => O(n log n)
         # TODO : Use quick-sort (or something known) instead of Python sort
@@ -96,6 +95,8 @@ class BinaryPartitionTree:
         while len(stack) is not 0:
             current_sketch = stack.pop()
 
+            print('part : {}'.format(current_sketch.width))
+
             # Calculate distinct edges
             distinct_edge_count = 0
             for vertex in current_sketch.vertices:  # => O(n)
@@ -103,6 +104,11 @@ class BinaryPartitionTree:
 
             c1 = current_sketch.width < self.w_0  # Terminating condition 1
             c2 = distinct_edge_count <= self.C * current_sketch.width  # Terminating condition 2
+
+            if c1:
+                print('c1 : width - {}'.format(current_sketch.width))
+            elif c2:
+                print('c2 : # distinct edges - {} : width - {}'.format(distinct_edge_count, current_sketch.width))
 
             if c1 or c2:  # Enough partitioning
                 # Append the current sketch to the list of sketches => O(1)
@@ -129,14 +135,12 @@ class BinaryPartitionTree:
                     # Calculate E1
                     E1 = 0
                     for i in range(0, pivot):
-                        E1 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(
-                            vertices[i]))
+                        E1 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
 
                     # Calculate E1
                     E2 = 0
                     for i in range(pivot, len(vertices)):
-                        E2 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(
-                            vertices[i]))
+                        E2 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
 
                     E = E1 + E2
 
@@ -170,7 +174,7 @@ class GSketch(Sketch):
 
             sample_size: int = 10000,
             w_0: int = 100,
-            C: int = 10
+            C: float = 1.0
     ):
         self.base_edges = base_edges
 
@@ -196,6 +200,8 @@ class GSketch(Sketch):
 
         # create outlier sketch
         self.bpt.sketch_hash.outliers = CountMinTable(self.outlier_sketch_width, self.sketch_depth)
+
+        print('# partitions: {}'.format(len(self.bpt.sketch_hash.countmin_tables)))
 
     def add_edge(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:

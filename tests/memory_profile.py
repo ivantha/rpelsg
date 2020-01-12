@@ -4,6 +4,10 @@ import enum
 class MemoryProfile(enum.Enum):
     fullgraph = 'fullgraph'
 
+    countmin_100 = 'countmin_100'
+    countmin_200 = 'countmin_200'
+    countmin_300 = 'countmin_300'
+    countmin_400 = 'countmin_400'
     countmin_512 = 'countmin_512'
     countmin_1024 = 'countmin_1024'
     countmin_2048 = 'countmin_2048'
@@ -13,6 +17,10 @@ class MemoryProfile(enum.Enum):
     countmin_32768 = 'countmin_32768'
     countmin_65536 = 'countmin_65536'
 
+    gsketch_100 = 'gsketch_100'
+    gsketch_200 = 'gsketch_200'
+    gsketch_300 = 'gsketch_300'
+    gsketch_400 = 'gsketch_400'
     gsketch_512 = 'gsketch_512'
     gsketch_1024 = 'gsketch_1024'
     gsketch_2048 = 'gsketch_2048'
@@ -22,6 +30,10 @@ class MemoryProfile(enum.Enum):
     gsketch_32768 = 'gsketch_32768'
     gsketch_65536 = 'gsketch_65536'
 
+    tcm_100 = 'tcm_100'
+    tcm_200 = 'tcm_200'
+    tcm_300 = 'tcm_300'
+    tcm_400 = 'tcm_400'
     tcm_512 = 'tcm_512'
     tcm_1024 = 'tcm_1024'
     tcm_2048 = 'tcm_2048'
@@ -31,6 +43,10 @@ class MemoryProfile(enum.Enum):
     tcm_32768 = 'tcm_32768'
     tcm_65536 = 'tcm_65536'
 
+    alpha_100 = 'alpha_100'
+    alpha_200 = 'alpha_200'
+    alpha_300 = 'alpha_300'
+    alpha_400 = 'alpha_400'
     alpha_512 = 'alpha_512'
     alpha_1024 = 'alpha_1024'
     alpha_2048 = 'alpha_2048'

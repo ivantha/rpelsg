@@ -57,8 +57,16 @@ def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, lengt
         print()
 
 
+def print_gsketch_sizes():
+    for i in [100, 200, 300, 400, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
+        x = i / 16.0
+        p1 = round(x * 0.75)
+        p2 = round(x * 0.25)
+        print('{} : {}, {} >> {}KB ({}MB)'.format(i, p1, p2, (p1 + p2) * 16.0, (p1 + p2) * 16.0 / 1024.0))
+
+
 def print_tcm_sizes():
-    for i in [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
+    for i in [100, 200, 300, 400, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
         x = round(sqrt(i / 16.0 * 1024.0))
         print('{} : {} >> {}KB ({}MB)'.format(i, x, (x ** 2) * 16.0 / 1024.0, (x ** 2) * 16.0 / 1024.0 / 1024.0))
 

@@ -13,21 +13,25 @@ def neq_visualize():
     print('neq_visualize')
 
     sketches = (
-        # (Sketches.countmin.name, 'CountMin'),
-        # (Sketches.gsketch.name, 'gSketch'),
+        (Sketches.countmin.name, 'CountMin'),
+        (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
-        (Sketches.alpha.name, 'Alpha'),
+        # (Sketches.alpha.name, 'Alpha'),
     )
 
     sketch_sizes = (
+        (100, '100 KB'),
+        (200, '200 KB'),
+        (300, '300 KB'),
+        (400, '400 KB'),
         (512, '512 KB'),
-        (1024, '1 MB'),
-        (2048, '2 MB'),
-        (4096, '4 MB'),
-        (8192, '8 MB'),
-        (16384, '16 MB'),
-        (32768, '32 MB'),
-        (65536, '64 MB')
+        # (1024, '1 MB'),
+        # (2048, '2 MB'),
+        # (4096, '4 MB'),
+        # (8192, '8 MB'),
+        # (16384, '16 MB'),
+        # (32768, '32 MB'),
+        # (65536, '64 MB')
     )
 
     matplotlib.rcParams['figure.dpi'] = 500

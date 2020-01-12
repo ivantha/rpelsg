@@ -52,35 +52,45 @@ class BinaryPartitionTree:
         self.vertices = []
         self.vertex_relative_frequency = {}
         self.vertex_out_degree = {}
+        self.vertex_in_degree = {}
+        self.vertex_sum_degree = {}
         self.vertex_average_frequency = {}  # f_v(m) / d_(m)
 
     def partition(self):
         # Calculate edges, vertices, vertex frequencies and out degrees => O(n)
         for i, j in self.sample_stream:
-            # Add to vertices
+            # add to vertices
             self.vertices.append(i)
             self.vertices.append(j)
 
-            # Add to vertex frequencies in i,j
+            # add to vertex frequencies in i,j
             self.vertex_relative_frequency[i] = self.vertex_relative_frequency.get(i, 0) + 1
             self.vertex_relative_frequency[j] = self.vertex_relative_frequency.get(j, 0) + 1
 
-            # Add to vertex out degrees in i
+            # add to vertex out degrees in i
             self.vertex_out_degree[i] = self.vertex_out_degree.get(i, 0) + 1
 
-        # TODO : What do we do when out degree is zero?
-        # Set vertices without out degree count to 1 instead of None to stop NoneType errors
+            # add to vertex in degrees in j
+            self.vertex_in_degree[j] = self.vertex_in_degree.get(j, 0) + 1
+
+        # TODO : What do we do when out/in degree is zero?
+        # -------------> Set vertices without degree count to 1 instead of None to stop NoneType errors
         for vertex in self.vertices:
             if vertex not in self.vertex_out_degree:
-                self.vertex_out_degree[vertex] = 1
+                self.vertex_out_degree[vertex] = 0
+            if vertex not in self.vertex_in_degree:
+                self.vertex_in_degree[vertex] = 0
+
+        # calculate sum_degree
+        for vertex in self.vertices:
+            self.vertex_sum_degree[vertex] = self.vertex_out_degree[vertex] + self.vertex_in_degree[vertex]
 
         # Calculate average frequencies => O(n)
         for vertex in self.vertices:
-            if self.vertex_out_degree.get(vertex) == 0:
+            if self.vertex_sum_degree.get(vertex) == 0:
                 self.vertex_average_frequency[vertex] = 0
             else:
-                self.vertex_average_frequency[vertex] = self.vertex_relative_frequency.get(
-                    vertex) / self.vertex_out_degree.get(vertex)
+                self.vertex_average_frequency[vertex] = self.vertex_relative_frequency.get(vertex) / self.vertex_sum_degree.get(vertex)
 
         # Sort the vertices by average frequency => O(n log n)
         # TODO : Use quick-sort (or something known) instead of Python sort
@@ -101,6 +111,7 @@ class BinaryPartitionTree:
             distinct_edge_count = 0
             for vertex in current_sketch.vertices:  # => O(n)
                 distinct_edge_count += self.vertex_out_degree.get(vertex)
+                # distinct_edge_count += self.vertex_in_degree.get(vertex)
 
             c1 = current_sketch.width < self.w_0  # Terminating condition 1
             c2 = distinct_edge_count <= self.C * current_sketch.width  # Terminating condition 2
@@ -131,14 +142,12 @@ class BinaryPartitionTree:
                     # Calculate E1
                     E1 = 0
                     for i in range(0, pivot):
-                        E1 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(
-                            vertices[i]))
+                        E1 += ((self.vertex_sum_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
 
                     # Calculate E1
                     E2 = 0
                     for i in range(pivot, len(vertices)):
-                        E2 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(
-                            vertices[i]))
+                        E2 += ((self.vertex_sum_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
 
                     E = E1 + E2
 
@@ -172,8 +181,8 @@ class Alpha(Sketch):
 
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
-            sample_size: int = 30000,
-            w_0: int = 1000,
+            sample_size: int = 10000,
+            w_0: int = 200,
             C: int = 10
     ):
         self.base_edges = base_edges
@@ -220,11 +229,9 @@ class Alpha(Sketch):
 
     def get_edge_frequency(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            return self.bpt.sketch_hash.tcm_tables[self.bpt.sketch_hash.hash.get(source_id)]\
-                .get_edge_frequency(source_id, target_id)
+            return self.bpt.sketch_hash.tcm_tables[self.bpt.sketch_hash.hash.get(source_id)].get_edge_frequency(source_id, target_id)
         else:
-            return self.bpt.sketch_hash.outliers\
-                .get_edge_frequency(source_id, target_id)
+            return self.bpt.sketch_hash.outliers.get_edge_frequency(source_id, target_id)
 
     @timeit
     def get_analytics(self):

@@ -20,6 +20,10 @@ def are_test(datasets):
         edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
+        # (MemoryProfile.countmin_100, CountMin(m=1024 * 6, d=8)),  # 96 KB
+        # (MemoryProfile.countmin_200, CountMin(m=1024 * 13, d=8)),  # 208 KB
+        # (MemoryProfile.countmin_300, CountMin(m=1024 * 19, d=8)),  # 304 KB
+        # (MemoryProfile.countmin_400, CountMin(m=1024 * 25, d=8)),  # 400 KB
         # (MemoryProfile.countmin_512, CountMin(m=1024 * 32, d=8)),  # 512 KB
         # (MemoryProfile.countmin_1024, CountMin(m=1024 * 32 * 2, d=8)),  # 1 MB
         # (MemoryProfile.countmin_2048, CountMin(m=1024 * 32 * 4, d=8)),  # 2 MB
@@ -29,9 +33,21 @@ def are_test(datasets):
         # (MemoryProfile.countmin_32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32 MB
         # (MemoryProfile.countmin_65536, CountMin(m=1024 * 32 * 128, d=8)),  # 64 MB
 
-        # (MemoryProfile.gsketch_512, GSketch(edge_lists[0],
-        #                                     partitioned_sketch_width=1024 * 24, outlier_sketch_width=1024 * 8,
-        #                                     sketch_depth=8)),  # 512 KB
+        (MemoryProfile.gsketch_100, GSketch(edge_lists[0],
+                                            partitioned_sketch_width=1024 * 5, outlier_sketch_width=1024 * 2,
+                                            sketch_depth=8)),  # 112 KB
+        (MemoryProfile.gsketch_200, GSketch(edge_lists[0],
+                                            partitioned_sketch_width=1024 * 9, outlier_sketch_width=1024 * 3,
+                                            sketch_depth=8)),  # 192 KB
+        (MemoryProfile.gsketch_300, GSketch(edge_lists[0],
+                                            partitioned_sketch_width=1024 * 14, outlier_sketch_width=1024 * 5,
+                                            sketch_depth=8)),  # 304 KB
+        (MemoryProfile.gsketch_400, GSketch(edge_lists[0],
+                                            partitioned_sketch_width=1024 * 19, outlier_sketch_width=1024 * 6,
+                                            sketch_depth=8)),  # 400 KB
+        (MemoryProfile.gsketch_512, GSketch(edge_lists[0],
+                                            partitioned_sketch_width=1024 * 24, outlier_sketch_width=1024 * 8,
+                                            sketch_depth=8)),  # 512 KB
         # (MemoryProfile.gsketch_1024, GSketch(edge_lists[0],
         #                                      partitioned_sketch_width=1024 * 24 * 2, outlier_sketch_width=1024 * 8 * 2,
         #                                      sketch_depth=8)),  # 1 MB
@@ -58,6 +74,10 @@ def are_test(datasets):
         #                                       outlier_sketch_width=1024 * 8 * 128,
         #                                       sketch_depth=8)),  # 64 MB
 
+        # (MemoryProfile.tcm_100, TCM(w=80, d=8)),  # 100 KB
+        # (MemoryProfile.tcm_200, TCM(w=113, d=8)),  # 199.5 KB
+        # (MemoryProfile.tcm_300, TCM(w=139, d=8)),  # 301.8 KB
+        # (MemoryProfile.tcm_400, TCM(w=160, d=8)),  # 400 KB
         # (MemoryProfile.tcm_512, TCM(w=181, d=8)),  # 511.8 KB
         # (MemoryProfile.tcm_1024, TCM(w=256, d=8)),  # 1 MB
         # (MemoryProfile.tcm_2048, TCM(w=362, d=8)),  # 1.9996 MB
@@ -67,14 +87,14 @@ def are_test(datasets):
         # (MemoryProfile.tcm_32768, TCM(w=1448, d=8)),  # 31.9932 MB
         # (MemoryProfile.tcm_65536, TCM(w=2048, d=8)),  # 64 MB
 
-        (MemoryProfile.alpha_512, Alpha(edge_lists[0], total_sketch_width=181, sketch_depth=8)),  # 512 KB
-        (MemoryProfile.alpha_1024, Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8)),  # 1 MB
-        (MemoryProfile.alpha_2048, Alpha(edge_lists[0], total_sketch_width=362, sketch_depth=8)),  # 2 MB
-        (MemoryProfile.alpha_4096, Alpha(edge_lists[0], total_sketch_width=512, sketch_depth=8)),  # 4 MB
-        (MemoryProfile.alpha_8192, Alpha(edge_lists[0], total_sketch_width=724, sketch_depth=8)),  # 8 MB
-        (MemoryProfile.alpha_16384, Alpha(edge_lists[0], total_sketch_width=1024, sketch_depth=8)),  # 16 MB
-        (MemoryProfile.alpha_32768, Alpha(edge_lists[0], total_sketch_width=1448, sketch_depth=8)),  # 32 MB
-        (MemoryProfile.alpha_65536, Alpha(edge_lists[0], total_sketch_width=2048, sketch_depth=8)),  # 64 MB
+        # (MemoryProfile.alpha_512, Alpha(edge_lists[0], total_sketch_width=181, sketch_depth=8)),  # 512 KB
+        # (MemoryProfile.alpha_1024, Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8)),  # 1 MB
+        # (MemoryProfile.alpha_2048, Alpha(edge_lists[0], total_sketch_width=362, sketch_depth=8)),  # 2 MB
+        # (MemoryProfile.alpha_4096, Alpha(edge_lists[0], total_sketch_width=512, sketch_depth=8)),  # 4 MB
+        # (MemoryProfile.alpha_8192, Alpha(edge_lists[0], total_sketch_width=724, sketch_depth=8)),  # 8 MB
+        # (MemoryProfile.alpha_16384, Alpha(edge_lists[0], total_sketch_width=1024, sketch_depth=8)),  # 16 MB
+        # (MemoryProfile.alpha_32768, Alpha(edge_lists[0], total_sketch_width=1448, sketch_depth=8)),  # 32 MB
+        # (MemoryProfile.alpha_65536, Alpha(edge_lists[0], total_sketch_width=2048, sketch_depth=8)),  # 64 MB
     )
 
     # init fullgraph
@@ -83,8 +103,8 @@ def are_test(datasets):
     for edge_list in edge_lists:
         full_graph.stream(edge_list)
 
-    # reservoir sampling for 1000 items as (i, j) => 1000 queries
-    sample_size = 1000
+    # reservoir sampling for 10000 items as (i, j) => 10000 queries
+    sample_size = 10000
     sample_stream = sampling.select_k_items(edge_lists[0], sample_size)
 
     test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
