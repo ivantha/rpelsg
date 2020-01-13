@@ -12,8 +12,8 @@ def are_visualize():
     print('are_visualize')
 
     sketches = (
-        # (Sketches.countmin.name, 'CountMin'),
-        # (Sketches.gsketch.name, 'gSketch'),
+        (Sketches.countmin.name, 'CountMin'),
+        (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
         (Sketches.alpha.name, 'Alpha'),
     )
