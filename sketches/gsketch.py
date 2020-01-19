@@ -32,8 +32,8 @@ class BinaryPartitionTree:
     def __init__(
             self,
             sample_stream: [(str, str)],
-            sketch_total_width,
-            sketch_depth,
+            sketch_total_width: int,
+            sketch_depth: int,
             w_0: int,
             C: float
     ):
@@ -54,34 +54,41 @@ class BinaryPartitionTree:
         self.vertex_average_frequency = {}  # f_v(m) / d_(m)
 
     def partition(self):
-        # Calculate edges, vertices, vertex frequencies and out degrees => O(n)
+        # Calculate edges, vertices, vertex frequencies => O(n)
+        temp_out_degree_set = {}
         for i, j in self.sample_stream:
             # Add to vertices
             self.vertices.append(i)
             self.vertices.append(j)
 
-            # Add to vertex frequencies in i,j
+            # Add to vertex relative frequencies in i
             self.vertex_relative_frequency[i] = self.vertex_relative_frequency.get(i, 0) + 1
-            self.vertex_relative_frequency[j] = self.vertex_relative_frequency.get(j, 0) + 1
 
+            # keep track of vertices
+            if i not in temp_out_degree_set:
+                temp_out_degree_set[i] = set()
+            temp_out_degree_set[i].add(j)
+
+        # Calculate out degrees
+        for v in temp_out_degree_set.keys():
             # Add to vertex out degrees in i
-            self.vertex_out_degree[i] = self.vertex_out_degree.get(i, 0) + 1
+            self.vertex_out_degree[v] = len(temp_out_degree_set[v])
 
-        # TODO : What do we do when out degree is zero?
-        # Set vertices without out degree count to 1 instead of None to stop NoneType errors
+        # Set vertices without relative frequency & out degree count to 0 instead of None to stop NoneType errors
         for vertex in self.vertices:
+            if vertex not in self.vertex_relative_frequency:
+                self.vertex_relative_frequency[vertex] = 0
             if vertex not in self.vertex_out_degree:
                 self.vertex_out_degree[vertex] = 0
 
         # Calculate average frequencies => O(n)
         for vertex in self.vertices:
-            if self.vertex_out_degree.get(vertex) == 0:
-                self.vertex_average_frequency[vertex] = 1
+            if self.vertex_relative_frequency[vertex] == 0:
+                self.vertex_average_frequency[vertex] = 0
             else:
-                self.vertex_average_frequency[vertex] = self.vertex_relative_frequency.get(vertex) / self.vertex_out_degree.get(vertex)
+                self.vertex_average_frequency[vertex] = self.vertex_relative_frequency[vertex] / self.vertex_out_degree[vertex]
 
-        # Sort the vertices by average frequency => O(n log n)
-        # TODO : Use quick-sort (or something known) instead of Python sort
+        # Sort the vertices by average frequency (Timesort) => O(n log n)
         sorted_vertices = sorted(self.vertex_average_frequency.items(), key=operator.itemgetter(1))
         sorted_vertices = [vertex for (vertex, average_frequency) in sorted_vertices]
 
@@ -100,7 +107,7 @@ class BinaryPartitionTree:
             # Calculate distinct edges
             distinct_edge_count = 0
             for vertex in current_sketch.vertices:  # => O(n)
-                distinct_edge_count += self.vertex_out_degree.get(vertex)
+                distinct_edge_count += self.vertex_out_degree[vertex]
 
             c1 = current_sketch.width < self.w_0  # Terminating condition 1
             c2 = distinct_edge_count <= self.C * current_sketch.width  # Terminating condition 2
@@ -125,36 +132,41 @@ class BinaryPartitionTree:
                     # Calculate F_S1
                     F_S1 = 0
                     for i in range(0, pivot):
-                        F_S1 += self.vertex_relative_frequency.get(vertices[i])
+                        F_S1 += self.vertex_relative_frequency[vertices[i]]
 
                     # Calculate F_S2
                     F_S2 = 0
                     for i in range(pivot, len(vertices)):
-                        F_S2 += self.vertex_relative_frequency.get(vertices[i])
+                        F_S2 += self.vertex_relative_frequency[vertices[i]]
 
                     # Calculate E1
                     E1 = 0
                     for i in range(0, pivot):
-                        E1 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
+                        if self.vertex_out_degree[vertices[i]] != 0:
+                            E1 += ((self.vertex_out_degree[vertices[i]] * F_S1) / self.vertex_average_frequency[vertices[i]])
 
                     # Calculate E1
                     E2 = 0
                     for i in range(pivot, len(vertices)):
-                        E2 += ((self.vertex_out_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
+                        if self.vertex_out_degree[vertices[i]] != 0:
+                            E2 += ((self.vertex_out_degree[vertices[i]] * F_S1) / self.vertex_average_frequency[vertices[i]])
 
                     E = E1 + E2
 
                     return E
 
-                min_E = (1, calculate_E(current_sketch.vertices, 1))  # (partition_index, min_value)
-                for i in range(2, len(current_sketch.vertices)):  # => O(n) This probably gets reduced over iterations
-                    E_val = calculate_E(current_sketch.vertices, i)
-                    if E_val < min_E[1]:
-                        min_E = [i, E_val]
+                E_values = [calculate_E(current_sketch.vertices, i) for i in range(1, len(current_sketch.vertices))]
+                min_E_index = E_values.index(min(E_values)) + 1
+
+                # min_E = (1, calculate_E(current_sketch.vertices, 1))  # (partition_index, min_value)
+                # for i in range(2, len(current_sketch.vertices)):  # => O(n) This probably gets reduced over iterations
+                #     E_val = calculate_E(current_sketch.vertices, i)
+                #     if E_val < min_E[1]:
+                #         min_E = [i, E_val]
 
                 # Create two new partition nodes
-                stack.append(BptNode(current_sketch.vertices[:min_E[0]], int(current_sketch.width / 2)))
-                stack.append(BptNode(current_sketch.vertices[min_E[0]:], int(current_sketch.width / 2)))
+                stack.append(BptNode(current_sketch.vertices[:min_E_index], int(current_sketch.width / 2)))
+                stack.append(BptNode(current_sketch.vertices[min_E_index:], int(current_sketch.width / 2)))
 
 
 class GSketch(Sketch):
@@ -164,11 +176,8 @@ class GSketch(Sketch):
             self,
             base_edges: List,
 
-            # partitioned sketch => [2 bytes * (1024 * 24) * 8 = 384 KB]
-            partitioned_sketch_width: int = 1024 * 24,  # m: Total width of the hash table (➡️)
-
-            # outliers => [2 bytes * (1024 * 8) * 8 = 128 KB]
-            outlier_sketch_width: int = 1024 * 8,  # Width of the outlier hash table (➡️)
+            # total sketch => [2 bytes * (1024 * 32) * 8 = 512 KB]
+            sketch_width: int = 1024 * 32,  # m: Total width of the hash table (➡️)
 
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
@@ -178,8 +187,7 @@ class GSketch(Sketch):
     ):
         self.base_edges = base_edges
 
-        self.partitioned_sketch_width = partitioned_sketch_width
-        self.outlier_sketch_width = outlier_sketch_width
+        self.sketch_width = sketch_width
         self.sketch_depth = sketch_depth
 
         self.sample_size = sample_size
@@ -195,30 +203,37 @@ class GSketch(Sketch):
         self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, self.partitioned_sketch_width, self.sketch_depth, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, round(self.sketch_width * 0.9), self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        self.bpt.sketch_hash.outliers = CountMinTable(self.outlier_sketch_width, self.sketch_depth)
+        self.bpt.sketch_hash.outliers = CountMinTable(round(self.sketch_width * 0.1), self.sketch_depth)
 
-        print('# partitions: {}'.format(len(self.bpt.sketch_hash.countmin_tables)))
+        self.partitioned_edges = 0
+        self.outlier_edges = 0
 
     def add_edge(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge('{},{}'.format(source_id, target_id))
+            self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash[source_id]].add_edge('{},{}'.format(source_id, target_id))
+            self.partitioned_edges += 1
         else:
             self.bpt.sketch_hash.outliers.add_edge('{},{}'.format(source_id, target_id))
+            self.outlier_edges += 1
 
     def get_edge_frequency(self, source_id, target_id):
         if source_id in self.bpt.sketch_hash.hash:
-            return self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash.get(source_id)]\
+            return self.bpt.sketch_hash.countmin_tables[self.bpt.sketch_hash.hash[source_id]]\
                 .get_edge_frequency('{},{}'.format(source_id, target_id))
         else:
             return self.bpt.sketch_hash.outliers\
                 .get_edge_frequency('{},{}'.format(source_id, target_id))
 
     @timeit
-    def get_analytics(self):
-        return {
-            'sketch_hash_object_size': asizeof.asizeof(self.bpt.sketch_hash)
-        }
+    def print_analytics(self):
+        print('# partitions: {}'.format(len(self.bpt.sketch_hash.countmin_tables)))
+        print('# partitioned edges : {}'.format(self.partitioned_edges))
+        print('# outlier edges : {}'.format(self.outlier_edges))
+
+        # return {
+        #     'sketch_hash_object_size': asizeof.asizeof(self.bpt.sketch_hash)
+        # }

@@ -22,7 +22,7 @@ class Sketch(ABC):
         pass
 
     @abstractmethod
-    def get_analytics(self):
+    def print_analytics(self):
         pass
 
     @timeit

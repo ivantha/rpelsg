@@ -60,8 +60,10 @@ class CountMin(Sketch):
         return self._table.get_edge_frequency('{},{}'.format(source_id, target_id))
 
     @timeit
-    def get_analytics(self):
-        return {
-            'edge_count': self._table._edge_count,
-            'table_object_size': asizeof.asizeof(self._table._tables)
-        }
+    def print_analytics(self):
+        pass
+
+        # return {
+        #     'edge_count': self._table._edge_count,
+        #     'table_object_size': asizeof.asizeof(self._table._tables)
+        # }

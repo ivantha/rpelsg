@@ -60,8 +60,10 @@ class TCM(Sketch):
         return self._table.get_edge_frequency(source_id, target_id)
 
     @timeit
-    def get_analytics(self):
-        return {
-            'edge_count': self._table.edge_count,
-            'table_object_size': asizeof.asizeof(self._table.matrix)
-        }
+    def print_analytics(self):
+        pass
+
+        # return {
+        #     'edge_count': self._table.edge_count,
+        #     'table_object_size': asizeof.asizeof(self._table.matrix)
+        # }

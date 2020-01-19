@@ -20,5 +20,5 @@ class GSS(Sketch):
         pass
 
     @timeit
-    def get_analytics(self):
+    def print_analytics(self):
         pass

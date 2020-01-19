@@ -53,11 +53,13 @@ class FullGraph(Sketch):
         return self.graph._edges[source_id][target_id]
 
     @timeit
-    def get_analytics(self):
-        return {
-            'node_count': self.graph._node_count,
-            'edge_count': self.graph._edge_count,
-            'node_store_size': asizeof.asizeof(self.graph._nodes),
-            'edge_store_size': asizeof.asizeof(self.graph._edges),
-            'graph_object_size': asizeof.asizeof(self)
-        }
+    def print_analytics(self):
+        pass
+
+        # return {
+        #     'node_count': self.graph._node_count,
+        #     'edge_count': self.graph._edge_count,
+        #     'node_store_size': asizeof.asizeof(self.graph._nodes),
+        #     'edge_store_size': asizeof.asizeof(self.graph._edges),
+        #     'graph_object_size': asizeof.asizeof(self)
+        # }

@@ -234,7 +234,9 @@ class Alpha(Sketch):
             return self.bpt.sketch_hash.outliers.get_edge_frequency(source_id, target_id)
 
     @timeit
-    def get_analytics(self):
-        return {
-            'sketch_hash_object_size': asizeof.asizeof(self.bpt.sketch_hash)
-        }
+    def print_analytics(self):
+        pass
+
+        # return {
+        #     'sketch_hash_object_size': asizeof.asizeof(self.bpt.sketch_hash)
+        # }
