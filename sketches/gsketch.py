@@ -158,12 +158,6 @@ class BinaryPartitionTree:
                 E_values = [calculate_E(current_sketch.vertices, i) for i in range(1, len(current_sketch.vertices))]
                 min_E_index = E_values.index(min(E_values)) + 1
 
-                # min_E = (1, calculate_E(current_sketch.vertices, 1))  # (partition_index, min_value)
-                # for i in range(2, len(current_sketch.vertices)):  # => O(n) This probably gets reduced over iterations
-                #     E_val = calculate_E(current_sketch.vertices, i)
-                #     if E_val < min_E[1]:
-                #         min_E = [i, E_val]
-
                 # Create two new partition nodes
                 stack.append(BptNode(current_sketch.vertices[:min_E_index], int(current_sketch.width / 2)))
                 stack.append(BptNode(current_sketch.vertices[min_E_index:], int(current_sketch.width / 2)))
@@ -182,7 +176,7 @@ class GSketch(Sketch):
             sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
 
             sample_size: int = 10000,
-            w_0: int = 100,
+            w_0: int = 10000,
             C: float = 1.0
     ):
         self.base_edges = base_edges
@@ -203,11 +197,11 @@ class GSketch(Sketch):
         self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, round(self.sketch_width * 0.9), self.sketch_depth, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, round(self.sketch_width * 0.95), self.sketch_depth, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        self.bpt.sketch_hash.outliers = CountMinTable(round(self.sketch_width * 0.1), self.sketch_depth)
+        self.bpt.sketch_hash.outliers = CountMinTable(round(self.sketch_width * 0.05), self.sketch_depth)
 
         self.partitioned_edges = 0
         self.outlier_edges = 0
