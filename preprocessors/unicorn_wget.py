@@ -1,6 +1,8 @@
 import os
 
 import shutil
+import random
+
 from google_drive_downloader import GoogleDriveDownloader as gdd
 
 from common.utils import get_txt_files
@@ -33,13 +35,13 @@ if __name__ == '__main__':
         shutil.rmtree('{}/{}/'.format(parent_dir, file_base))
 
         subsets = [
-            (100, '100'),
-            (75, '75'),
-            (50, '50'),
-            (25, '25'),
-            (10, '10'),
-            (5, '5'),
-            (1, '1'),
+            (100.0, '100'),
+            (75.0, '75'),
+            (50.0, '50'),
+            (25.0, '25'),
+            (10.0, '10'),
+            (5.0, '5'),
+            (1.0, '1'),
             (0.1, '01'),
             (0.01, '001'),
         ]
@@ -47,27 +49,26 @@ if __name__ == '__main__':
         num_lines = len(lines)
 
         for percent, suffix in subsets:
-            line_counter = 0
-            new_f_counter = 0
+            k = int(num_lines * percent / 100.0)
 
-            os.makedirs('{}/{}_{}/'.format(parent_dir, file_base, suffix), exist_ok=True)
-            new_f = open('{}/{}_{}/{}.txt'.format(parent_dir, file_base, suffix, new_f_counter), 'w')
+            i = 0
+            reservoir = ['x'] * k
 
             for line in lines:
-                if line_counter / num_lines * 100.0 > percent:
-                    print('{} / {} > {}%'.format(line_counter, num_lines, percent))
-                    break
+                if i < k:
+                    reservoir[i] = line
+                else:
+                    j = random.randrange(i + 1)
+                    if j < k:
+                        reservoir[j] = line
 
-                try:
-                    source_id, target_id, _ = line.split(' ')
+                i += 1
 
-                    line_counter += 1
-                    new_f.write('{},{}\n'.format(source_id, target_id))
-
-                    # start writing to a new file
-                    if line_counter % 100000 == 0:
-                        new_f.close()
-                        new_f_counter += 1
-                        new_f = open('{}/{}_{}/{}.txt'.format(parent_dir, file_base, suffix, new_f_counter), 'w')
-                except:
-                    print('Error in line > {}'.format(line))
+            os.makedirs('{}/{}_{}/'.format(parent_dir, file_base, suffix), exist_ok=True)
+            with open('{}/{}_{}/data.txt'.format(parent_dir, file_base, suffix), 'w') as new_f:
+                for line in reservoir:
+                    try:
+                        source_id, target_id, _ = line.split(' ')
+                        new_f.write('{},{}\n'.format(source_id, target_id))
+                    except:
+                        print('Error in line > {}'.format(line))
