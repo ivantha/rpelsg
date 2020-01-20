@@ -21,7 +21,7 @@ from tests.neq_visualize import neq_visualize
 if __name__ == '__main__':
     datasets = [
         '../datasets/unicorn_wget/benign_base_100/',
-        '../datasets/unicorn_wget/benign_streaming_100/',
+        '../datasets/unicorn_wget/benign_streaming_10/',
     ]
 
     # analyze datasets

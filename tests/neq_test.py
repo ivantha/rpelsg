@@ -24,14 +24,14 @@ def neq_test(datasets):
         # (MemoryProfile.countmin_200, CountMin(m=1024 * 13, d=8)),  # 208 KB
         # (MemoryProfile.countmin_300, CountMin(m=1024 * 19, d=8)),  # 304 KB
         # (MemoryProfile.countmin_400, CountMin(m=1024 * 25, d=8)),  # 400 KB
-        (MemoryProfile.countmin_512, CountMin(m=1024 * 32, d=8)),  # 512 KB
-        (MemoryProfile.countmin_1024, CountMin(m=1024 * 32 * 2, d=8)),  # 1 MB
-        (MemoryProfile.countmin_2048, CountMin(m=1024 * 32 * 4, d=8)),  # 2 MB
-        (MemoryProfile.countmin_4096, CountMin(m=1024 * 32 * 8, d=8)),  # 4 MB
-        (MemoryProfile.countmin_8192, CountMin(m=1024 * 32 * 16, d=8)),  # 8 MB
-        (MemoryProfile.countmin_16384, CountMin(m=1024 * 32 * 32, d=8)),  # 16 MB
-        (MemoryProfile.countmin_32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32 MB
-        (MemoryProfile.countmin_65536, CountMin(m=1024 * 32 * 128, d=8)),  # 64 MB
+        # (MemoryProfile.countmin_512, CountMin(m=1024 * 32, d=8)),  # 512 KB
+        # (MemoryProfile.countmin_1024, CountMin(m=1024 * 32 * 2, d=8)),  # 1 MB
+        # (MemoryProfile.countmin_2048, CountMin(m=1024 * 32 * 4, d=8)),  # 2 MB
+        # (MemoryProfile.countmin_4096, CountMin(m=1024 * 32 * 8, d=8)),  # 4 MB
+        # (MemoryProfile.countmin_8192, CountMin(m=1024 * 32 * 16, d=8)),  # 8 MB
+        # (MemoryProfile.countmin_16384, CountMin(m=1024 * 32 * 32, d=8)),  # 16 MB
+        # (MemoryProfile.countmin_32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32 MB
+        # (MemoryProfile.countmin_65536, CountMin(m=1024 * 32 * 128, d=8)),  # 64 MB
 
         # (MemoryProfile.gsketch_100, GSketch(edge_lists[0], w=1024 * 6, d=8)),  # 96 KB
         # (MemoryProfile.gsketch_200, GSketch(edge_lists[0], w=1024 * 13, d=8)),  # 208 KB
@@ -50,14 +50,14 @@ def neq_test(datasets):
         # (MemoryProfile.tcm_200, TCM(w=113, d=8)),  # 199.5 KB
         # (MemoryProfile.tcm_300, TCM(w=139, d=8)),  # 301.8 KB
         # (MemoryProfile.tcm_400, TCM(w=160, d=8)),  # 400 KB
-        (MemoryProfile.tcm_512, TCM(w=181, d=8)),  # 511.8 KB
-        (MemoryProfile.tcm_1024, TCM(w=256, d=8)),  # 1 MB
-        (MemoryProfile.tcm_2048, TCM(w=362, d=8)),  # 1.9996 MB
-        (MemoryProfile.tcm_4096, TCM(w=512, d=8)),  # 4 MB
-        (MemoryProfile.tcm_8192, TCM(w=724, d=8)),  # 7.9983 MB
-        (MemoryProfile.tcm_16384, TCM(w=1024, d=8)),  # 16 MB
-        (MemoryProfile.tcm_32768, TCM(w=1448, d=8)),  # 31.9932 MB
-        (MemoryProfile.tcm_65536, TCM(w=2048, d=8)),  # 64 MB
+        # (MemoryProfile.tcm_512, TCM(w=181, d=8)),  # 511.8 KB
+        # (MemoryProfile.tcm_1024, TCM(w=256, d=8)),  # 1 MB
+        # (MemoryProfile.tcm_2048, TCM(w=362, d=8)),  # 1.9996 MB
+        # (MemoryProfile.tcm_4096, TCM(w=512, d=8)),  # 4 MB
+        # (MemoryProfile.tcm_8192, TCM(w=724, d=8)),  # 7.9983 MB
+        # (MemoryProfile.tcm_16384, TCM(w=1024, d=8)),  # 16 MB
+        # (MemoryProfile.tcm_32768, TCM(w=1448, d=8)),  # 31.9932 MB
+        # (MemoryProfile.tcm_65536, TCM(w=2048, d=8)),  # 64 MB
 
         # (MemoryProfile.alpha_512, Alpha(edge_lists[0], total_sketch_width=181, sketch_depth=8)),  # 512 KB
         # (MemoryProfile.alpha_1024, Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8)),  # 1 MB
@@ -77,7 +77,7 @@ def neq_test(datasets):
 
     # reservoir sampling for 10000 items as (i, j) => 10000 queries
     sample_size = 10000
-    sample_stream = sampling.select_k_items(edge_lists[0], sample_size)
+    sample_stream = sampling.select_k_items_from_lists(edge_lists, sample_size)
 
     test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)

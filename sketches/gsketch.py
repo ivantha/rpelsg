@@ -187,7 +187,7 @@ class GSketch(Sketch):
             d: int = 8,  # d: Number of hash functions (⬇️)
 
             sample_size: int = 20000,
-            w_0: int = 200,
+            w_0: int = 100,
             C: float = 1.0
     ):
         self.base_edges = base_edges
