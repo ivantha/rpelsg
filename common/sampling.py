@@ -20,6 +20,7 @@ def select_k_items(items: List, k: int):
 
     return reservoir
 
+
 # reservoir sampling from multiple lists
 def select_k_items_from_lists(items: List, k: int):
     i = 0

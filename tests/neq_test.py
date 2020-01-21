@@ -33,18 +33,18 @@ def neq_test(datasets):
         # (MemoryProfile.countmin_32768, CountMin(m=1024 * 32 * 64, d=8)),  # 32 MB
         # (MemoryProfile.countmin_65536, CountMin(m=1024 * 32 * 128, d=8)),  # 64 MB
 
-        # (MemoryProfile.gsketch_100, GSketch(edge_lists[0], w=1024 * 6, d=8)),  # 96 KB
-        # (MemoryProfile.gsketch_200, GSketch(edge_lists[0], w=1024 * 13, d=8)),  # 208 KB
-        # (MemoryProfile.gsketch_300, GSketch(edge_lists[0], w=1024 * 19, d=8)),  # 304 KB
-        # (MemoryProfile.gsketch_400, GSketch(edge_lists[0], w=1024 * 25, d=8)),  # 400 KB
-        (MemoryProfile.gsketch_512, GSketch(edge_lists[0], w=1024 * 32, d=8)),  # 512 KB
-        (MemoryProfile.gsketch_1024, GSketch(edge_lists[0], w=1024 * 32 * 2, d=8)),  # 1 MB
-        (MemoryProfile.gsketch_2048, GSketch(edge_lists[0], w=1024 * 24 * 4, d=8)),  # 2 MB
-        (MemoryProfile.gsketch_4096, GSketch(edge_lists[0], w=1024 * 24 * 8, d=8)),  # 4 MB
-        (MemoryProfile.gsketch_8192, GSketch(edge_lists[0], w=1024 * 24 * 16, d=8)),  # 8 MB
-        (MemoryProfile.gsketch_16384, GSketch(edge_lists[0], w=1024 * 24 * 32, d=8)),  # 16 MB
-        (MemoryProfile.gsketch_32768, GSketch(edge_lists[0], w=1024 * 24 * 64, d=8)),  # 32 MB
-        (MemoryProfile.gsketch_65536, GSketch(edge_lists[0], w=1024 * 24 * 128, d=8)),  # 64 MB
+        # (MemoryProfile.gsketch_100, GSketch(edge_lists, w=1024 * 6, d=8)),  # 96 KB
+        # (MemoryProfile.gsketch_200, GSketch(edge_lists, w=1024 * 13, d=8)),  # 208 KB
+        # (MemoryProfile.gsketch_300, GSketch(edge_lists, w=1024 * 19, d=8)),  # 304 KB
+        # (MemoryProfile.gsketch_400, GSketch(edge_lists, w=1024 * 25, d=8)),  # 400 KB
+        (MemoryProfile.gsketch_512, GSketch(edge_lists, w=1024 * 32, d=8)),  # 512 KB
+        (MemoryProfile.gsketch_1024, GSketch(edge_lists, w=1024 * 32 * 2, d=8)),  # 1 MB
+        (MemoryProfile.gsketch_2048, GSketch(edge_lists, w=1024 * 24 * 4, d=8)),  # 2 MB
+        (MemoryProfile.gsketch_4096, GSketch(edge_lists, w=1024 * 24 * 8, d=8)),  # 4 MB
+        (MemoryProfile.gsketch_8192, GSketch(edge_lists, w=1024 * 24 * 16, d=8)),  # 8 MB
+        (MemoryProfile.gsketch_16384, GSketch(edge_lists, w=1024 * 24 * 32, d=8)),  # 16 MB
+        (MemoryProfile.gsketch_32768, GSketch(edge_lists, w=1024 * 24 * 64, d=8)),  # 32 MB
+        (MemoryProfile.gsketch_65536, GSketch(edge_lists, w=1024 * 24 * 128, d=8)),  # 64 MB
 
         # (MemoryProfile.tcm_100, TCM(w=80, d=8)),  # 100 KB
         # (MemoryProfile.tcm_200, TCM(w=113, d=8)),  # 199.5 KB

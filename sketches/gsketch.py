@@ -187,7 +187,7 @@ class GSketch(Sketch):
             d: int = 8,  # d: Number of hash functions (⬇️)
 
             sample_size: int = 20000,
-            w_0: int = 100,
+            w_0: int = 200,
             C: float = 1.0
     ):
         self.base_edges = base_edges
@@ -205,7 +205,7 @@ class GSketch(Sketch):
     @timeit
     def initialize(self):
         # reservoir sampling for k items as (i, j)
-        self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
+        self.sample_stream = sampling.select_k_items_from_lists(self.base_edges, self.sample_size)
 
         # partition sketches
         self.bpt = BinaryPartitionTree(self.sample_stream, round(self.w * 0.9), self.d, self.w_0, self.C)
