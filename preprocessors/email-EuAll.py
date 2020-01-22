@@ -7,13 +7,10 @@ from google_drive_downloader import GoogleDriveDownloader as gdd
 
 from common.utils import get_txt_files
 
-parent_dir = '../datasets/unicorn_wget'
+parent_dir = '../datasets/email-EuAll'
 
 files = (
-    ('benign_base', '1-rmP2_vOgIU56husFP0AhHK3O3HjPi0d'),
-    ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
-    ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
-    ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
+    ('email-EuAll', '1HNw17l-PtdVgcMcWnCsZndGEWVjin3Oz'),
 )
 
 if __name__ == '__main__':
@@ -68,7 +65,7 @@ if __name__ == '__main__':
             with open('{}/{}_{}/data.txt'.format(parent_dir, file_base, suffix), 'w') as new_f:
                 for line in reservoir:
                     try:
-                        source_id, target_id, _ = line.split(' ')
+                        source_id, target_id = line.split()
                         new_f.write('{},{}\n'.format(source_id, target_id))
                     except:
                         print('Error in line > {}'.format(line))
