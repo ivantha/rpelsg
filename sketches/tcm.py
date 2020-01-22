@@ -47,6 +47,9 @@ class TCM(Sketch):
         self._w = w
         self._d = d
 
+        # TODO
+        self._d = 1
+
         self._table = None
 
     @timeit

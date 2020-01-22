@@ -47,6 +47,9 @@ class CountMin(Sketch):
         self._m = m
         self._d = d
 
+        # TODO
+        self._d = 1
+
         self._table = None
 
     @timeit

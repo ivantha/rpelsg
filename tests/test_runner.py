@@ -20,8 +20,7 @@ from tests.neq_visualize import neq_visualize
 
 if __name__ == '__main__':
     datasets = [
-        '../datasets/unicorn_wget/benign_base_100/',
-        # '../datasets/unicorn_wget/benign_streaming_10/',
+        '../datasets/unicorn_wget/benign_base_1/'
     ]
 
     # analyze datasets
@@ -41,10 +40,10 @@ if __name__ == '__main__':
     pool.map(run_test, [
         # [buildtime_test, buildtime_visualize],
         [are_test, are_visualize],
-        [neq_test, neq_visualize],
-        [dd_test, dd_visualize],
+        # [neq_test, neq_visualize],
+        # [dd_test, dd_visualize],
         # [ewd_test, ewd_visualize],
-        [dc_test, dc_visualize],
+        # [dc_test, dc_visualize],
         # [hn_test, hn_visualize],
         # [he_test, he_visualize],
     ])
