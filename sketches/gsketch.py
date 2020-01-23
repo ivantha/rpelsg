@@ -116,6 +116,11 @@ class BinaryPartitionTree:
                 for vertex in current_sketch.vertices:
                     self.sketch_hash.hash[vertex] = idx
             else:  # Partition some more
+
+
+
+
+
                 # Calculate E
                 def calculate_E(vertices, pivot):
                     # Calculate F_S1
@@ -159,7 +164,7 @@ class BinaryPartitionTree:
                         M += ((self.out_degree[v] * FFF) / self.average_frequency[v])
                 if min(E_values) > M:
                     print('kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk')
-                    # exit(-7867)
+                    exit(-7867)
                 else:
                     print('----{}'.format(min(E_values) / M))
 
@@ -179,9 +184,9 @@ class GSketch(Sketch):
             w: int = 1024 * 32,  # m: Total width of the hash table (➡️)
             d: int = 8,  # d: Number of hash functions (⬇️)
 
-            sample_size: int = 25000,
-            w_0: int = 10000,
-            C: float = 1.0
+            sample_size: int = 20000,
+            w_0: int = 50,
+            C: float = 3.0
     ):
         self.base_edges = base_edges
 
@@ -189,7 +194,7 @@ class GSketch(Sketch):
         self.d = d  # sketch depth
 
         # TODO
-        self.d = 1
+        # self.w = self.w * 1.5
 
         self.sample_size = sample_size
         self.w_0 = w_0
@@ -204,11 +209,11 @@ class GSketch(Sketch):
         self.sample_stream = sampling.select_k_items_from_lists(self.base_edges, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, round(self.w * 0.8), self.d, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, round(self.w * 0.95), self.d, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        self.bpt.sketch_hash.outliers = CountMinTable(round(self.w * 0.02), self.d)
+        self.bpt.sketch_hash.outliers = CountMinTable(round(self.w * 0.05), self.d)
 
         self.partitioned_edges = 0
         self.outlier_edges = 0

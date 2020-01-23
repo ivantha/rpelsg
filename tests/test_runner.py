@@ -20,7 +20,8 @@ from tests.neq_visualize import neq_visualize
 
 if __name__ == '__main__':
     datasets = [
-        '../datasets/unicorn_wget/benign_base_1/'
+        '../datasets/unicorn_wget/benign_base_1/',
+        # '../datasets/email-EuAll/email-EuAll_100/'
     ]
 
     # analyze datasets
