@@ -46,11 +46,11 @@ def neq_test(datasets):
         # (MemoryProfile.gsketch_32768, GSketch(edge_lists, w=1024 * 24 * 64, d=8)),  # 32 MB
         # (MemoryProfile.gsketch_65536, GSketch(edge_lists, w=1024 * 24 * 128, d=8)),  # 64 MB
 
-        # (MemoryProfile.tcm_100, TCM(w=80, d=8)),  # 100 KB
-        # (MemoryProfile.tcm_200, TCM(w=113, d=8)),  # 199.5 KB
-        # (MemoryProfile.tcm_300, TCM(w=139, d=8)),  # 301.8 KB
-        # (MemoryProfile.tcm_400, TCM(w=160, d=8)),  # 400 KB
-        # (MemoryProfile.tcm_512, TCM(w=181, d=8)),  # 511.8 KB
+        (MemoryProfile.tcm_100, TCM(w=80, d=8)),  # 100 KB
+        (MemoryProfile.tcm_200, TCM(w=113, d=8)),  # 199.5 KB
+        (MemoryProfile.tcm_300, TCM(w=139, d=8)),  # 301.8 KB
+        (MemoryProfile.tcm_400, TCM(w=160, d=8)),  # 400 KB
+        (MemoryProfile.tcm_512, TCM(w=181, d=8)),  # 511.8 KB
         # (MemoryProfile.tcm_1024, TCM(w=256, d=8)),  # 1 MB
         # (MemoryProfile.tcm_2048, TCM(w=362, d=8)),  # 1.9996 MB
         # (MemoryProfile.tcm_4096, TCM(w=512, d=8)),  # 4 MB
@@ -59,14 +59,18 @@ def neq_test(datasets):
         # (MemoryProfile.tcm_32768, TCM(w=1448, d=8)),  # 31.9932 MB
         # (MemoryProfile.tcm_65536, TCM(w=2048, d=8)),  # 64 MB
 
-        # (MemoryProfile.alpha_512, Alpha(edge_lists[0], total_sketch_width=181, sketch_depth=8)),  # 512 KB
-        # (MemoryProfile.alpha_1024, Alpha(edge_lists[0], total_sketch_width=256, sketch_depth=8)),  # 1 MB
-        # (MemoryProfile.alpha_2048, Alpha(edge_lists[0], total_sketch_width=362, sketch_depth=8)),  # 2 MB
-        # (MemoryProfile.alpha_4096, Alpha(edge_lists[0], total_sketch_width=512, sketch_depth=8)),  # 4 MB
-        # (MemoryProfile.alpha_8192, Alpha(edge_lists[0], total_sketch_width=724, sketch_depth=8)),  # 8 MB
-        # (MemoryProfile.alpha_16384, Alpha(edge_lists[0], total_sketch_width=1024, sketch_depth=8)),  # 16 MB
-        # (MemoryProfile.alpha_32768, Alpha(edge_lists[0], total_sketch_width=1448, sketch_depth=8)),  # 32 MB
-        # (MemoryProfile.alpha_65536, Alpha(edge_lists[0], total_sketch_width=2048, sketch_depth=8)),  # 64 MB
+        (MemoryProfile.alpha_100, Alpha(edge_lists[0], w=80, d=8)),  # 100 KB
+        (MemoryProfile.alpha_200, Alpha(edge_lists[0], w=113, d=8)),  # 199.5 KB
+        (MemoryProfile.alpha_300, Alpha(edge_lists[0], w=139, d=8)),  # 301.8 KB
+        (MemoryProfile.alpha_400, Alpha(edge_lists[0], w=160, d=8)),  # 400 KB
+        (MemoryProfile.alpha_512, Alpha(edge_lists[0], w=181, d=8)),  # 512 KB
+        # (MemoryProfile.alpha_1024, Alpha(edge_lists[0], w=256, d=8)),  # 1 MB
+        # (MemoryProfile.alpha_2048, Alpha(edge_lists[0], w=362, d=8)),  # 2 MB
+        # (MemoryProfile.alpha_4096, Alpha(edge_lists[0], w=512, d=8)),  # 4 MB
+        # (MemoryProfile.alpha_8192, Alpha(edge_lists[0], w=724, d=8)),  # 8 MB
+        # (MemoryProfile.alpha_16384, Alpha(edge_lists[0], w=1024, d=8)),  # 16 MB
+        # (MemoryProfile.alpha_32768, Alpha(edge_lists[0], w=1448, d=8)),  # 32 MB
+        # (MemoryProfile.alpha_65536, Alpha(edge_lists[0], w=2048, d=8)),  # 64 MB
     )
 
     # init fullgraph
