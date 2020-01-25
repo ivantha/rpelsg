@@ -18,6 +18,18 @@ datasets = (
         (
             ('email-EuAll', '1HNw17l-PtdVgcMcWnCsZndGEWVjin3Oz'),
         )
+    ),
+    (
+        '../datasets/ego-Facebook',
+        (
+            ('ego-Facebook', '1HcDGtLakSWbjOT4kfW2bOXWBHYTUk0np'),
+        )
+    ),
+    (
+        '../datasets/com-Youtube',
+        (
+            ('com-Youtube', '1HqNsOrAW-NMzwXMqBgxtMmDQJvHweUre'),
+        )
     )
 )
 

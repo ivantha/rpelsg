@@ -34,14 +34,14 @@ if __name__ == '__main__':
 
     def run_test(funs):
         test_fun, visualize_fun = funs[0], funs[1]
-        test_fun(datasets)
+        # test_fun(datasets)
         visualize_fun()
 
     pool = multiprocessing.Pool()
     pool.map(run_test, [
         # [buildtime_test, buildtime_visualize],
         [are_test, are_visualize],
-        # [neq_test, neq_visualize],
+        [neq_test, neq_visualize],
         # [dd_test, dd_visualize],
         # [ewd_test, ewd_visualize],
         # [dc_test, dc_visualize],

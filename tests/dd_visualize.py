@@ -13,14 +13,17 @@ def dd_visualize():
     print('dd_visualize')
 
     sketches = (
-        (Sketches.fullgraph.name, 'FullGraph'),
-        # (Sketches.countmin.name, 'CountMin'),
-        # (Sketches.gsketch.name, 'gSketch'),
-        # (Sketches.tcm.name, 'TCM'),
-        # (Sketches.alpha.name, 'Alpha'),
+        (Sketches.countmin.name, 'CountMin'),
+        (Sketches.gsketch.name, 'gSketch'),
+        (Sketches.tcm.name, 'TCM'),
+        (Sketches.alpha.name, 'Alpha'),
     )
 
     sketch_sizes = (
+        (100, '100 KB'),
+        (200, '200 KB'),
+        (300, '300 KB'),
+        (400, '400 KB'),
         (512, '512 KB'),
         # (1024, '1 MB'),
         # (2048, '2 MB'),

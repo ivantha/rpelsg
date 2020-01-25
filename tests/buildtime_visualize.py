@@ -12,7 +12,7 @@ from sketches import Sketches
 
 
 def buildtime_visualize():
-    print('buildtime_visualize')
+    print(os.path.basename(__file__).split('.')[0].split('_')[0])
 
     sketches = (
         (Sketches.countmin.name, 'CountMin'),
@@ -22,14 +22,18 @@ def buildtime_visualize():
     )
 
     sketch_sizes = (
+        (100, '100 KB'),
+        (200, '200 KB'),
+        (300, '300 KB'),
+        (400, '400 KB'),
         (512, '512 KB'),
-        (1024, '1 MB'),
-        (2048, '2 MB'),
-        (4096, '4 MB'),
-        (8192, '8 MB'),
-        (16384, '16 MB'),
-        (32768, '32 MB'),
-        (65536, '64 MB')
+        # (1024, '1 MB'),
+        # (2048, '2 MB'),
+        # (4096, '4 MB'),
+        # (8192, '8 MB'),
+        # (16384, '16 MB'),
+        # (32768, '32 MB'),
+        # (65536, '64 MB')
     )
 
     test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
@@ -74,8 +78,9 @@ def buildtime_visualize():
         fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
         fig.text(0.1, 0.03, 'Sketch size : 512 KB')
 
-        os.makedirs('../reports', exist_ok=True)
-        plt.savefig('../reports/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], sketch_size))
+        test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+        os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
+        plt.savefig('../reports/{}/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], test_name, sketch_size))
 
         # plt.show()
         plt.close()

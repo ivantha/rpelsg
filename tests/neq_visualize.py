@@ -15,8 +15,8 @@ def neq_visualize():
     sketches = (
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),
-        # (Sketches.tcm.name, 'TCM'),
-        # (Sketches.alpha.name, 'Alpha'),
+        (Sketches.tcm.name, 'TCM'),
+        (Sketches.alpha.name, 'Alpha'),
     )
 
     sketch_sizes = (
@@ -69,7 +69,9 @@ def neq_visualize():
 
     test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
     os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
-    plt.savefig('../reports/{}/{}.png'.format(test_name, test_name))
+    plt.savefig('../reports/{}/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], test_name, sketch_size))
 
     # plt.show()
     plt.close()
+
+    print('Completed visualization: {}'.format(sketch_size))
