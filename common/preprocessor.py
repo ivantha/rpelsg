@@ -30,6 +30,15 @@ datasets = (
         (
             ('com-Youtube', '1HqNsOrAW-NMzwXMqBgxtMmDQJvHweUre'),
         )
+    ),
+    (
+        '../datasets/unicorn-wget',
+        (
+            ('benign_base', '1-rmP2_vOgIU56husFP0AhHK3O3HjPi0d'),
+            ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
+            ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
+            ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
+        )
     )
 )
 
