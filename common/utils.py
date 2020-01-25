@@ -1,6 +1,5 @@
 import glob
 from _datetime import datetime
-from math import sqrt
 
 
 def get_txt_files(dir_path: str):
@@ -55,26 +54,3 @@ def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, lengt
     # Print New Line on Complete
     if iteration == total:
         print()
-
-
-def print_gsketch_sizes():
-    for i in [100, 200, 300, 400, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
-        x = i / 16.0
-        p1 = round(x * 0.75)
-        p2 = round(x * 0.25)
-        print('{} : {}, {} >> {}KB ({}MB)'.format(i, p1, p2, (p1 + p2) * 16.0, (p1 + p2) * 16.0 / 1024.0))
-
-
-def print_tcm_sizes():
-    for i in [100, 200, 300, 400, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
-        x = round(sqrt(i / 16.0 * 1024.0))
-        print('{} : {} >> {}KB ({}MB)'.format(i, x, (x ** 2) * 16.0 / 1024.0, (x ** 2) * 16.0 / 1024.0 / 1024.0))
-
-
-def print_alpha_sizes():
-    for i in [512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
-        print('{} ----------------'.format(i))
-        x = round(sqrt(i * 0.75 / 16.0 * 1024.0))
-        print('Partitioned : {} >> {}KB ({}MB)'.format(x, (x ** 2) * 16.0 / 1024.0, (x ** 2) * 16.0 / 1024.0 / 1024.0))
-        y = round(sqrt(i * 0.25 / 16.0 * 1024.0))
-        print('Outliers : {} >> {}KB ({}MB)'.format(y, (y ** 2) * 16.0 / 1024.0, (y ** 2) * 16.0 / 1024.0 / 1024.0))
