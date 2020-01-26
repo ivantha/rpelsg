@@ -75,6 +75,24 @@ datasets = (
         (
             ('web-Google', '1J-LRZzFiIoMp46I6hoM8C5J33gNhTjtQ'),
         )
+    ),
+    (
+        '../datasets/gen-random-simple',
+        (
+            ('gen-random-simple', '1MjYNufhJVBFaQMm8w9nPWftvR4PtJQp3'),
+        )
+    ),
+    (
+        '../datasets/gen-scale-free',
+        (
+            ('gen-scale-free', '1MdGHmlDO9dNtcETvLqjriNCnhFgqLloY'),
+        )
+    ),
+    (
+        '../datasets/gen-small-world',
+        (
+            ('gen-small-world', '1MTwJOTCyuil_JXIqopp0asLkLfvEtIh8'),
+        )
     )
 )
 
