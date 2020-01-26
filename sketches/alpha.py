@@ -5,168 +5,205 @@ from typing import List
 from pympler import asizeof
 
 from common import sampling
+from common.globals import INT_SIZE
 from common.utils import timeit
 from sketches import Sketches
 from sketches.sketch import Sketch
 from sketches.tcm import TcmTable
 
 
-class SketchHash:
-    def __init__(self):
-        self.tcm_tables = []
-        self.hash = {}
-
-        self.outliers = None
-
-
 class BptNode:
-    def __init__(self, vertices: [], width: int):
-        # self.left = None
-        # self.right = None
-
+    def __init__(self,
+                 vertices: [],
+                 w: int
+                 ):
         # Sketch properties
         self.vertices = vertices  # Sorted in ASC of f_v(m) / d_(m)
-        self.width = width
+        self.w = w
 
 
 class BinaryPartitionTree:
     def __init__(
             self,
             sample_stream: [(str, str)],
-            partitioned_sketch_width,
-            sketch_depth,
+            w,
+            d,
             w_0: int,
-            C: int
+            C: float
     ):
-        # initial parameters
         self.sample_stream = sample_stream
-        self.partitioned_sketch_width = partitioned_sketch_width
-        self.sketch_depth = sketch_depth
+
+        # initial parameters
+        self.w = w
+        self.d = d
         self.w_0 = w_0
         self.C = C
 
-        self.root = None  # Root node
-        self.sketch_hash = SketchHash()  # Hash-structure for edge-sketch in a dictionary
+        self.tcm_tables = []  # countmin tables
+        self.vertex_hash = {}  # hash-structure for edge-sketch in a dictionary
+        self.outlier_vertices = None  # outlier vertices
 
         # vertex properties
-        self.vertices = []
-        self.vertex_relative_frequency = {}
-        self.vertex_out_degree = {}
-        self.vertex_in_degree = {}
-        self.vertex_sum_degree = {}
-        self.vertex_average_frequency = {}  # f_v(m) / d_(m)
+        self.vertices = set()
+        self.rel_freq = {}  # relative frequency of vertices
+        self.out_degree = {}  # out degree of vertices
+        self.avg_freq = {}  # f_v(m) / d_(m)
+        self.err_numerator = {}  # d_(m) * d_(m) / f_v(m)
+
+        # for partitioning
+        self.rem_size = INT_SIZE * self.w * self.w * self.d
 
     def partition(self):
-        # Calculate edges, vertices, vertex frequencies and out degrees => O(n)
+        # Calculate stuff
+        seen_edges = set()
         for i, j in self.sample_stream:
-            # add to vertices
-            self.vertices.append(i)
-            self.vertices.append(j)
+            # Add to vertices
+            self.vertices.add(i)
 
-            # add to vertex frequencies in i,j
-            self.vertex_relative_frequency[i] = self.vertex_relative_frequency.get(i, 0) + 1
-            self.vertex_relative_frequency[j] = self.vertex_relative_frequency.get(j, 0) + 1
+            if (i, j) in seen_edges:
+                self.rel_freq[i] += 1
+            else:
+                if i not in self.rel_freq:
+                    self.rel_freq[i] = 1
+                else:
+                    self.rel_freq[i] += 1
 
-            # add to vertex out degrees in i
-            self.vertex_out_degree[i] = self.vertex_out_degree.get(i, 0) + 1
+                if i not in self.out_degree:
+                    self.out_degree[i] = 1
+                else:
+                    self.out_degree[i] += 1
 
-            # add to vertex in degrees in j
-            self.vertex_in_degree[j] = self.vertex_in_degree.get(j, 0) + 1
-
-        # TODO : What do we do when out/in degree is zero?
-        # -------------> Set vertices without degree count to 1 instead of None to stop NoneType errors
-        for vertex in self.vertices:
-            if vertex not in self.vertex_out_degree:
-                self.vertex_out_degree[vertex] = 0
-            if vertex not in self.vertex_in_degree:
-                self.vertex_in_degree[vertex] = 0
-
-        # calculate sum_degree
-        for vertex in self.vertices:
-            self.vertex_sum_degree[vertex] = self.vertex_out_degree[vertex] + self.vertex_in_degree[vertex]
+            # add the edge as seen
+            seen_edges.add((i, j))
 
         # Calculate average frequencies => O(n)
-        for vertex in self.vertices:
-            if self.vertex_sum_degree.get(vertex) == 0:
-                self.vertex_average_frequency[vertex] = 0
-            else:
-                self.vertex_average_frequency[vertex] = self.vertex_relative_frequency.get(vertex) / self.vertex_sum_degree.get(vertex)
+        self.avg_freq = {v: self.rel_freq[v] / self.out_degree[v] for v in self.vertices}
 
-        # Sort the vertices by average frequency => O(n log n)
-        # TODO : Use quick-sort (or something known) instead of Python sort
-        sorted_vertices = sorted(self.vertex_average_frequency.items(), key=operator.itemgetter(1))
+        self.err_numerator = {v: self.out_degree[v] * self.out_degree[v] / self.rel_freq[v] for v in self.vertices}
+
+        # Sort the vertices by average frequency (Timesort) => O(n log n)
+        sorted_vertices = sorted(self.avg_freq.items(), key=lambda item: item[1])
         sorted_vertices = [vertex for (vertex, average_frequency) in sorted_vertices]
 
         # Create a root node => O(1)
-        self.root = BptNode(sorted_vertices, self.partitioned_sketch_width)
-
-        # Push the root node to the stack => O(1)
-        stack = [self.root]
+        # Create the stack with the root node as the only element => O(1)
+        stack = [BptNode(sorted_vertices, self.w)]
 
         # Loop while stack is not empty => O(w / w_0 - 1) According to the paper gSketch
         while len(stack) is not 0:
-            current_sketch = stack.pop()
+            curr_sketch = stack.pop()  # current sketch
 
-            # Calculate distinct edges
-            distinct_edge_count = 0
-            for vertex in current_sketch.vertices:  # => O(n)
-                distinct_edge_count += self.vertex_out_degree.get(vertex)
-                # distinct_edge_count += self.vertex_in_degree.get(vertex)
+            sum_freq = sum([self.rel_freq[v] for v in curr_sketch.vertices])
+            sum_out_degree = sum([self.out_degree[v] for v in curr_sketch.vertices])  # Calculate distinct edges
+            sum_numerate = sum([self.err_numerator[v] for v in curr_sketch.vertices])
+            # sum_denom = sum([self.out_degree[v] for v in self.vertices])
+            sum_denom = 1
 
-            c1 = current_sketch.width < self.w_0  # Terminating condition 1
-            c2 = distinct_edge_count <= self.C * current_sketch.width  # Terminating condition 2
+            # current error
+            base = (sum_freq * sum_numerate) / curr_sketch.w / sum_denom
 
-            if c1 or c2:  # Enough partitioning
-                # Append the current sketch to the list of sketches => O(1)
-                table = TcmTable(current_sketch.width, self.sketch_depth)
-                self.sketch_hash.tcm_tables.append(table)
+            print('Partitioning : width - {}, # vertices - {}, # edges - {}'.format(curr_sketch.w,
+                                                                                    len(curr_sketch.vertices),
+                                                                                    sum_out_degree))
 
-                # Save index of leaf(sketch) at leaves in sketch_hash => O(n)
-                idx = len(self.sketch_hash.tcm_tables) - 1
-                for vertex in current_sketch.vertices:
-                    self.sketch_hash.hash[vertex] = idx
+            c1 = curr_sketch.w < self.w_0  # Terminating condition 1
+            c2 = sum_out_degree <= self.C * curr_sketch.w  # Terminating condition 2
+            c3 = len(curr_sketch.vertices) == 1
 
+            if c2 or c1 or c3:
+                if c2:
+                    print('c2', end='')
+
+                    ratio_width = self.C
+                    sketch_d = 2
+
+                    new_width = int(sum_out_degree / ratio_width)
+                    if new_width == 0:
+                        new_width = 1
+                    table = TcmTable(new_width, sketch_d)  # create sketch
+
+                    self.rem_size -= INT_SIZE * new_width * new_width * sketch_d  # subtract from remaining space for outliers
+
+                    print(' : width - {}, # distinct edges - {}'.format(new_width, sum_out_degree))
+                elif c1:
+                    print('c1', end='')
+
+                    ratio_width = self.C
+                    sketch_d = 1
+
+                    new_width = int(curr_sketch.w / ratio_width)
+                    if new_width == 0:
+                        new_width = 1
+                    table = TcmTable(new_width, sketch_d)  # create sketch
+
+                    self.rem_size -= INT_SIZE * new_width * new_width * sketch_d  # subtract from remaining space for outliers
+
+                    print(' : width - {}, # distinct edges - {}'.format(new_width, sum_out_degree))
+                else:  # c3
+                    print('c3', end='')
+
+                    table = TcmTable(curr_sketch.w, self.d)  # create sketch
+
+                    self.rem_size -= INT_SIZE * curr_sketch.w * curr_sketch.w * self.d  # subtract from remaining space for outliers
+
+                    print(' : width - {}, # distinct edges - {}'.format(curr_sketch.w, sum_out_degree))
+
+                # append the created hash to table list
+                self.tcm_tables.append(table)
+
+                # save index of leaf(sketch) at leaves in sketch_hash
+                idx = len(self.tcm_tables) - 1
+                for vertex in curr_sketch.vertices:
+                    self.vertex_hash[vertex] = idx
             else:  # Partition some more
-                # Calculate E
-                def calculate_E(vertices, pivot):
-                    # Calculate F_S1
-                    F_S1 = 0
-                    for i in range(0, pivot):
-                        F_S1 += self.vertex_relative_frequency.get(vertices[i])
+                sub_sum_freq_1 = 0
+                sub_width_1 = int(curr_sketch.w / 2)
+                sub_sum_numerate_1 = 0
+                sub_sum_denom_1 = 0
 
-                    # Calculate F_S2
-                    F_S2 = 0
-                    for i in range(pivot, len(vertices)):
-                        F_S2 += self.vertex_relative_frequency.get(vertices[i])
+                sub_sum_freq_2 = sum_freq
+                sub_width_2 = int(curr_sketch.w / 2)
+                sub_sum_numerate_2 = sum_numerate
+                sub_sum_denom_2 = sum_denom
 
-                    # Calculate E1
-                    E1 = 0
-                    for i in range(0, pivot):
-                        E1 += ((self.vertex_sum_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
+                min_index = None
+                min_value = 999999999999999999999.0
 
-                    # Calculate E1
-                    E2 = 0
-                    for i in range(pivot, len(vertices)):
-                        E2 += ((self.vertex_sum_degree.get(vertices[i]) * F_S1) / self.vertex_average_frequency.get(vertices[i]))
+                Eg_List = []
 
-                    E = E1 + E2
+                for i in range(0, len(curr_sketch.vertices) - 1):
+                    curr_vertex = curr_sketch.vertices[i]
+                    sub_sum_freq_1 += self.rel_freq[curr_vertex]
+                    sub_sum_numerate_1 += self.out_degree[curr_vertex] * self.out_degree[curr_vertex] / \
+                                          self.rel_freq[curr_vertex]
+                    # sub_sum_denom_1 += self.out_degree[curr_vertex]
+                    sub_sum_denom_1 = 1
 
-                    return E
+                    sub_base_1 = (sub_sum_freq_1 * sub_sum_numerate_1) / sub_width_1 / sub_sum_denom_1
 
-                min_E = (1, calculate_E(current_sketch.vertices, 1))  # (partition_index, min_value)
-                for i in range(2, len(current_sketch.vertices)):  # => O(n) This probably gets reduced over iterations
-                    E_val = calculate_E(current_sketch.vertices, i)
-                    if E_val < min_E[1]:
-                        min_E = [i, E_val]
+                    sub_sum_freq_2 -= self.rel_freq[curr_vertex]
+                    sub_sum_numerate_2 -= self.out_degree[curr_vertex] * self.out_degree[curr_vertex] / \
+                                          self.rel_freq[curr_vertex]
+                    # sub_sum_denom_2 -= self.out_degree[curr_vertex]
+                    sub_sum_denom_2 = 1
 
-                # calculate half size
-                current_sketch_size = 2 * current_sketch.width * current_sketch.width * self.sketch_depth / 1024.0
-                new_partition_size = current_sketch_size / 2.0
-                new_partition_width = round(math.sqrt(new_partition_size * 1024.0 / 2.0 / self.sketch_depth))
+                    sub_base_2 = (sub_sum_freq_2 * sub_sum_numerate_2) / sub_width_2 / sub_sum_denom_2
 
-                # create two new partition nodes
-                stack.append(BptNode(current_sketch.vertices[:min_E[0]], new_partition_width))
-                stack.append(BptNode(current_sketch.vertices[min_E[0]:], new_partition_width))
+                    error_gain = sub_base_1 + sub_base_2 - base
+
+                    Eg_List.append(error_gain)
+
+                    if error_gain < min_value:
+                        min_index = i
+                        min_value = error_gain
+
+                print(
+                    '{}<=>{} (base:{:.10f}, max:{:.10f}, min:{:.10f})'.format(len(curr_sketch.vertices), min_index,
+                                                                              base, max(Eg_List), min_value))
+
+                # Create two new partition nodes
+                stack.append(BptNode(curr_sketch.vertices[:min_index + 1], sub_width_1))
+                stack.append(BptNode(curr_sketch.vertices[min_index + 1:], sub_width_2))
 
 
 class Alpha(Sketch):
@@ -176,18 +213,20 @@ class Alpha(Sketch):
             self,
             base_edges: List,
 
-            # total sketch => [2 bytes * (181 * 181) * 8 = 511.9 KB)]
-            total_sketch_width: int = 181,  # m: Total width of the hash table (➡️)
+            # total sketch =>
+            # [INT_SIZE * w * w * d]
+            # [2 bytes * (181 * 181) * 8 = 511.9 KB)]
+            w: int,  # w: Total width of the hash table (➡️)
+            d: int,  # d: Number of hash functions (⬇️)
 
-            sketch_depth: int = 8,  # d: Number of hash functions (⬇️)
-
-            sample_size: int = 10000,
-            w_0: int = 200,
-            C: int = 10
+            sample_size: int = 30000,
+            w_0: int = 29,
+            C: float = 0.2
     ):
         self.base_edges = base_edges
 
-        self.sketch_depth = sketch_depth
+        self.w = w  # sketch width
+        self.d = d  # sketch depth
 
         self.sample_size = sample_size
         self.w_0 = w_0
@@ -196,46 +235,46 @@ class Alpha(Sketch):
         self.sample_stream = None
         self.bpt = None
 
-        # sketch sizes
-        total_sketch_size = 2 * total_sketch_width * total_sketch_width * self.sketch_depth / 1024.0
-
-        # partitioned sketch =>
-        partitioned_sketch_size = total_sketch_size * 0.9
-        self.partitioned_sketch_width: int = round(math.sqrt(partitioned_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
-
-        # outliers =>
-        outlier_sketch_size = total_sketch_size * 0.1
-        self.outlier_sketch_width: int = round(math.sqrt(outlier_sketch_size * 1024.0 / 2.0 / self.sketch_depth))
+        self.partitioned_edges = 0
+        self.outlier_edges = 0
 
     @timeit
     def initialize(self):
         # reservoir sampling for k items as (i, j)
-        self.sample_stream = sampling.select_k_items(self.base_edges, self.sample_size)
+        self.sample_stream = sampling.select_k_items_from_lists(self.base_edges, self.sample_size)
 
         # partition sketches
-        self.bpt = BinaryPartitionTree(self.sample_stream, self.partitioned_sketch_width, self.sketch_depth, self.w_0, self.C)
+        self.bpt = BinaryPartitionTree(self.sample_stream, self.w, self.d, self.w_0, self.C)
         self.bpt.partition()
 
         # create outlier sketch
-        self.bpt.sketch_hash.outliers = TcmTable(self.outlier_sketch_width, self.sketch_depth)
-
-        print('# partitions: {}'.format(len(self.bpt.sketch_hash.tcm_tables)))
+        print('Remaining size for outliers : {} ({}%)'.format(self.bpt.rem_size, self.bpt.rem_size / (INT_SIZE * self.w * self.w * self.d) * 100.0))
+        outlier_width = round(math.sqrt(self.bpt.rem_size / INT_SIZE / self.d))
+        if outlier_width == 0:
+            print('Outlier width 0 -> 1')
+            outlier_width = 1
+        print('Outlier size : {:.2f}KB ({:.2f}%)'.format(INT_SIZE * outlier_width * outlier_width * self.d / 1024.0, (outlier_width * outlier_width) / (self.w * self.w) * 100.0))
+        self.bpt.outlier_vertices = TcmTable(outlier_width, self.d)
 
     def add_edge(self, source_id, target_id):
-        if source_id in self.bpt.sketch_hash.hash:
-            self.bpt.sketch_hash.tcm_tables[self.bpt.sketch_hash.hash.get(source_id)].add_edge(source_id, target_id)
+        if source_id in self.bpt.vertex_hash:
+            self.bpt.tcm_tables[self.bpt.vertex_hash.get(source_id)].add_edge(source_id, target_id)
+            self.partitioned_edges += 1
         else:
-            self.bpt.sketch_hash.outliers.add_edge(source_id, target_id)
+            self.bpt.outlier_vertices.add_edge(source_id, target_id)
+            self.outlier_edges += 1
 
     def get_edge_frequency(self, source_id, target_id):
-        if source_id in self.bpt.sketch_hash.hash:
-            return self.bpt.sketch_hash.tcm_tables[self.bpt.sketch_hash.hash.get(source_id)].get_edge_frequency(source_id, target_id)
+        if source_id in self.bpt.vertex_hash:
+            return self.bpt.tcm_tables[self.bpt.vertex_hash.get(source_id)].get_edge_frequency(source_id, target_id)
         else:
-            return self.bpt.sketch_hash.outliers.get_edge_frequency(source_id, target_id)
+            return self.bpt.outlier_vertices.get_edge_frequency(source_id, target_id)
 
     @timeit
     def print_analytics(self):
-        pass
+        print('# partitions: {}'.format(len(self.bpt.tcm_tables)))
+        print('# partitioned edges : {}'.format(self.partitioned_edges))
+        print('# outlier edges : {}'.format(self.outlier_edges))
 
         # return {
         #     'sketch_hash_object_size': asizeof.asizeof(self.bpt.sketch_hash)

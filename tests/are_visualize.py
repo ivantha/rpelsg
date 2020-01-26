@@ -15,7 +15,7 @@ def are_visualize():
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
-        # (Sketches.alpha.name, 'Alpha'),
+        (Sketches.alpha.name, 'Alpha'),
     )
 
     sketch_sizes = (
