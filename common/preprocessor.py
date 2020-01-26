@@ -8,12 +8,6 @@ from common.utils import get_txt_files
 
 datasets = (
     (
-        '../datasets/ego-Twitter',
-        (
-            ('ego-Twitter', '1HTzRpeLLeSVZw0NdlFKecokXLtviXXla'),
-        )
-    ),
-    (
         '../datasets/email-EuAll',
         (
             ('email-EuAll', '1HNw17l-PtdVgcMcWnCsZndGEWVjin3Oz'),
@@ -38,6 +32,48 @@ datasets = (
             ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
             ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
             ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
+        )
+    ),
+    (
+        '../datasets/soc-Pokec',
+        (
+            ('soc-Pokec', '1I4eespCmdknZ0zlgy-PuZELv0RexHfuV'),
+        )
+    ),
+    (
+        '../datasets/soc-RedditHyperlinks',
+        (
+            ('soc-RedditHyperlinks', '1I7Q09n58X4DIxfK3SDaQ1noo4T_DS7wt'),
+        )
+    ),
+    (
+        '../datasets/ego-Gplus',
+        (
+            ('ego-Gplus', '1IF6JI64ENfQXRxAW1vIjDYPimTlrcoFZ'),
+        )
+    ),
+    (
+        '../datasets/ca-AstroPh',
+        (
+            ('ca-AstroPh', '1IPT-O9dGo2q3Knkof9Knzx_6t65KlpwL'),
+        )
+    ),
+    (
+        '../datasets/cit-HepPh',
+        (
+            ('cit-HepPh', '1IahaJH4FybYu31gJRcFK8b8fanl7604X'),
+        )
+    ),
+    (
+        '../datasets/roadNet-CA',
+        (
+            ('roadNet-CA', '1IusD9nbXRxZRpQhYg1xR5cLQdA6q7xWT'),
+        )
+    ),
+    (
+        '../datasets/web-Google',
+        (
+            ('web-Google', '1J-LRZzFiIoMp46I6hoM8C5J33gNhTjtQ'),
         )
     )
 )
