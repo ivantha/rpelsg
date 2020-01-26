@@ -97,9 +97,7 @@ class BinaryPartitionTree:
             # current error
             base = (sum_freq * sum_numerate) / curr_sketch.w / sum_denom
 
-            print('Partitioning : width - {}, # vertices - {}, # edges - {}'.format(curr_sketch.w,
-                                                                                    len(curr_sketch.vertices),
-                                                                                    sum_out_degree))
+            # print('Partitioning : width - {}, # vertices - {}, # edges - {}'.format(curr_sketch.w, len(curr_sketch.vertices), sum_out_degree))
 
             c1 = curr_sketch.w < self.w_0  # Terminating condition 1
             c2 = sum_out_degree <= self.C * curr_sketch.w  # Terminating condition 2
@@ -107,7 +105,7 @@ class BinaryPartitionTree:
 
             if c2 or c1 or c3:
                 if c2:
-                    print('c2', end='')
+                    # print('c2', end='')
 
                     ratio_width = self.C
                     sketch_d = 2
@@ -119,9 +117,9 @@ class BinaryPartitionTree:
 
                     self.rem_size -= INT_SIZE * new_width * sketch_d  # subtract from remaining space for outliers
 
-                    print(' : width - {}, # distinct edges - {}'.format(new_width, sum_out_degree))
+                    # print(' : width - {}, # distinct edges - {}'.format(new_width, sum_out_degree))
                 elif c1:
-                    print('c1', end='')
+                    # print('c1', end='')
 
                     ratio_width = self.C
                     sketch_d = 1
@@ -133,15 +131,15 @@ class BinaryPartitionTree:
 
                     self.rem_size -= INT_SIZE * new_width * sketch_d  # subtract from remaining space for outliers
 
-                    print(' : width - {}, # distinct edges - {}'.format(new_width, sum_out_degree))
+                    # print(' : width - {}, # distinct edges - {}'.format(new_width, sum_out_degree))
                 else:  # c3
-                    print('c3', end='')
+                    # print('c3', end='')
 
                     table = CountMinTable(curr_sketch.w, self.d)  # create sketch
 
                     self.rem_size -= INT_SIZE * curr_sketch.w * self.d  # subtract from remaining space for outliers
 
-                    print(' : width - {}, # distinct edges - {}'.format(curr_sketch.w, sum_out_degree))
+                    # print(' : width - {}, # distinct edges - {}'.format(curr_sketch.w, sum_out_degree))
 
                 # append the created hash to table list
                 self.countmin_tables.append(table)
@@ -190,7 +188,7 @@ class BinaryPartitionTree:
                         min_index = i
                         min_value = error_gain
 
-                print('{}<=>{} (base:{:.10f}, max:{:.10f}, min:{:.10f})'.format(len(curr_sketch.vertices), min_index, base, max(Eg_List), min_value))
+                # print('{}<=>{} (base:{:.10f}, max:{:.10f}, min:{:.10f})'.format(len(curr_sketch.vertices), min_index, base, max(Eg_List), min_value))
 
                 # Create two new partition nodes
                 stack.append(BptNode(curr_sketch.vertices[:min_index + 1], sub_width_1))
