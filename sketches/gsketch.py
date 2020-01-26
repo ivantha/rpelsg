@@ -190,16 +190,6 @@ class BinaryPartitionTree:
                         min_index = i
                         min_value = error_gain
 
-
-                # if min_value == 0:
-                #     print('arrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrghhh')
-                # if min_index == 0:
-                #     print('=========================================================================================================')
-                #     print(curr_sketch.vertices)
-                #     print(curr_sketch.vertices[:min_index + 1])
-                #     print(curr_sketch.vertices[min_index + 1:])
-                #     print('=========================================================================================================')
-
                 print('{}<=>{} (base:{:.10f}, max:{:.10f}, min:{:.10f})'.format(len(curr_sketch.vertices), min_index, base, max(Eg_List), min_value))
 
                 # Create two new partition nodes

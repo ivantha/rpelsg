@@ -1,18 +1,20 @@
 from math import sqrt
 
+from common.globals import INT_SIZE
+
 
 def print_gsketch_sizes(d):
     for i in [100, 200, 300, 400, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
         x = i / 2.0 / d
         x_round = round(x)
-        revert = x_round * 2.0 * d
+        revert = x_round * INT_SIZE * d
         print('{} : {} >> {}KB ({}MB)'.format(i, x_round, revert, revert / 1024.0))
 
 
-def print_tcm_sizes():
+def print_tcm_sizes(d):
     for i in [100, 200, 300, 400, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536]:
-        x = round(sqrt(i / 16.0 * 1024.0))
-        print('{} : {} >> {}KB ({}MB)'.format(i, x, (x ** 2) * 16.0 / 1024.0, (x ** 2) * 16.0 / 1024.0 / 1024.0))
+        x = round(sqrt(i / (INT_SIZE * d) * 1024.0))
+        print('{} : {} >> {}KB ({}MB)'.format(i, x, (x ** 2) * (INT_SIZE * d) / 1024.0, (x ** 2) * (INT_SIZE * d) / 1024.0 / 1024.0))
 
 
 def print_alpha_sizes():
@@ -25,6 +27,8 @@ def print_alpha_sizes():
 
 
 if __name__ == '__main__':
+    print('gSketch')
     print_gsketch_sizes(7)
-    print('-------------------')
-    print_gsketch_sizes(5)
+
+    print('TCM')
+    print_tcm_sizes(7)

@@ -20,8 +20,7 @@ from tests.neq_visualize import neq_visualize
 
 if __name__ == '__main__':
     datasets = [
-        '../datasets/unicorn_wget/benign_base_1/',
-        # '../datasets/email-EuAll/email-EuAll_100/'
+        '../datasets/unicorn_wget/benign_base_50/',
     ]
 
     # analyze datasets
@@ -34,7 +33,7 @@ if __name__ == '__main__':
 
     def run_test(funs):
         test_fun, visualize_fun = funs[0], funs[1]
-        # test_fun(datasets)
+        test_fun(datasets)
         visualize_fun()
 
     pool = multiprocessing.Pool()

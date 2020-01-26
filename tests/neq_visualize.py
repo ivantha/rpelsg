@@ -16,11 +16,11 @@ def neq_visualize():
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
-        (Sketches.alpha.name, 'Alpha'),
+        # (Sketches.alpha.name, 'Alpha'),
     )
 
     sketch_sizes = (
-        (100, '100 KB'),
+        # (100, '100 KB'),
         (200, '200 KB'),
         (300, '300 KB'),
         (400, '400 KB'),
