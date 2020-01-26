@@ -41,12 +41,6 @@ datasets = (
         )
     ),
     (
-        '../datasets/soc-RedditHyperlinks',
-        (
-            ('soc-RedditHyperlinks', '1I7Q09n58X4DIxfK3SDaQ1noo4T_DS7wt'),
-        )
-    ),
-    (
         '../datasets/ego-Gplus',
         (
             ('ego-Gplus', '1IF6JI64ENfQXRxAW1vIjDYPimTlrcoFZ'),
@@ -150,7 +144,8 @@ if __name__ == '__main__':
                 with open('{}/{}_{}/data.txt'.format(output_dir, file_base, suffix), 'w') as new_f:
                     for line in reservoir:
                         try:
-                            source_id, target_id = line.split()
+                            parts = line.split()
+                            source_id, target_id = parts[0], parts[1]
                             new_f.write('{},{}\n'.format(source_id, target_id))
                         except:
                             print('Error in line > {}'.format(line))
