@@ -23,6 +23,8 @@ from tests.insertionrate2_test import insertionrate2_test
 from tests.insertionrate2_visualize import insertionrate2_visualize
 from tests.neq_test import neq_test
 from tests.neq_visualize import neq_visualize
+from tests.smallworld_test import smallworld_test
+from tests.smallworld_visualize import smallworld_visualize
 
 if __name__ == '__main__':
     datasets = [
@@ -63,6 +65,7 @@ if __name__ == '__main__':
         # [hn_test, hn_visualize],
         # [he_test, he_visualize],
 
-        [clust_test, clust_visualize]
+        # [clust_test, clust_visualize],
+        [smallworld_test, smallworld_visualize]
     ])
     pool.close()
