@@ -10,7 +10,7 @@ from sketches import Sketches
 
 
 def ewd_visualize():
-    print('ewd_visualize')
+    print(os.path.basename(__file__).split('.')[0])
 
     sketches = (
         (Sketches.countmin.name, 'CountMin'),

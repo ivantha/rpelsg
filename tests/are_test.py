@@ -13,7 +13,7 @@ from tests.memory_profile import MemoryProfile
 
 
 def are_test(datasets):
-    print('are_test')
+    print(os.path.basename(__file__).split('.')[0])
 
     edge_lists = []
     for dataset in datasets:

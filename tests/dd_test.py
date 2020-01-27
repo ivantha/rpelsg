@@ -14,7 +14,7 @@ from tests.memory_profile import MemoryProfile
 
 
 def dd_test(datasets):
-    print('dd_test')
+    print(os.path.basename(__file__).split('.')[0])
 
     edge_lists = []
     for dataset in datasets:

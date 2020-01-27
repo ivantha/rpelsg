@@ -9,7 +9,7 @@ from sketches import Sketches
 
 
 def are_visualize():
-    print('are_visualize')
+    print(os.path.basename(__file__).split('.')[0])
 
     sketches = (
         (Sketches.countmin.name, 'CountMin'),

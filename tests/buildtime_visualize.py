@@ -12,7 +12,7 @@ from sketches import Sketches
 
 
 def buildtime_visualize():
-    print(os.path.basename(__file__).split('.')[0].split('_')[0])
+    print(os.path.basename(__file__).split('.')[0])
 
     sketches = (
         (Sketches.countmin.name, 'CountMin'),

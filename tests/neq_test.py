@@ -13,7 +13,7 @@ from tests.memory_profile import MemoryProfile
 
 
 def neq_test(datasets):
-    print('neq_test')
+    print(os.path.basename(__file__).split('.')[0])
 
     edge_lists = []
     for dataset in datasets:

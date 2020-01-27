@@ -15,12 +15,16 @@ from tests.he_test import he_test
 from tests.he_visualize import he_visualize
 from tests.hn_test import hn_test
 from tests.hn_visualize import hn_visualize
+from tests.insertionrate1_test import insertionrate1_test
+from tests.insertionrate1_visualize import insertionrate1_visualize
+from tests.insertionrate2_test import insertionrate2_test
+from tests.insertionrate2_visualize import insertionrate2_visualize
 from tests.neq_test import neq_test
 from tests.neq_visualize import neq_visualize
 
 if __name__ == '__main__':
     datasets = [
-        '../datasets/unicorn_wget/benign_base_50/',
+        '../datasets/unicorn-wget/benign_base_10/',
     ]
 
     # analyze datasets
@@ -36,15 +40,26 @@ if __name__ == '__main__':
         test_fun(datasets)
         visualize_fun()
 
+        # run more visualize_funs (if there are any)
+        if len(funs) > 2:
+            for i in range(2, len(funs)):
+                funs[i]()
+
     pool = multiprocessing.Pool()
     pool.map(run_test, [
-        [buildtime_test, buildtime_visualize],
-        [are_test, are_visualize],
-        [neq_test, neq_visualize],
-        [dd_test, dd_visualize],
-        [ewd_test, ewd_visualize],
-        [dc_test, dc_visualize],
-        [hn_test, hn_visualize],
-        [he_test, he_visualize],
+        # [buildtime_test, buildtime_visualize],
+        # [insertionrate1_test, insertionrate1_visualize],
+        [insertionrate2_test, insertionrate2_visualize],
+
+        # [are_test, are_visualize],
+        # [neq_test, neq_visualize],
+
+        # [dd_test, dd_visualize],
+        # [ewd_test, ewd_visualize],
+
+        # [dc_test, dc_visualize],
+
+        # [hn_test, hn_visualize],
+        # [he_test, he_visualize],
     ])
     pool.close()

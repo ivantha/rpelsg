@@ -11,7 +11,7 @@ from sketches import Sketches
 
 
 def hn_visualize():
-    print('hn_visualize')
+    print(os.path.basename(__file__).split('.')[0])
 
     sketches = (
         (Sketches.countmin.name, 'CountMin'),

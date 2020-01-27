@@ -13,7 +13,7 @@ from tests.memory_profile import MemoryProfile
 
 
 def buildtime_test(datasets):
-    print(os.path.basename(__file__).split('.')[0].split('_')[0])
+    print(os.path.basename(__file__).split('.')[0])
 
     edge_lists = []
     for dataset in datasets:
