@@ -5,6 +5,8 @@ from tests.are_test import are_test
 from tests.are_visualize import are_visualize
 from tests.buildtime_test import buildtime_test
 from tests.buildtime_visualize import buildtime_visualize
+from tests.clust_test import clust_test
+from tests.clust_visualize import clust_visualize
 from tests.dc_test import dc_test
 from tests.dc_visualize import dc_visualize
 from tests.dd_test import dd_test
@@ -36,20 +38,19 @@ if __name__ == '__main__':
         print('# nodes : {:,}'.format(len(nodes)))
 
     def run_test(funs):
-        test_fun, visualize_fun = funs[0], funs[1]
+        test_fun = funs[0]
         test_fun(datasets)
-        visualize_fun()
 
-        # run more visualize_funs (if there are any)
-        if len(funs) > 2:
-            for i in range(2, len(funs)):
+        # run visualize_funs (if there are any)
+        if len(funs) > 1:
+            for i in range(1, len(funs)):
                 funs[i]()
 
     pool = multiprocessing.Pool()
     pool.map(run_test, [
         # [buildtime_test, buildtime_visualize],
         # [insertionrate1_test, insertionrate1_visualize],
-        [insertionrate2_test, insertionrate2_visualize],
+        # [insertionrate2_test, insertionrate2_visualize],
 
         # [are_test, are_visualize],
         # [neq_test, neq_visualize],
@@ -61,5 +62,7 @@ if __name__ == '__main__':
 
         # [hn_test, hn_visualize],
         # [he_test, he_visualize],
+
+        [clust_test, clust_visualize]
     ])
     pool.close()
