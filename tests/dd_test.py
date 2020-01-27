@@ -103,17 +103,10 @@ def dd_test(datasets):
         for vertex in vertices:
             degrees[vertex] = 0
 
-        i = 0
-        chunk = number_of_edges / 100
         for source_id, target_id in edges:
             f = sketch.get_edge_frequency(source_id, target_id)
             degrees[source_id] += f
             degrees[target_id] += f
-
-            # update progress bar
-            i += 1
-            if i % chunk == 0:
-                utils.print_progress_bar(i, number_of_edges - 1, prefix='Progress:', suffix=sketch.name, length=50)
 
         degree_distribution = {}
         for edge_frequency in degrees.values():
