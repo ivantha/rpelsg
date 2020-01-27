@@ -229,7 +229,12 @@ class GSketch(Sketch):
     @timeit
     def initialize(self):
         # reservoir sampling for k items as (i, j)
-        self.sample_stream = sampling.select_k_items_from_lists(self.base_edges, self.sample_size)
+        base_edge_count = sum([len(x) for x in self.base_edges])
+        if base_edge_count > self.sample_size:
+            self.sample_stream = sampling.select_k_items_from_lists(self.base_edges, self.sample_size)
+        else:
+            self.sample_stream = sampling.select_k_items_from_lists(self.base_edges, int(base_edge_count * 0.1))
+            print('{} items are not present in the original stream. Choosing {} items from {} instead'.format(self.sample_size, int(base_edge_count * 0.1), len(self.base_edges)))
 
         # partition sketches
         self.bpt = BinaryPartitionTree(self.sample_stream, self.w, self.d, self.w_0, self.C)
