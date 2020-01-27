@@ -74,7 +74,7 @@ def insertionrate2_visualize():
             for sketch_size, pretty_size in sketch_sizes:
                 with open('{}/{}_{}.json'.format(test_output_dir, sketch_name, sketch_size)) as file:
                     output = json.load(file)
-                    edge_count = output['edge_count']
+                    number_of_edges = output['number_of_edges']
                     EDGE_INTERVAL = int(output['EDGE_INTERVAL'])
                     streaming_rates = [i / 100000 for i in output['streaming_rates']]
 

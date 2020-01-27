@@ -115,7 +115,7 @@ def are_test(datasets):
         output = {
             'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+            'number_of_edges': sum([len(edge_list) for edge_list in edge_lists]),
             'memory_allocation': int(sketch_id.name.split('_')[1]),
             'average_relative_error': relative_error_sum / sample_size
         }

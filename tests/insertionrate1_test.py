@@ -93,7 +93,7 @@ def insertionrate1_test(datasets):
             'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
             'memory_allocation': int(sketch_id.name.split('_')[1]),
-            'edge_count': n_edges,
+            'number_of_edges': n_edges,
             'insertions_per_sec': '{}'.format(n_edges / (streaming_end_time - streaming_start_time).total_seconds())
         }
 

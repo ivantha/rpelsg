@@ -113,11 +113,8 @@ def pagerank_test(datasets):
                 pass
                 # specific edge is not found in the sketch
 
-    print(len(nodes))
-
     full_G_pr = nx.pagerank(full_G)
-    print('aha!!!')
-    full_G_sorted_vertices = sorted(full_G_pr.items(), key=lambda item: item[1], reverse=True)
+    full_G_sorted_vertices = sorted(full_G_pr.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
     full_G_sorted_vertices = [vertex for (vertex, pr) in full_G_sorted_vertices]
 
     test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
@@ -142,14 +139,17 @@ def pagerank_test(datasets):
                     # specific edge is not found in the sketch
 
         sketch_pr = nx.pagerank(G)
-        sketch_sorted_vertices = sorted(sketch_pr.items(), key=lambda item: item[1], reverse=True)
+        sketch_sorted_vertices = sorted(sketch_pr.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
         sketch_sorted_vertices = [vertex for (vertex, pr) in sketch_sorted_vertices]
 
         # compare top-k results
-        k = 1000
+        k = int(len(nodes) * 0.1)
+        print('Comparing top-{} nodes'.format(k))
         set1 = set([i[0] for i in full_G_sorted_vertices[:k]])
         set2 = set([i[0] for i in sketch_sorted_vertices[:k]])
         intersection_count = len(set1.intersection(set2))
+
+        print('Yielding an inter-accuracy of {}'.format(intersection_count / k))
 
         output = {
             'sketch_id': sketch_id.name,

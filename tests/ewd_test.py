@@ -124,7 +124,7 @@ def ewd_test(datasets):
         output = {
             'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+            'number_of_edges': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_vertices': number_of_vertices,
             'edge_weights': edge_weights,
             'edge_weight_distribution': edge_weight_distribution

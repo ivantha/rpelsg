@@ -58,7 +58,7 @@ def smallworld_visualize():
                 memory_allocation.append(output['memory_allocation'])
                 sw_sigma.append(output['sw_sigma'])
                 sw_omega.append(output['sw_omega'])
-                edge_count = output['edge_count']
+                number_of_edges = output['number_of_edges']
 
         plt.figure(1)
         plt.plot(memory_allocation, sw_sigma, label=pretty_name)
@@ -84,7 +84,7 @@ def smallworld_visualize():
     plt.xlabel('Memory')
     plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes], rotation='vertical')
     plt.legend()
-    fig1.text(0.1, 0.045, '# edges : {:,}'.format(edge_count))
+    fig1.text(0.1, 0.045, '# edges : {:,}'.format(number_of_edges))
 
     plt.figure(2)
     plt.title('Memory vs Small world property')
@@ -92,7 +92,7 @@ def smallworld_visualize():
     plt.xlabel('Memory')
     plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes], rotation='vertical')
     plt.legend()
-    fig2.text(0.1, 0.045, '# edges : {:,}'.format(edge_count))
+    fig2.text(0.1, 0.045, '# edges : {:,}'.format(number_of_edges))
 
     test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
     os.makedirs('../reports/{}'.format(test_name), exist_ok=True)

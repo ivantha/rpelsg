@@ -116,7 +116,7 @@ def neq_test(datasets):
             'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
             'memory_allocation': int(sketch_id.name.split('_')[1]),
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+            'number_of_edges': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_queries': sample_size,
             'effective_query_count': effective_query_count,
             'effective_query_percent': effective_query_count / sample_size

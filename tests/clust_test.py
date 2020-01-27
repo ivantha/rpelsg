@@ -94,6 +94,12 @@ def clust_test(datasets):
         (MemoryProfile.alpha_1048576, Alpha(edge_lists, w=8758, d=7)),
     )
 
+    nodes = set()
+    for edge_list in edge_lists:
+        for edge in edge_list:
+            nodes.add(edge[0])
+            nodes.add(edge[1])
+
     test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
     os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
 
@@ -101,16 +107,8 @@ def clust_test(datasets):
         sketch.initialize()  # initialize the sketch
 
         # stream edges
-        streaming_times = []
-        edges = set()
         for edge_list in edge_lists:
-            streaming_times.append(sketch.stream(edge_list))
-            edges.update(edge_list)
-
-        nodes = set()
-        for edge in edges:
-            nodes.update(edge[0])
-            nodes.update(edge[0])
+            sketch.stream(edge_list)
 
         G = nx.Graph()
         for n1 in nodes:
@@ -139,8 +137,9 @@ def clust_test(datasets):
 
         print('Completed: {}'.format(sketch_id.name))
 
-        # free memory - remove reference to the sketch
+        # free memory - remove reference to the sketch & G
         del sketch
+        del G
 
         # free memory - call garbage collector
         gc.collect()

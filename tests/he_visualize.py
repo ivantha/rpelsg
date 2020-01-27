@@ -3,7 +3,6 @@
 import json
 import os
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -35,7 +34,7 @@ def he_visualize():
         # (65536, '64 MB')
     )
 
-    matplotlib.rcParams['figure.dpi'] = 500
+    plt.rcParams['figure.dpi'] = 500
 
     test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
 
@@ -62,7 +61,6 @@ def he_visualize():
         plt.xlabel('Sketches')
         plt.xticks(ind, [pretty_name for sketch_name, pretty_name in sketches])
 
-        fig.text(0.5, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
         fig.text(0.1, 0.03, '# vertices : {:,}'.format(results[0]['number_of_vertices']))
         fig.text(0.5, 0.03, '# edges : {:,}'.format(results[0]['number_of_edges']))
 

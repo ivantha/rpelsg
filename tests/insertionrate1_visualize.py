@@ -67,7 +67,7 @@ def insertionrate1_visualize():
                     output = json.load(file)
                     memory_allocation.append(output['memory_allocation'])
                     insertions_per_sec.append(float(output['insertions_per_sec']) / 1000.0)
-                    edge_count = output['edge_count']
+                    number_of_edges = output['number_of_edges']
 
             plt.plot(memory_allocation, insertions_per_sec, label=pretty_name)
 
@@ -77,7 +77,7 @@ def insertionrate1_visualize():
         plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes])
         plt.legend()
 
-        fig.text(0.1, 0.045, '# edges : {:,}'.format(edge_count))
+        fig.text(0.1, 0.045, '# edges : {:,}'.format(number_of_edges))
 
         test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
         os.makedirs('../reports/{}'.format(test_name), exist_ok=True)

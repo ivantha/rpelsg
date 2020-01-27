@@ -92,7 +92,7 @@ def he_test(datasets):
                 edge_weights['{},{}'.format(edge[0], edge[1])] += 1
 
     # sort the edge weights
-    sorted_edge_weights = sorted(edge_weights.items(), key=lambda kv: (kv[1], kv[0]))
+    sorted_edge_weights = sorted(edge_weights.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 
     number_of_vertices = len(vertices)
     number_of_edges = len(edges)
@@ -112,7 +112,7 @@ def he_test(datasets):
             f = sketch.get_edge_frequency(source_id, target_id)
             sketch_edge_weights['{},{}'.format(source_id, target_id)] = f
 
-        sorted_sketch_edge_weights = sorted(sketch_edge_weights.items(), key=lambda kv: (kv[1], kv[0]))
+        sorted_sketch_edge_weights = sorted(sketch_edge_weights.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 
         # compare top-k results
         k = 1000
@@ -123,7 +123,7 @@ def he_test(datasets):
         output = {
             'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
+            # 'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_edges': number_of_edges,
             'number_of_vertices': number_of_vertices,
             'inter_accuracy': intersection_count / k

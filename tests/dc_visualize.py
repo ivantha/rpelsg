@@ -62,7 +62,7 @@ def dc_visualize():
             plt.ylabel('Frequency')
             plt.xlabel('Degree')
 
-            fig.text(0.5, 0.06, '# edges : {:,}'.format(output['edge_count']))
+            fig.text(0.5, 0.06, '# edges : {:,}'.format(output['number_of_edges']))
             fig.text(0.1, 0.03, '# vertices : {:,}'.format(output['number_of_vertices']))
 
             test_name = os.path.basename(__file__).split('.')[0].split('_')[0]

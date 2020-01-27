@@ -97,7 +97,7 @@ def hn_test(datasets):
                 degrees[edge[1]] += 1
 
     # sort the degrees
-    sorted_degrees = sorted(degrees.items(), key=lambda kv: (kv[1], kv[0]))
+    sorted_degrees = sorted(degrees.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 
     number_of_vertices = len(vertices)
     number_of_edges = len(edges)
@@ -122,7 +122,7 @@ def hn_test(datasets):
             sketch_degrees[source_id] += f
             sketch_degrees[target_id] += f
 
-        sorted_sketch_degrees = sorted(sketch_degrees.items(), key=lambda kv: (kv[1], kv[0]))
+        sorted_sketch_degrees = sorted(sketch_degrees.items(), key=lambda kv: (kv[1], kv[0]), reverse=True)
 
         # compare top-k results
         k = 1000
@@ -133,7 +133,6 @@ def hn_test(datasets):
         output = {
             'sketch_id': sketch_id.name,
             'sketch_name': sketch.name,
-            'edge_count': sum([len(edge_list) for edge_list in edge_lists]),
             'number_of_edges': number_of_edges,
             'number_of_vertices': number_of_vertices,
             'inter_accuracy': intersection_count / k

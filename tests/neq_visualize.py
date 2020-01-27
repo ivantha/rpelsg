@@ -53,7 +53,7 @@ def neq_visualize():
                 output = json.load(file)
                 memory_allocation.append(output['memory_allocation'])
                 effective_query_count.append(output['effective_query_count'])
-                edge_count = output['edge_count']
+                number_of_edges = output['number_of_edges']
                 query_count = output['number_of_queries']
 
         plt.plot(memory_allocation, effective_query_count, label=pretty_name)
@@ -64,7 +64,7 @@ def neq_visualize():
     plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes])
     plt.legend()
 
-    fig.text(0.1, 0.06, '# edges : {:,}'.format(edge_count))
+    fig.text(0.1, 0.06, '# edges : {:,}'.format(number_of_edges))
     fig.text(0.5, 0.06, '# queries : {:,}'.format(query_count))
 
     test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
