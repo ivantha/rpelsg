@@ -16,6 +16,7 @@ def he_visualize():
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
+        (Sketches.gmatrix.name, 'GMatrix'),
         (Sketches.alpha.name, 'Alpha'),
     )
 

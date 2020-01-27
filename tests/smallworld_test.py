@@ -9,6 +9,7 @@ from sketches import Sketches
 from sketches.alpha import Alpha
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
+from sketches.gmatrix import GMatrix
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 from tests.memory_profile import MemoryProfile
@@ -75,6 +76,23 @@ def smallworld_test(datasets):
         (MemoryProfile.tcm_262144, TCM(w=4379, d=7)),
         (MemoryProfile.tcm_524288, TCM(w=6193, d=7)),
         (MemoryProfile.tcm_1048576, TCM(w=8758, d=7)),
+
+        (MemoryProfile.gmatrix_100, GMatrix(w=86, d=7)),
+        (MemoryProfile.gmatrix_200, GMatrix(w=121, d=7)),
+        (MemoryProfile.gmatrix_300, GMatrix(w=148, d=7)),
+        (MemoryProfile.gmatrix_400, GMatrix(w=171, d=7)),
+        (MemoryProfile.gmatrix_512, GMatrix(w=194, d=7)),
+        (MemoryProfile.gmatrix_1024, GMatrix(w=274, d=7)),
+        (MemoryProfile.gmatrix_2048, GMatrix(w=387, d=7)),
+        (MemoryProfile.gmatrix_4096, GMatrix(w=547, d=7)),
+        (MemoryProfile.gmatrix_8192, GMatrix(w=774, d=7)),
+        (MemoryProfile.gmatrix_16384, GMatrix(w=1095, d=7)),
+        (MemoryProfile.gmatrix_32768, GMatrix(w=1548, d=7)),
+        (MemoryProfile.gmatrix_65536, GMatrix(w=2189, d=7)),
+        (MemoryProfile.gmatrix_131072, GMatrix(w=3096, d=7)),
+        (MemoryProfile.gmatrix_262144, GMatrix(w=4379, d=7)),
+        (MemoryProfile.gmatrix_524288, GMatrix(w=6193, d=7)),
+        (MemoryProfile.gmatrix_1048576, GMatrix(w=8758, d=7)),
 
         (MemoryProfile.alpha_100, Alpha(edge_lists, w=86, d=7)),
         (MemoryProfile.alpha_200, Alpha(edge_lists, w=121, d=7)),

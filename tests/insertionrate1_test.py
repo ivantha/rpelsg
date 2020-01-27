@@ -7,6 +7,7 @@ import os
 from common import utils
 from sketches.alpha import Alpha
 from sketches.countmin import CountMin
+from sketches.gmatrix import GMatrix
 from sketches.gsketch import GSketch
 from sketches.tcm import TCM
 from tests.memory_profile import MemoryProfile
@@ -58,6 +59,19 @@ def insertionrate1_test(datasets):
         (MemoryProfile.tcm_16384, TCM(w=1095, d=7)),
         (MemoryProfile.tcm_32768, TCM(w=1548, d=7)),
         (MemoryProfile.tcm_65536, TCM(w=2189, d=7)),
+
+        (MemoryProfile.gmatrix_100, GMatrix(w=86, d=7)),
+        (MemoryProfile.gmatrix_200, GMatrix(w=121, d=7)),
+        (MemoryProfile.gmatrix_300, GMatrix(w=148, d=7)),
+        (MemoryProfile.gmatrix_400, GMatrix(w=171, d=7)),
+        (MemoryProfile.gmatrix_512, GMatrix(w=194, d=7)),
+        (MemoryProfile.gmatrix_1024, GMatrix(w=274, d=7)),
+        (MemoryProfile.gmatrix_2048, GMatrix(w=387, d=7)),
+        (MemoryProfile.gmatrix_4096, GMatrix(w=547, d=7)),
+        (MemoryProfile.gmatrix_8192, GMatrix(w=774, d=7)),
+        (MemoryProfile.gmatrix_16384, GMatrix(w=1095, d=7)),
+        (MemoryProfile.gmatrix_32768, GMatrix(w=1548, d=7)),
+        (MemoryProfile.gmatrix_65536, GMatrix(w=2189, d=7)),
 
         (MemoryProfile.alpha_100, Alpha(edge_lists, w=86, d=7)),
         (MemoryProfile.alpha_200, Alpha(edge_lists, w=121, d=7)),
