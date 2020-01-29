@@ -23,6 +23,8 @@ from tests.insertionrate2_test import insertionrate2_test
 from tests.insertionrate2_visualize import insertionrate2_visualize
 from tests.neq_test import neq_test
 from tests.neq_visualize import neq_visualize
+from tests.pagerank_test import pagerank_test
+from tests.pagerank_visualize import pagerank_visualize
 from tests.smallworld_test import smallworld_test
 from tests.smallworld_visualize import smallworld_visualize
 
@@ -54,8 +56,8 @@ if __name__ == '__main__':
         # [insertionrate1_test, insertionrate1_visualize],
         # [insertionrate2_test, insertionrate2_visualize],
 
-        # [are_test, are_visualize],
-        # [neq_test, neq_visualize],
+        [are_test, are_visualize],
+        [neq_test, neq_visualize],
 
         # [dd_test, dd_visualize],
         # [ewd_test, ewd_visualize],
@@ -66,6 +68,7 @@ if __name__ == '__main__':
         # [he_test, he_visualize],
 
         # [clust_test, clust_visualize],
-        [smallworld_test, smallworld_visualize]
+        # [smallworld_test, smallworld_visualize],
+        # [pagerank_test, pagerank_visualize]
     ])
     pool.close()

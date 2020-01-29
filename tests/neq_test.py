@@ -5,6 +5,7 @@ import os
 
 from common import utils, sampling
 from sketches.alpha import Alpha
+from sketches.beta import Beta
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gmatrix import GMatrix
@@ -21,18 +22,6 @@ def neq_test(datasets):
         edge_lists.append(utils.get_edges_in_path(dataset))
 
     memory_profiles = (
-        # (MemoryProfile.countmin_100, CountMin(m=1024 * 10 * 5, d=1)),
-        # (MemoryProfile.countmin_200, CountMin(m=1024 * 20 * 5, d=1)),
-        # (MemoryProfile.countmin_300, CountMin(m=1024 * 30 * 5, d=1)),
-        # (MemoryProfile.countmin_400, CountMin(m=1024 * 40 * 5, d=1)),
-        # (MemoryProfile.countmin_512, CountMin(m=1024 * 51 * 5, d=1)),
-
-        # (MemoryProfile.countmin_100, CountMin(m=1024 * 10, d=5)),
-        # (MemoryProfile.countmin_200, CountMin(m=1024 * 20, d=5)),
-        # (MemoryProfile.countmin_300, CountMin(m=1024 * 30, d=5)),
-        # (MemoryProfile.countmin_400, CountMin(m=1024 * 40, d=5)),
-        # (MemoryProfile.countmin_512, CountMin(m=1024 * 51, d=5)),
-
         (MemoryProfile.countmin_100, CountMin(m=1024 * 7, d=7)),
         (MemoryProfile.countmin_200, CountMin(m=1024 * 14, d=7)),
         (MemoryProfile.countmin_300, CountMin(m=1024 * 21, d=7)),
