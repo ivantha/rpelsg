@@ -25,9 +25,15 @@ class GMatrixTable:
         self.b = [random.randrange(1, self.P) for i in range(d)]
 
     def add_edge(self, x: str, y: str):
+        new_buckets_occupied = 0
+
         for i, x_hash, y_hash in zip(range(self.d), self._hash(x), self._hash(y)):
+            if self.matrix[i][x_hash][y_hash] == 0:
+                new_buckets_occupied += 1
             self.matrix[i][x_hash][y_hash] += 1
         self.edge_count += 1
+
+        return new_buckets_occupied
 
     def get_edge_frequency(self, x: str, y: str):
         return min([self.matrix[i][x_hash][y_hash] for i, x_hash, y_hash in zip(range(self.d), self._hash(x), self._hash(y))])
@@ -55,17 +61,21 @@ class GMatrix(Sketch):
 
     @timeit
     def initialize(self):
+        self.total_buckets = self.w * self.w * self.d
+        self.used_buckets = 0
+
         self.table = GMatrixTable(self.w, self.d)
 
     def add_edge(self, source_id, target_id):
-        self.table.add_edge(source_id, target_id)
+        new_buckets_occupied = self.table.add_edge(source_id, target_id)
+        self.used_buckets += new_buckets_occupied
 
     def get_edge_frequency(self, source_id, target_id):
         return self.table.get_edge_frequency(source_id, target_id)
 
     @timeit
     def print_analytics(self):
-        pass
+        print('Bucket ratio (used/total) : {:,}/{:,} ({}%)'.format(self.used_buckets, self.total_buckets, self.used_buckets / self.total_buckets * 100.0))
 
         # return {
         #     'edge_count': self._table.edge_count,

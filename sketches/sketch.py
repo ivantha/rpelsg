@@ -6,6 +6,12 @@ from common.utils import timeit
 
 class Sketch(ABC):
     name: str = None
+
+    # space information
+    total_buckets = None
+    used_buckets = None
+
+    # record the time cost
     initialize_time = None
     streaming_time = None
 

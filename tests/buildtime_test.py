@@ -115,6 +115,8 @@ def buildtime_test(datasets):
             'streaming_time': '{}'.format(sketch.streaming_time),
         }
 
+        sketch.print_analytics()
+
         with open('{}/{}.json'.format(test_output_dir, sketch_id.name), 'w') as file:
             json.dump(output, file, indent=4)
 

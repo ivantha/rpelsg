@@ -7,87 +7,87 @@ from google_drive_downloader import GoogleDriveDownloader as gdd
 from common.utils import get_txt_files
 
 datasets = (
-    (
-        '../datasets/email-EuAll',
-        (
-            ('email-EuAll', '1HNw17l-PtdVgcMcWnCsZndGEWVjin3Oz'),
-        )
-    ),
-    (
-        '../datasets/ego-Facebook',
-        (
-            ('ego-Facebook', '1HcDGtLakSWbjOT4kfW2bOXWBHYTUk0np'),
-        )
-    ),
-    (
-        '../datasets/com-Youtube',
-        (
-            ('com-Youtube', '1HqNsOrAW-NMzwXMqBgxtMmDQJvHweUre'),
-        )
-    ),
-    (
-        '../datasets/unicorn-wget',
-        (
-            ('benign_base', '1-rmP2_vOgIU56husFP0AhHK3O3HjPi0d'),
-            ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
-            ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
-            ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
-        )
-    ),
-    (
-        '../datasets/soc-Pokec',
-        (
-            ('soc-Pokec', '1I4eespCmdknZ0zlgy-PuZELv0RexHfuV'),
-        )
-    ),
-    (
-        '../datasets/ego-Gplus',
-        (
-            ('ego-Gplus', '1IF6JI64ENfQXRxAW1vIjDYPimTlrcoFZ'),
-        )
-    ),
-    (
-        '../datasets/ca-AstroPh',
-        (
-            ('ca-AstroPh', '1IPT-O9dGo2q3Knkof9Knzx_6t65KlpwL'),
-        )
-    ),
-    (
-        '../datasets/cit-HepPh',
-        (
-            ('cit-HepPh', '1IahaJH4FybYu31gJRcFK8b8fanl7604X'),
-        )
-    ),
-    (
-        '../datasets/roadNet-CA',
-        (
-            ('roadNet-CA', '1IusD9nbXRxZRpQhYg1xR5cLQdA6q7xWT'),
-        )
-    ),
-    (
-        '../datasets/web-Google',
-        (
-            ('web-Google', '1J-LRZzFiIoMp46I6hoM8C5J33gNhTjtQ'),
-        )
-    ),
-    (
-        '../datasets/gen-random-simple',
-        (
-            ('gen-random-simple', '1MjYNufhJVBFaQMm8w9nPWftvR4PtJQp3'),
-        )
-    ),
-    (
-        '../datasets/gen-scale-free',
-        (
-            ('gen-scale-free', '1MdGHmlDO9dNtcETvLqjriNCnhFgqLloY'),
-        )
-    ),
-    (
-        '../datasets/gen-small-world',
-        (
-            ('gen-small-world', '1MTwJOTCyuil_JXIqopp0asLkLfvEtIh8'),
-        )
-    )
+    # (
+    #     '../datasets/email-EuAll',
+    #     (
+    #         ('email-EuAll', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/ego-Facebook',
+    #     (
+    #         ('ego-Facebook', '1HcDGtLakSWbjOT4kfW2bOXWBHYTUk0np'),
+    #     )
+    # ),
+    # (
+    #     '../datasets/com-Youtube',
+    #     (
+    #         ('com-Youtube', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/unicorn-wget',
+    #     (
+    #         ('benign_base', '1-rmP2_vOgIU56husFP0AhHK3O3HjPi0d'),
+    #         ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
+    #         ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
+    #         ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
+    #     )
+    # ),
+    # (
+    #     '../datasets/soc-Pokec',
+    #     (
+    #         ('soc-Pokec', '1I4eespCmdknZ0zlgy-PuZELv0RexHfuV'),
+    #     )
+    # ),
+    # (
+    #     '../datasets/ego-Gplus',
+    #     (
+    #         ('ego-Gplus', '1IF6JI64ENfQXRxAW1vIjDYPimTlrcoFZ'),
+    #     )
+    # ),
+    # (
+    #     '../datasets/ca-AstroPh',
+    #     (
+    #         ('ca-AstroPh', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/cit-HepPh',
+    #     (
+    #         ('cit-HepPh', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/roadNet-CA',
+    #     (
+    #         ('roadNet-CA', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/web-Google',
+    #     (
+    #         ('web-Google', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/gen-random-simple',
+    #     (
+    #         ('gen-random-simple', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/gen-scale-free',
+    #     (
+    #         ('gen-scale-free', ''),
+    #     )
+    # ),
+    # (
+    #     '../datasets/gen-small-world',
+    #     (
+    #         ('gen-small-world', ''),
+    #     )
+    # )
 )
 
 
