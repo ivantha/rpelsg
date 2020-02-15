@@ -9,4 +9,3 @@ class Sketches(enum.Enum):
     gmatrix = 'gmatrix'
     gss = 'gss'
     alpha = 'alpha'
-    beta = 'beta'

@@ -5,7 +5,6 @@ import os
 
 from common import utils, sampling
 from sketches.alpha import Alpha
-from sketches.beta import Beta
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gmatrix import GMatrix
