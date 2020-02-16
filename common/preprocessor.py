@@ -7,12 +7,12 @@ from google_drive_downloader import GoogleDriveDownloader as gdd
 from common.utils import get_txt_files
 
 datasets = (
-    # (
-    #     '../datasets/email-EuAll',
-    #     (
-    #         ('email-EuAll', ''),
-    #     )
-    # ),
+    (
+        '../datasets/email-EuAll',
+        (
+            ('email-EuAll', '1GippTQh93Pwei5Z-ARE-RYa-MNTVP9nF'),
+        )
+    ),
     # (
     #     '../datasets/ego-Facebook',
     #     (
@@ -25,15 +25,15 @@ datasets = (
     #         ('com-Youtube', ''),
     #     )
     # ),
-    # (
-    #     '../datasets/unicorn-wget',
-    #     (
-    #         ('benign_base', '1-rmP2_vOgIU56husFP0AhHK3O3HjPi0d'),
-    #         ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
-    #         ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
-    #         ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
-    #     )
-    # ),
+    (
+        '../datasets/unicorn-wget',
+        (
+            ('benign_base', '1GzHJSBlANyBoCVHVs4Zmt4k3FnE5NCk4'),
+            # ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
+            # ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
+            # ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
+        )
+    ),
     # (
     #     '../datasets/soc-Pokec',
     #     (
@@ -52,12 +52,12 @@ datasets = (
     #         ('ca-AstroPh', ''),
     #     )
     # ),
-    # (
-    #     '../datasets/cit-HepPh',
-    #     (
-    #         ('cit-HepPh', ''),
-    #     )
-    # ),
+    (
+        '../datasets/cit-HepPh',
+        (
+            ('cit-HepPh', '1IahaJH4FybYu31gJRcFK8b8fanl7604X'),
+        )
+    ),
     # (
     #     '../datasets/roadNet-CA',
     #     (
@@ -76,18 +76,18 @@ datasets = (
     #         ('gen-random-simple', ''),
     #     )
     # ),
-    # (
-    #     '../datasets/gen-scale-free',
-    #     (
-    #         ('gen-scale-free', ''),
-    #     )
-    # ),
-    # (
-    #     '../datasets/gen-small-world',
-    #     (
-    #         ('gen-small-world', ''),
-    #     )
-    # )
+    (
+        '../datasets/gen-scale-free',
+        (
+            ('gen-scale-free', '1MdGHmlDO9dNtcETvLqjriNCnhFgqLloY'),
+        )
+    ),
+    (
+        '../datasets/gen-small-world',
+        (
+            ('gen-small-world', '1MTwJOTCyuil_JXIqopp0asLkLfvEtIh8'),
+        )
+    )
 )
 
 
@@ -145,7 +145,7 @@ if __name__ == '__main__':
                     for line in reservoir:
                         try:
                             parts = line.split()
-                            source_id, target_id = parts[0], parts[1]
+                            source_id, target_id = int(parts[0]), int(parts[1])
                             new_f.write('{},{}\n'.format(source_id, target_id))
                         except:
                             print('Error in line > {}'.format(line))

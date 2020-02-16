@@ -50,31 +50,31 @@ if __name__ == '__main__':
             for i in range(1, len(funs)):
                 funs[i]()
 
-    # pool = multiprocessing.Pool()
-    # pool.map(run_test, [
-    #     [buildtime_test, buildtime_visualize],
-    #     [insertionrate1_test, insertionrate1_visualize],
-    #     [insertionrate2_test, insertionrate2_visualize],
-    #
-    #     [are_test, are_visualize],
-    #     [neq_test, neq_visualize],
-    #
-    #     [dd_test, dd_visualize],
-    #     [ewd_test, ewd_visualize],
-    #
-    #     [dc_test, dc_visualize],
-    #
-    #     [hn_test, hn_visualize],
-    #     [he_test, he_visualize],
-    #
-    #     [clust_test, clust_visualize],
-    #     [smallworld_test, smallworld_visualize],
-    #     [pagerank_test, pagerank_visualize]
-    # ])
-    # pool.close()
+    pool = multiprocessing.Pool()
+    pool.map(run_test, [
+        [buildtime_test, buildtime_visualize],
+        [insertionrate1_test, insertionrate1_visualize],
+        [insertionrate2_test, insertionrate2_visualize],
 
-    buildtime_test(datasets)
-    buildtime_visualize()
+        [are_test, are_visualize],
+        [neq_test, neq_visualize],
+
+        [dd_test, dd_visualize],
+        [ewd_test, ewd_visualize],
+
+        [dc_test, dc_visualize],
+
+        [hn_test, hn_visualize],
+        [he_test, he_visualize],
+
+        # [clust_test, clust_visualize],
+        # [smallworld_test, smallworld_visualize],
+        # [pagerank_test, pagerank_visualize]
+    ])
+    pool.close()
+
+    # buildtime_test(datasets)
+    # buildtime_visualize()
     # insertionrate1_test(datasets)
     # insertionrate1_visualize()
     # insertionrate2_test(datasets)
