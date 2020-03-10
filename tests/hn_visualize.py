@@ -4,7 +4,6 @@ import json
 import os
 
 import matplotlib.pyplot as plt
-import numpy as np
 
 from sketches import Sketches
 
@@ -13,11 +12,11 @@ def hn_visualize():
     print(os.path.basename(__file__).split('.')[0])
 
     sketches = (
-        (Sketches.countmin.name, 'CountMin'),
-        (Sketches.gsketch.name, 'gSketch'),
-        (Sketches.tcm.name, 'TCM'),
-        (Sketches.gmatrix.name, 'GMatrix'),
-        (Sketches.alpha.name, 'Alpha'),
+        (Sketches.countmin.name, 'CountMin', [2, 2, 2, 2]),
+        (Sketches.gsketch.name, 'gSketch', [2, 2, 10, 2]),
+        (Sketches.tcm.name, 'TCM', [5, 2]),
+        (Sketches.gmatrix.name, 'GMatrix', [2, 2, 2, 2, 10, 2]),
+        (Sketches.alpha.name, 'Alpha', [1, 0]),
     )
 
     sketch_sizes = (
@@ -36,40 +35,42 @@ def hn_visualize():
     )
 
     plt.rcParams['figure.dpi'] = 500
+    # plt.rcParams["figure.figsize"] = (20, 15)
 
+    fig = plt.figure()
+    ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+    # ax.set_xscale("log")
+    ax.minorticks_off()
+
+    edge_count = 0
     test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
+    for sketch_name, pretty_name, dashes in sketches:
+        memory_allocation = []
+        inter_accuracy = []
 
-    for sketch_size, pretty_size in sketch_sizes:
-        results = []
-
-        for sketch_name, pretty_name in sketches:
+        for sketch_size, pretty_size in sketch_sizes:
             with open('{}/{}_{}.json'.format(test_output_dir, sketch_name, sketch_size)) as file:
                 output = json.load(file)
-                results.append(output)
+                memory_allocation.append(output['memory_allocation'])
+                inter_accuracy.append(output['inter_accuracy'])
+                number_of_edges = output['number_of_edges']
+                number_of_vertices = output['number_of_vertices']
 
-        ind = np.arange(len(results))  # the x locations for the groups
-        width = 0.35  # the width of the bars
+        plt.plot(memory_allocation, inter_accuracy, label=pretty_name, dashes=dashes)
 
-        fig = plt.figure()
-        ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+    plt.title('Memory vs Inter accuracy of heavy nodes')
+    plt.ylabel('Inter-accuracy')
+    plt.xlabel('Memory')
+    # plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes], rotation='vertical')
+    plt.xticks(ticks=[x[0] for x in sketch_sizes], labels=[x[1] for x in sketch_sizes])
+    plt.legend()
 
-        dataset = [x['inter_accuracy'] for x in results]
+    fig.text(0.1, 0.03, '# vertices : {:,}'.format(number_of_edges))
+    fig.text(0.5, 0.03, '# edges : {:,}'.format(number_of_vertices))
 
-        plt.bar(ind, dataset, color='#00BCD4')
+    test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+    os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
+    plt.savefig('../reports/{}/{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], test_name))
 
-        plt.title('Heavy nodes - {}'.format(pretty_size))
-        plt.ylabel('Inter-accuracy')
-        plt.xlabel('Sketches')
-        plt.xticks(ind, [pretty_name for sketch_name, pretty_name in sketches])
-
-        fig.text(0.1, 0.03, '# vertices : {:,}'.format(results[0]['number_of_vertices']))
-        fig.text(0.5, 0.03, '# edges : {:,}'.format(results[0]['number_of_edges']))
-
-        test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
-        os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
-        plt.savefig('../reports/{}/{}.png'.format(test_name, sketch_size))
-
-        # plt.show()
-        plt.close()
-
-        print('Completed visualization: {}'.format(sketch_size))
+    # plt.show()
+    plt.close()

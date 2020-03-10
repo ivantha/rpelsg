@@ -216,8 +216,12 @@ class Alpha(Sketch):
             d: int,  # d: Number of hash functions (⬇️)
 
             sample_size: int = 30000,
+            # unicorn-wget, cit-HepPh
             w_0: int = 29,
             C: float = 0.2
+            # email-EuAll, gen-scale-free, gen-small-world
+            # w_0: int = 113,
+            # C: float = 0.5
     ):
         self.base_edges = base_edges
 

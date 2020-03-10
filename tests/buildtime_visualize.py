@@ -23,18 +23,18 @@ def buildtime_visualize():
     )
 
     sketch_sizes = (
-        (100, '100 KB'),
-        (200, '200 KB'),
-        (300, '300 KB'),
-        (400, '400 KB'),
-        (512, '512 KB'),
+        # (100, '100 KB'),
+        # (200, '200 KB'),
+        # (300, '300 KB'),
+        # (400, '400 KB'),
+        # (512, '512 KB'),
         (1024, '1 MB'),
-        (2048, '2 MB'),
-        (4096, '4 MB'),
-        (8192, '8 MB'),
-        (16384, '16 MB'),
-        (32768, '32 MB'),
-        (65536, '64 MB')
+        # (2048, '2 MB'),
+        # (4096, '4 MB'),
+        # (8192, '8 MB'),
+        # (16384, '16 MB'),
+        # (32768, '32 MB'),
+        # (65536, '64 MB')
     )
 
     test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
@@ -67,17 +67,16 @@ def buildtime_visualize():
         ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
         # ax.yaxis.grid(True)
 
-        p1 = plt.bar(ind, dataset[0], width, color='#f44336')
-        p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='#00BCD4')
+        p1 = plt.bar(ind, dataset[0], width, color='none', edgecolor="#000000", hatch='\\\\')
+        p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='none', edgecolor="#000000", hatch='.')
 
         plt.title('Sketch construction and streaming times : {}'.format(pretty_size))
         plt.ylabel('Time (s)')
         plt.xlabel('Sketches')
         plt.xticks(ind, [pretty_name for _, pretty_name in sketches])
-        plt.legend((p1[0], p2[0]), ('Initialization', 'Streaming'))
+        leg = plt.legend((p1[0], p2[0]), ('Initialization', 'Streaming'))
 
         fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
-        fig.text(0.1, 0.03, 'Sketch size : 512 KB')
 
         test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
         os.makedirs('../reports/{}'.format(test_name), exist_ok=True)

@@ -12,11 +12,11 @@ def are_visualize():
     print(os.path.basename(__file__).split('.')[0])
 
     sketches = (
-        (Sketches.countmin.name, 'CountMin'),
-        (Sketches.gsketch.name, 'gSketch'),
-        (Sketches.tcm.name, 'TCM'),
-        (Sketches.gmatrix.name, 'GMatrix'),
-        (Sketches.alpha.name, 'Alpha'),
+        (Sketches.countmin.name, 'CountMin', [2, 2, 2, 2]),
+        (Sketches.gsketch.name, 'gSketch', [2, 2, 10, 2]),
+        (Sketches.tcm.name, 'TCM', [5, 2]),
+        (Sketches.gmatrix.name, 'GMatrix', [2, 2, 2, 2, 10, 2]),
+        (Sketches.alpha.name, 'Alpha', [1, 0]),
     )
 
     sketch_sizes = (
@@ -39,12 +39,12 @@ def are_visualize():
 
     fig = plt.figure()
     ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
-    ax.set_xscale("log")
+    # ax.set_xscale("log")
     ax.minorticks_off()
 
     edge_count = 0
     test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
-    for sketch_name, pretty_name in sketches:
+    for sketch_name, pretty_name, dashes in sketches:
         memory_allocation = []
         average_relative_error = []
 
@@ -55,7 +55,7 @@ def are_visualize():
                 average_relative_error.append(output['average_relative_error'])
                 number_of_edges = output['number_of_edges']
 
-        plt.plot(memory_allocation, average_relative_error, label=pretty_name)
+        plt.plot(memory_allocation, average_relative_error, label=pretty_name, dashes=dashes)
 
     plt.title('Memory vs Average Relative Error')
     plt.ylabel('Average relative error (%)')

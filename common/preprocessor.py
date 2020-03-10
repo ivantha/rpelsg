@@ -79,13 +79,13 @@ datasets = (
     (
         '../datasets/gen-scale-free',
         (
-            ('gen-scale-free', '1MdGHmlDO9dNtcETvLqjriNCnhFgqLloY'),
+            ('gen-scale-free', '1HVfNQ0x84cOZAquaocRH2EApuW7joauM'),
         )
     ),
     (
         '../datasets/gen-small-world',
         (
-            ('gen-small-world', '1MTwJOTCyuil_JXIqopp0asLkLfvEtIh8'),
+            ('gen-small-world', '1H_JTUJVP2TBSW23pkJr09ueckCjCmRt5'),
         )
     )
 )

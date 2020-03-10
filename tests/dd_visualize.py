@@ -13,6 +13,7 @@ def dd_visualize():
     print(os.path.basename(__file__).split('.')[0])
 
     sketches = (
+        (Sketches.fullgraph.name, 'FullGraph'),
         (Sketches.countmin.name, 'CountMin'),
         (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
@@ -21,12 +22,12 @@ def dd_visualize():
     )
 
     sketch_sizes = (
-        (100, '100 KB'),
-        (200, '200 KB'),
-        (300, '300 KB'),
-        (400, '400 KB'),
-        (512, '512 KB'),
-        # (1024, '1 MB'),
+        # (100, '100 KB'),
+        # (200, '200 KB'),
+        # (300, '300 KB'),
+        # (400, '400 KB'),
+        # (512, '512 KB'),
+        (1024, '1 MB'),
         # (2048, '2 MB'),
         # (4096, '4 MB'),
         # (8192, '8 MB'),
@@ -42,7 +43,7 @@ def dd_visualize():
     for sketch_name, pretty_name in sketches:
         for sketch_size, pretty_size in sketch_sizes:
             if sketch_name == Sketches.fullgraph.name:
-                if sketch_size == 512:
+                if sketch_size == 1024:
                     file = open('{}/{}.json'.format(test_output_dir, Sketches.fullgraph.name))
                     sketch_size = ''
                 else:
@@ -55,6 +56,7 @@ def dd_visualize():
 
             fig = plt.figure()
             ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+            ax.set_xscale("log")
 
             X = [int(float(i)) for i in degree_distribution.keys()]
             Y = [i for i in degree_distribution.values()]
@@ -64,7 +66,7 @@ def dd_visualize():
             plt.ylabel('Distribution')
             plt.xlabel('Degree')
 
-            fig.text(0.5, 0.06, '# edges : {:,}'.format(output['number_of_edges']))
+            fig.text(0.5, 0.03, '# edges : {:,}'.format(output['number_of_edges']))
             fig.text(0.1, 0.03, '# vertices : {:,}'.format(output['number_of_vertices']))
 
             test_name = os.path.basename(__file__).split('.')[0].split('_')[0]

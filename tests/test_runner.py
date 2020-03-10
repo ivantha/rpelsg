@@ -30,7 +30,7 @@ from tests.smallworld_visualize import smallworld_visualize
 
 if __name__ == '__main__':
     datasets = [
-        '../datasets/unicorn-wget/benign_base_10/',
+        '../datasets/gen-small-world/gen-small-world_100/',
     ]
 
     # analyze datasets
@@ -52,48 +52,21 @@ if __name__ == '__main__':
 
     pool = multiprocessing.Pool()
     pool.map(run_test, [
-        [buildtime_test, buildtime_visualize],
-        [insertionrate1_test, insertionrate1_visualize],
-        [insertionrate2_test, insertionrate2_visualize],
+        # [buildtime_test, buildtime_visualize],
+        # [insertionrate1_test, insertionrate1_visualize],
+        # [insertionrate2_test, insertionrate2_visualize],
 
-        [are_test, are_visualize],
-        [neq_test, neq_visualize],
+        # [are_test, are_visualize],
+        # [neq_test, neq_visualize],
 
-        [dd_test, dd_visualize],
-        [ewd_test, ewd_visualize],
+        # [dd_test, dd_visualize],
+        # [ewd_test, ewd_visualize],
 
-        [dc_test, dc_visualize],
+        # [hn_test, hn_visualize],
+        # [he_test, he_visualize],
 
-        [hn_test, hn_visualize],
-        [he_test, he_visualize],
-
-        # [clust_test, clust_visualize],
+        [clust_test, clust_visualize],
         # [smallworld_test, smallworld_visualize],
         # [pagerank_test, pagerank_visualize]
     ])
     pool.close()
-
-    # buildtime_test(datasets)
-    # buildtime_visualize()
-    # insertionrate1_test(datasets)
-    # insertionrate1_visualize()
-    # insertionrate2_test(datasets)
-    # insertionrate2_visualize()
-    #
-    # are_test(datasets)
-    # are_visualize()
-    # neq_test(datasets)
-    # neq_visualize()
-    #
-    # dd_test(datasets)
-    # dd_visualize()
-    # ewd_test(datasets)
-    # ewd_visualize()
-    #
-    # dc_test(datasets)
-    # dc_visualize()
-    #
-    # hn_test(datasets)
-    # hn_visualize()
-    # he_test(datasets)
-    # he_visualize()
