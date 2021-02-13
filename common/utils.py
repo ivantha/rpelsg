@@ -1,21 +1,15 @@
-import glob
 from _datetime import datetime
 
 
-def get_txt_files(dir_path: str):
-    return [f for f in glob.glob(dir_path + '*.txt', recursive=True)]
-
-
-def get_edges_in_path(path: str):
+def get_edges_in_path(file_path: str):
     edges = []
-    for i, data_file in enumerate(get_txt_files(path)):
-        with open(data_file) as file:
-            for line in file.readlines():
-                try:
-                    source_id, target_id = line.strip().split(',')
-                    edges.append((source_id, target_id))
-                except:
-                    print('Erroneous input: {}'.format(line))
+    with open(file_path) as file:
+        for line in file.readlines():
+            try:
+                source_id, target_id = line.strip().split(',')
+                edges.append((source_id, target_id))
+            except:
+                print('Erroneous input: {}'.format(line))
 
     return edges
 

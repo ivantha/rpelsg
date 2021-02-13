@@ -4,17 +4,21 @@ import gc
 import json
 import os
 
+import matplotlib
+import matplotlib.pyplot as plt
+
 from common import utils
-from sketches.alpha import Alpha
+from sketches import Sketches
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gmatrix import GMatrix
 from sketches.gsketch import GSketch
+from sketches.kmatrix import Alpha
 from sketches.tcm import TCM
 from tests.memory_profile import MemoryProfile
 
 
-def dd_test(datasets):
+def test(datasets):
     print(os.path.basename(__file__).split('.')[0])
 
     edge_lists = []
@@ -148,3 +152,73 @@ def dd_test(datasets):
 
         # free memory - call garbage collector
         gc.collect()
+
+
+def visualize():
+    print(os.path.basename(__file__).split('.')[0])
+
+    sketches = (
+        (Sketches.fullgraph.name, 'FullGraph'),
+        (Sketches.countmin.name, 'CountMin'),
+        (Sketches.gsketch.name, 'gSketch'),
+        (Sketches.tcm.name, 'TCM'),
+        (Sketches.gmatrix.name, 'GMatrix'),
+        (Sketches.alpha.name, 'Alpha'),
+    )
+
+    sketch_sizes = (
+        # (100, '100 KB'),
+        # (200, '200 KB'),
+        # (300, '300 KB'),
+        # (400, '400 KB'),
+        # (512, '512 KB'),
+        (1024, '1 MB'),
+        # (2048, '2 MB'),
+        # (4096, '4 MB'),
+        # (8192, '8 MB'),
+        # (16384, '16 MB'),
+        # (32768, '32 MB'),
+        # (65536, '64 MB')
+    )
+
+    matplotlib.rcParams['figure.dpi'] = 500
+
+    test_output_dir = '../output/{}_test'.format(os.path.basename(__file__).split('.')[0].split('_')[0])
+
+    for sketch_name, pretty_name in sketches:
+        for sketch_size, pretty_size in sketch_sizes:
+            if sketch_name == Sketches.fullgraph.name:
+                if sketch_size == 1024:
+                    file = open('{}/{}.json'.format(test_output_dir, Sketches.fullgraph.name))
+                    sketch_size = ''
+                else:
+                    break
+            else:
+                file = open('{}/{}_{}.json'.format(test_output_dir, sketch_name, sketch_size))
+
+            output = json.load(file)
+            degree_distribution = output['degree_distribution']
+
+            fig = plt.figure()
+            ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+            ax.set_xscale("log")
+
+            X = [int(float(i)) for i in degree_distribution.keys()]
+            Y = [i for i in degree_distribution.values()]
+            plt.scatter(X, Y, marker='.', s=10)
+
+            plt.title('Degree distribution of {}'.format(pretty_name))
+            plt.ylabel('Distribution')
+            plt.xlabel('Degree')
+
+            fig.text(0.5, 0.03, '# edges : {:,}'.format(output['number_of_edges']))
+            fig.text(0.1, 0.03, '# vertices : {:,}'.format(output['number_of_vertices']))
+
+            test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+            os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
+            plt.savefig('../reports/{}/{}_{}.png'.format(test_name, sketch_name, sketch_size))
+
+            # plt.show()
+            plt.close()
+
+            print('Completed visualization: {}_{}'.format(sketch_name, sketch_size))

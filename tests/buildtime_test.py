@@ -1,19 +1,24 @@
-# Build time
 import gc
 import json
 import os
+from datetime import datetime as dtt
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
 
 from common import utils
-from sketches.alpha import Alpha
+from sketches import Sketches
 from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gmatrix import GMatrix
 from sketches.gsketch import GSketch
+from sketches.kmatrix import KMatrix
 from sketches.tcm import TCM
 from tests.memory_profile import MemoryProfile
 
 
-def buildtime_test(datasets):
+def test(datasets):
     print(os.path.basename(__file__).split('.')[0])
 
     edge_lists = []
@@ -75,22 +80,22 @@ def buildtime_test(datasets):
         # (MemoryProfile.gmatrix_32768, GMatrix(w=1548, d=7)),
         # (MemoryProfile.gmatrix_65536, GMatrix(w=2189, d=7)),
 
-        # (MemoryProfile.alpha_100, Alpha(edge_lists, w=86, d=7)),
-        # (MemoryProfile.alpha_200, Alpha(edge_lists, w=121, d=7)),
-        # (MemoryProfile.alpha_300, Alpha(edge_lists, w=148, d=7)),
-        # (MemoryProfile.alpha_400, Alpha(edge_lists, w=171, d=7)),
-        # (MemoryProfile.alpha_512, Alpha(edge_lists, w=194, d=7)),
-        (MemoryProfile.alpha_1024, Alpha(edge_lists, w=274, d=7)),
-        # (MemoryProfile.alpha_2048, Alpha(edge_lists, w=387, d=7)),
-        # (MemoryProfile.alpha_4096, Alpha(edge_lists, w=547, d=7)),
-        # (MemoryProfile.alpha_8192, Alpha(edge_lists, w=774, d=7)),
-        # (MemoryProfile.alpha_16384, Alpha(edge_lists, w=1095, d=7)),
-        # (MemoryProfile.alpha_32768, Alpha(edge_lists, w=1548, d=7)),
-        # (MemoryProfile.alpha_65536, Alpha(edge_lists, w=2189, d=7)),
+        # (MemoryProfile.kmatrix_100, KMatrix(edge_lists, w=86, d=7)),
+        # (MemoryProfile.kmatrix_200, KMatrix(edge_lists, w=121, d=7)),
+        # (MemoryProfile.kmatrix_300, KMatrix(edge_lists, w=148, d=7)),
+        # (MemoryProfile.kmatrix_400, KMatrix(edge_lists, w=171, d=7)),
+        # (MemoryProfile.kmatrix_512, KMatrix(edge_lists, w=194, d=7)),
+        (MemoryProfile.kmatrix_1024, KMatrix(edge_lists, w=274, d=7)),
+        # (MemoryProfile.kmatrix_2048, KMatrix(edge_lists, w=387, d=7)),
+        # (MemoryProfile.kmatrix_4096, KMatrix(edge_lists, w=547, d=7)),
+        # (MemoryProfile.kmatrix_8192, KMatrix(edge_lists, w=774, d=7)),
+        # (MemoryProfile.kmatrix_16384, KMatrix(edge_lists, w=1095, d=7)),
+        # (MemoryProfile.kmatrix_32768, KMatrix(edge_lists, w=1548, d=7)),
+        # (MemoryProfile.kmatrix_65536, KMatrix(edge_lists, w=2189, d=7)),
     )
 
-    test_output_dir = '../output/{}/'.format(os.path.basename(__file__).split('.')[0])
-    os.makedirs(os.path.dirname(test_output_dir), exist_ok=True)
+    test_output_dir = '../output/{}'.format(os.path.basename(__file__).split('.')[0])
+    os.makedirs(test_output_dir, exist_ok=True)
 
     for sketch_id, sketch in memory_profiles:
         initialize_start_time, initialize_end_time = sketch.initialize()  # initialize the sketch
@@ -127,3 +132,86 @@ def buildtime_test(datasets):
 
         # free memory - call garbage collector
         gc.collect()
+
+
+def visualize():
+    print(os.path.basename(__file__).split('.')[0])
+
+    sketches = (
+        (Sketches.countmin.name, 'CountMin'),
+        (Sketches.gsketch.name, 'gSketch'),
+        (Sketches.tcm.name, 'TCM'),
+        (Sketches.gmatrix.name, 'gMatrix'),
+        (Sketches.kmatrix.name, 'kMatrix'),
+    )
+
+    sketch_sizes = (
+        # (100, '100 KB'),
+        # (200, '200 KB'),
+        # (300, '300 KB'),
+        # (400, '400 KB'),
+        # (512, '512 KB'),
+        (1024, '1 MB'),
+        # (2048, '2 MB'),
+        # (4096, '4 MB'),
+        # (8192, '8 MB'),
+        # (16384, '16 MB'),
+        # (32768, '32 MB'),
+        # (65536, '64 MB')
+    )
+
+    test_output_dir = '../output/{}'.format(os.path.basename(__file__).split('.')[0])
+
+    for sketch_size, pretty_size in sketch_sizes:
+        results = []
+
+        for sketch_name, pretty_name in sketches:
+            with open('{}/{}_{}.json'.format(test_output_dir, sketch_name, sketch_size)) as file:
+                output = json.load(file)
+                output['initialize_time'] = (
+                        dtt.strptime(output['initialize_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
+                ).total_seconds()
+                output['streaming_time'] = (
+                        dtt.strptime(output['streaming_time'], '%H:%M:%S.%f') - dtt.strptime("00:00", "%H:%M")
+                ).total_seconds()
+                results.append(output)
+
+        matplotlib.rcParams['figure.dpi'] = 500
+
+        ind = np.arange(len(results))  # the x locations for the groups
+        width = 0.35  # the width of the bars
+
+        dataset = [
+            [x['initialize_time'] for x in results],
+            [x['streaming_time'] for x in results]
+        ]
+
+        fig = plt.figure()
+        ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
+        # ax.yaxis.grid(True)
+
+        p1 = plt.bar(ind, dataset[0], width, color='none', edgecolor="#000000", hatch='\\\\')
+        p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='none', edgecolor="#000000", hatch='.')
+
+        plt.title('Sketch construction and streaming times : {}'.format(pretty_size))
+        plt.ylabel('Time (s)')
+        plt.xlabel('Sketches')
+        plt.xticks(ind, [pretty_name for _, pretty_name in sketches])
+        leg = plt.legend((p1[0], p2[0]), ('Initialization', 'Streaming'))
+
+        fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
+
+        test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+        os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
+        plt.savefig('../reports/{}/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], test_name,
+                                                     sketch_size))
+
+        # plt.show()
+        plt.close()
+
+        print('Completed visualization: {}'.format(sketch_size))
+
+
+if __name__ == '__main__':
+    test(['../datasets/unicorn-wget-benign-base/50.txt'])
+    visualize()

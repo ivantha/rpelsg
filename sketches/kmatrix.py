@@ -90,7 +90,7 @@ class BinaryPartitionTree:
         stack = [BptNode(sorted_vertices, self.w)]
 
         # Loop while stack is not empty => O(w / w_0 - 1) According to the paper gSketch
-        while len(stack) is not 0:
+        while len(stack) != 0:
             curr_sketch = stack.pop()  # current sketch
 
             sum_freq = sum([self.rel_freq[v] for v in curr_sketch.vertices])
@@ -202,7 +202,7 @@ class BinaryPartitionTree:
                 stack.append(BptNode(curr_sketch.vertices[min_index + 1:], sub_width_2))
 
 
-class Alpha(Sketch):
+class KMatrix(Sketch):
     name = Sketches.alpha.name
 
     def __init__(
