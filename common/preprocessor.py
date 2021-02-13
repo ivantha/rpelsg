@@ -1,114 +1,22 @@
 import os
 import random
-import shutil
-
-from google_drive_downloader import GoogleDriveDownloader as gdd
-
-from common.utils import get_txt_files
-
-datasets = (
-    (
-        '../datasets/email-EuAll',
-        (
-            ('email-EuAll', '1GippTQh93Pwei5Z-ARE-RYa-MNTVP9nF'),
-        )
-    ),
-    # (
-    #     '../datasets/ego-Facebook',
-    #     (
-    #         ('ego-Facebook', '1HcDGtLakSWbjOT4kfW2bOXWBHYTUk0np'),
-    #     )
-    # ),
-    # (
-    #     '../datasets/com-Youtube',
-    #     (
-    #         ('com-Youtube', ''),
-    #     )
-    # ),
-    (
-        '../datasets/unicorn-wget',
-        (
-            ('benign_base', '1GzHJSBlANyBoCVHVs4Zmt4k3FnE5NCk4'),
-            # ('benign_streaming', '1-urTwbWoqmeI-Y4Blhq1Xi_qnh2zDUhR'),
-            # ('attack_base', '1-jcapoEm0lEri9sBHn5RvTkrnDvSo0QG'),
-            # ('attack_streaming', '1-nZMkgFLfRPXCGKX2yo62ykSn2FGAh6X'),
-        )
-    ),
-    # (
-    #     '../datasets/soc-Pokec',
-    #     (
-    #         ('soc-Pokec', '1I4eespCmdknZ0zlgy-PuZELv0RexHfuV'),
-    #     )
-    # ),
-    # (
-    #     '../datasets/ego-Gplus',
-    #     (
-    #         ('ego-Gplus', '1IF6JI64ENfQXRxAW1vIjDYPimTlrcoFZ'),
-    #     )
-    # ),
-    # (
-    #     '../datasets/ca-AstroPh',
-    #     (
-    #         ('ca-AstroPh', ''),
-    #     )
-    # ),
-    (
-        '../datasets/cit-HepPh',
-        (
-            ('cit-HepPh', '1IahaJH4FybYu31gJRcFK8b8fanl7604X'),
-        )
-    ),
-    # (
-    #     '../datasets/roadNet-CA',
-    #     (
-    #         ('roadNet-CA', ''),
-    #     )
-    # ),
-    # (
-    #     '../datasets/web-Google',
-    #     (
-    #         ('web-Google', ''),
-    #     )
-    # ),
-    # (
-    #     '../datasets/gen-random-simple',
-    #     (
-    #         ('gen-random-simple', ''),
-    #     )
-    # ),
-    (
-        '../datasets/gen-scale-free',
-        (
-            ('gen-scale-free', '1HVfNQ0x84cOZAquaocRH2EApuW7joauM'),
-        )
-    ),
-    (
-        '../datasets/gen-small-world',
-        (
-            ('gen-small-world', '1H_JTUJVP2TBSW23pkJr09ueckCjCmRt5'),
-        )
-    )
-)
-
+import zipfile
 
 if __name__ == '__main__':
-    for output_dir, files in datasets:
-        os.makedirs(output_dir, exist_ok=True)
-
-        for file_base, drive_id in files:
-            gdd.download_file_from_google_drive(file_id=drive_id,
-                                                dest_path='{}/{}.zip'.format(output_dir, file_base),
-                                                unzip=True, showsize=True)
-
-            data_files = get_txt_files('{}/{}/'.format(output_dir, file_base))
+    for dataset_dir in os.listdir('../datasets'):
+        dataset_dir_path = os.path.join('../datasets', dataset_dir)
+        ext_dir_path = '{}/ext'.format(dataset_dir_path)
+        if os.path.isdir(dataset_dir_path):
+            # extract zip
+            with zipfile.ZipFile('{}/data.zip'.format(dataset_dir_path), 'r') as zip_ref:
+                zip_ref.extractall(ext_dir_path)
 
             # read lines
             lines = []
-            for data_file in data_files:
-                with open(data_file) as file:
-                    lines += file.readlines()
-
-            shutil.rmtree('{}/{}/'.format(output_dir, file_base))
+            for data_file in os.listdir(ext_dir_path):
+                if data_file.startswith('data'):
+                    with open('{}/{}'.format(ext_dir_path, data_file)) as file:
+                        lines += file.readlines()
 
             subsets = [
                 (100.0, '100'),
@@ -140,8 +48,7 @@ if __name__ == '__main__':
 
                     i += 1
 
-                os.makedirs('{}/{}_{}/'.format(output_dir, file_base, suffix), exist_ok=True)
-                with open('{}/{}_{}/data.txt'.format(output_dir, file_base, suffix), 'w') as new_f:
+                with open('{}/{}.txt'.format(dataset_dir_path, suffix), 'w') as new_f:
                     for line in reservoir:
                         try:
                             parts = line.split()
