@@ -8,4 +8,4 @@ class Sketches(enum.Enum):
     tcm = 'tcm'
     gmatrix = 'gmatrix'
     gss = 'gss'
-    alpha = 'alpha'
+    kmatrix = 'kmatrix'

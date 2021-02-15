@@ -203,7 +203,7 @@ class BinaryPartitionTree:
 
 
 class KMatrix(Sketch):
-    name = Sketches.alpha.name
+    name = Sketches.kmatrix.name
 
     def __init__(
             self,
