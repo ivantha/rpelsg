@@ -9,18 +9,17 @@ import numpy as np
 
 from common import utils
 from sketches import Sketches
-from sketches.countmin import CountMin
 from sketches.full_graph import FullGraph
 from sketches.gmatrix import GMatrix
-from sketches.gsketch import GSketch
 from sketches.kmatrix import KMatrix
 from sketches.tcm import TCM
 from tests.memory_profile import MemoryProfile
 
 
-def test(datasets):
-    print(os.path.basename(__file__).split('.')[0])
+test_output_dir = '../output/{}'.format(os.path.basename(__file__).split('.')[0])
 
+
+def test(datasets):
     edge_lists = []
     for dataset in datasets:
         edge_lists.append(utils.get_edges_in_path(dataset))
@@ -33,7 +32,7 @@ def test(datasets):
         # (MemoryProfile.countmin_300, CountMin(m=1024 * 21, d=7)),
         # (MemoryProfile.countmin_400, CountMin(m=1024 * 29, d=7)),
         # (MemoryProfile.countmin_512, CountMin(m=1024 * 37, d=7)),
-        (MemoryProfile.countmin_1024, CountMin(m=1024 * 73, d=7)),
+        # (MemoryProfile.countmin_1024, CountMin(m=1024 * 73, d=7)),
         # (MemoryProfile.countmin_2048, CountMin(m=1024 * 146, d=7)),
         # (MemoryProfile.countmin_4096, CountMin(m=1024 * 293, d=7)),
         # (MemoryProfile.countmin_8192, CountMin(m=1024 * 585, d=7)),
@@ -46,7 +45,7 @@ def test(datasets):
         # (MemoryProfile.gsketch_300, GSketch(edge_lists, w=1024 * 21, d=7)),
         # (MemoryProfile.gsketch_400, GSketch(edge_lists, w=1024 * 29, d=7)),
         # (MemoryProfile.gsketch_512, GSketch(edge_lists, w=1024 * 37, d=7)),
-        (MemoryProfile.gsketch_1024, GSketch(edge_lists, w=1024 * 73, d=7)),
+        # (MemoryProfile.gsketch_1024, GSketch(edge_lists, w=1024 * 73, d=7)),
         # (MemoryProfile.gsketch_2048, GSketch(edge_lists, w=1024 * 146, d=7)),
         # (MemoryProfile.gsketch_4096, GSketch(edge_lists, w=1024 * 293, d=7)),
         # (MemoryProfile.gsketch_8192, GSketch(edge_lists, w=1024 * 585, d=7)),
@@ -54,11 +53,11 @@ def test(datasets):
         # (MemoryProfile.gsketch_32768, GSketch(edge_lists, w=1024 * 2341, d=7)),
         # (MemoryProfile.gsketch_65536, GSketch(edge_lists, w=1024 * 4681, d=7)),
 
-        # (MemoryProfile.tcm_100, TCM(w=86, d=7)),
-        # (MemoryProfile.tcm_200, TCM(w=121, d=7)),
-        # (MemoryProfile.tcm_300, TCM(w=148, d=7)),
-        # (MemoryProfile.tcm_400, TCM(w=171, d=7)),
-        # (MemoryProfile.tcm_512, TCM(w=194, d=7)),
+        (MemoryProfile.tcm_100, TCM(w=86, d=7)),
+        (MemoryProfile.tcm_200, TCM(w=121, d=7)),
+        (MemoryProfile.tcm_300, TCM(w=148, d=7)),
+        (MemoryProfile.tcm_400, TCM(w=171, d=7)),
+        (MemoryProfile.tcm_512, TCM(w=194, d=7)),
         (MemoryProfile.tcm_1024, TCM(w=274, d=7)),
         # (MemoryProfile.tcm_2048, TCM(w=387, d=7)),
         # (MemoryProfile.tcm_4096, TCM(w=547, d=7)),
@@ -67,11 +66,11 @@ def test(datasets):
         # (MemoryProfile.tcm_32768, TCM(w=1548, d=7)),
         # (MemoryProfile.tcm_65536, TCM(w=2189, d=7)),
 
-        # (MemoryProfile.gmatrix_100, GMatrix(w=86, d=7)),
-        # (MemoryProfile.gmatrix_200, GMatrix(w=121, d=7)),
-        # (MemoryProfile.gmatrix_300, GMatrix(w=148, d=7)),
-        # (MemoryProfile.gmatrix_400, GMatrix(w=171, d=7)),
-        # (MemoryProfile.gmatrix_512, GMatrix(w=194, d=7)),
+        (MemoryProfile.gmatrix_100, GMatrix(w=86, d=7)),
+        (MemoryProfile.gmatrix_200, GMatrix(w=121, d=7)),
+        (MemoryProfile.gmatrix_300, GMatrix(w=148, d=7)),
+        (MemoryProfile.gmatrix_400, GMatrix(w=171, d=7)),
+        (MemoryProfile.gmatrix_512, GMatrix(w=194, d=7)),
         (MemoryProfile.gmatrix_1024, GMatrix(w=274, d=7)),
         # (MemoryProfile.gmatrix_2048, GMatrix(w=387, d=7)),
         # (MemoryProfile.gmatrix_4096, GMatrix(w=547, d=7)),
@@ -80,11 +79,11 @@ def test(datasets):
         # (MemoryProfile.gmatrix_32768, GMatrix(w=1548, d=7)),
         # (MemoryProfile.gmatrix_65536, GMatrix(w=2189, d=7)),
 
-        # (MemoryProfile.kmatrix_100, KMatrix(edge_lists, w=86, d=7)),
-        # (MemoryProfile.kmatrix_200, KMatrix(edge_lists, w=121, d=7)),
-        # (MemoryProfile.kmatrix_300, KMatrix(edge_lists, w=148, d=7)),
-        # (MemoryProfile.kmatrix_400, KMatrix(edge_lists, w=171, d=7)),
-        # (MemoryProfile.kmatrix_512, KMatrix(edge_lists, w=194, d=7)),
+        (MemoryProfile.kmatrix_100, KMatrix(edge_lists, w=86, d=7)),
+        (MemoryProfile.kmatrix_200, KMatrix(edge_lists, w=121, d=7)),
+        (MemoryProfile.kmatrix_300, KMatrix(edge_lists, w=148, d=7)),
+        (MemoryProfile.kmatrix_400, KMatrix(edge_lists, w=171, d=7)),
+        (MemoryProfile.kmatrix_512, KMatrix(edge_lists, w=194, d=7)),
         (MemoryProfile.kmatrix_1024, KMatrix(edge_lists, w=274, d=7)),
         # (MemoryProfile.kmatrix_2048, KMatrix(edge_lists, w=387, d=7)),
         # (MemoryProfile.kmatrix_4096, KMatrix(edge_lists, w=547, d=7)),
@@ -94,7 +93,6 @@ def test(datasets):
         # (MemoryProfile.kmatrix_65536, KMatrix(edge_lists, w=2189, d=7)),
     )
 
-    test_output_dir = '../output/{}'.format(os.path.basename(__file__).split('.')[0])
     os.makedirs(test_output_dir, exist_ok=True)
 
     for sketch_id, sketch in memory_profiles:
@@ -135,32 +133,28 @@ def test(datasets):
 
 
 def visualize():
-    print(os.path.basename(__file__).split('.')[0])
-
     sketches = (
-        (Sketches.countmin.name, 'CountMin'),
-        (Sketches.gsketch.name, 'gSketch'),
+        # (Sketches.countmin.name, 'CountMin'),
+        # (Sketches.gsketch.name, 'gSketch'),
         (Sketches.tcm.name, 'TCM'),
         (Sketches.gmatrix.name, 'gMatrix'),
         (Sketches.kmatrix.name, 'kMatrix'),
     )
 
     sketch_sizes = (
-        # (100, '100 KB'),
-        # (200, '200 KB'),
-        # (300, '300 KB'),
-        # (400, '400 KB'),
-        # (512, '512 KB'),
-        (1024, '1 MB'),
-        # (2048, '2 MB'),
-        # (4096, '4 MB'),
-        # (8192, '8 MB'),
-        # (16384, '16 MB'),
-        # (32768, '32 MB'),
-        # (65536, '64 MB')
+        # (100, '100'),  # KB
+        # (200, '200'),  # KB
+        # (300, '300'),  # KB
+        # (400, '400'),  # KB
+        # (512, '512'),  # KB
+        (1024, '1'),  # MB
+        # (2048, '2'),  # MB
+        # (4096, '4'),  # MB
+        # (8192, '8'),  # MB
+        # (16384, '16'),  # MB
+        # (32768, '32'),  # MB
+        # (65536, '64')  # MB
     )
-
-    test_output_dir = '../output/{}'.format(os.path.basename(__file__).split('.')[0])
 
     for sketch_size, pretty_size in sketch_sizes:
         results = []
@@ -177,9 +171,9 @@ def visualize():
                 results.append(output)
 
         matplotlib.rcParams['figure.dpi'] = 500
+        plt.rcParams["font.size"] = 20
 
         ind = np.arange(len(results))  # the x locations for the groups
-        width = 0.35  # the width of the bars
 
         dataset = [
             [x['initialize_time'] for x in results],
@@ -187,31 +181,38 @@ def visualize():
         ]
 
         fig = plt.figure()
-        ax = fig.add_axes((0.1, 0.2, 0.8, 0.7))
-        # ax.yaxis.grid(True)
 
-        p1 = plt.bar(ind, dataset[0], width, color='none', edgecolor="#000000", hatch='\\\\')
-        p2 = plt.bar(ind, dataset[1], width, bottom=dataset[0], color='none', edgecolor="#000000", hatch='.')
+        p1 = plt.bar(
+            ind,
+            dataset[0],
+            # width=0.35,  # the width of the bars
+            color='#000000',
+            edgecolor="#000000",
+            # hatch='.'
+        )
+        p2 = plt.bar(
+            ind,
+            dataset[1],
+            # width=0.35,  # the width of the bars
+            bottom=dataset[0],
+            color='none',
+            edgecolor="#000000",
+            hatch='/')
 
-        plt.title('Sketch construction and streaming times : {}'.format(pretty_size))
-        plt.ylabel('Time (s)')
         plt.xlabel('Sketches')
+        plt.ylabel('Time (s)')
         plt.xticks(ind, [pretty_name for _, pretty_name in sketches])
         leg = plt.legend((p1[0], p2[0]), ('Initialization', 'Streaming'))
 
-        fig.text(0.1, 0.06, '# edges : {:,}'.format(results[0]['edge_count']))
-
-        test_name = os.path.basename(__file__).split('.')[0].split('_')[0]
+        test_name = os.path.basename(__file__).split('.')[0]
         os.makedirs('../reports/{}'.format(test_name), exist_ok=True)
-        plt.savefig('../reports/{}/{}_{}.png'.format(os.path.basename(__file__).split('.')[0].split('_')[0], test_name,
-                                                     sketch_size))
+        plt.savefig('../reports/{}/{}.png'.format(test_name, sketch_size), bbox_inches='tight')
 
         # plt.show()
         plt.close()
 
-        print('Completed visualization: {}'.format(sketch_size))
-
 
 if __name__ == '__main__':
-    test(['../datasets/unicorn-wget-benign-base/50.txt'])
+    print(os.path.basename(__file__).split('.')[0])
+    test(['../datasets/email-EuAll/100.txt'])
     visualize()
