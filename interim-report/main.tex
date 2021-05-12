@@ -1,0 +1,128 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper, 12pt]{report}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[]{geometry}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{url}
+\usepackage{hyperref}
+% \usepackage{xcolor}
+
+% Color table cells
+\usepackage[table]{xcolor}
+
+% For subscript? 
+\usepackage{fixltx2e}
+\usepackage{hyperref}
+
+% Page numbering - roman
+\pagenumbering{roman} 
+
+% Add references to TOC
+\usepackage[nottoc,notlof,notlot]{tocbibind} 
+
+% Rename Bibilography to References
+\addto\captionsenglish{\renewcommand{\bibname}{References}}
+
+% Change section numbering to start from 1.0
+% \renewcommand*\thesection{\arabic{section}.0}
+% \renewcommand*\thesubsection{\arabic{section}.\arabic{subsection}}
+
+% Font
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\setmainfont{Times}
+
+% Font size
+\usepackage{titlesec}
+\usepackage{sectsty}
+\sectionfont{\fontsize{16}{18}\selectfont}
+\subsectionfont{\fontsize{14}{16}\selectfont}
+
+% Set emergency stretch - Avoid overfull \hbox
+\setlength{\emergencystretch}{10pt}
+
+% Remove title and change size of chapter
+\titleformat{\chapter}[display]{\normalfont\bfseries}{}{0pt}{\LARGE}
+
+\input{sections/cover.tex}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\input{sections/project-title.tex}
+
+\newpage
+\input{sections/signatures.tex}
+
+\tableofcontents
+\clearpage
+
+{%
+    \let\oldnumberline\numberline%
+    \renewcommand{\numberline}{\figurename~\oldnumberline}%
+    \listoffigures%
+}
+\clearpage
+
+{%
+\let\oldnumberline\numberline%
+\renewcommand{\numberline}{\tablename~\oldnumberline}%
+\listoftables%
+}
+\clearpage
+
+% Page numbering - arabic
+\pagenumbering{arabic} 
+
+\newpage
+\input{sections/section-1/introduction.tex}
+
+\newpage
+\input{sections/section-1/research-questions.tex}
+
+\newpage
+\input{sections/section-1/objectives.tex}
+
+\newpage
+\input{sections/section-1/research-methodology.tex}
+
+\newpage
+\input{sections/section-1/scope.tex}
+
+\newpage
+\input{sections/section-1/timeline.tex}
+
+\newpage
+\input{sections/section-2/literature-review.tex}
+
+\newpage
+\input{sections/section-2/research-design.tex}
+
+\newpage
+\input{sections/section-2/preliminary-results.tex}
+
+\newpage
+\input{sections/section-3/evaluation-plan.tex}
+
+\newpage
+\input{sections/section-3/research-tools.tex}
+
+\newpage
+\input{sections/feedback.tex}
+
+% \addcontentsline{toc}{section}{References}
+\bibliographystyle{unsrt}
+\bibliography{cat}
+
+\end{document}

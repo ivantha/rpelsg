@@ -1,0 +1,69 @@
+\chapter{Timeline}
+
+\section{Project Timeline}
+
+\definecolor{bla}{rgb}{0.149, 0.196, 0.22}
+\newcommand{\done}{\cellcolor{bla}}
+
+\definecolor{lash}{rgb}{0.565, 0.643, 0.682}
+\newcommand{\tbd}{\cellcolor{lash}}
+
+\begin{table}[h]
+    \begin{center}
+        \begin{tabular}{ |p{0.5cm}|p{8cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}|p{0.2cm}| } 
+            \hline
+            M & Milestone & \rotatebox[origin=c]{90}{ Feb } & \rotatebox[origin=c]{90}{Mar } & \rotatebox[origin=c]{90}{ Apr } & \rotatebox[origin=c]{90}{ May } & \rotatebox[origin=c]{90}{ Jun } & \rotatebox[origin=c]{90}{ Jul } & \rotatebox[origin=c]{90}{ Aug } & \rotatebox[origin=c]{90}{ Sep } & \rotatebox[origin=c]{90}{ Oct } & \rotatebox[origin=c]{90}{ Nov } \\
+            \hline
+            \multirow{3}{2em}{M1} & Research topic selection & \done & & & & & & & & & \\
+            \cline{2-12}
+            & Literature review & \done & \done & \done & \done & \done & \done & \done & \tbd & \tbd & \\
+            \cline{2-12}
+            & Draft the project proposal  & & \done & & & & & & & & \\
+            \hline
+            \multirow{3}{2em}{M2} & Preparing the test environment and the datasets & & & \done & & & & & & & \\
+            \cline{2-12}
+            & Implement the sketching algorithms & & & \done & & & & & & & \\
+            \cline{2-12}
+            & Initial evaluation & & & & \done & & & & & & \\
+            \hline
+            \multirow{2}{2em}{M3} & Propose improvements & & & & & \done & \done & \done & & & \\
+            \cline{2-12}
+            & Mid evaluation & & & & & \tbd & \tbd & \tbd & & & \\
+            \hline
+            \multirow{2}{2em}{M4} & Run on a parallel framework & & & & & & & & \tbd & & \\
+            \cline{2-12}
+            & Final evaluation & & & & & & & & \tbd & & \\
+            \hline
+            \multirow{2}{2em}{M5} & Writing the project thesis & & & & & & & & & \tbd & \tbd \\
+            \cline{2-12}
+            & Publication of the research & & & & & & & & & \tbd & \tbd \\
+            \hline
+        \end{tabular}
+    \end{center}
+    \caption{Timeline}
+    \label{table:timeline}
+\end{table}
+
+\paragraph{}
+According to the timeline indicated in Table \ref{table:timeline}, the research is in the M3 phase where improvements to the existing graph sketching techniques are proposed and benchmarked. 
+
+\section{Progress so far}
+
+\paragraph{}
+The implementation will consist of,
+
+\begin{itemize}
+    \item Re-implementing the existing summarization techniques.
+    \item Testing suite in order to benchmark the sketches. 
+    \item Module stating the queries that needs to be executed during the benchmarking process. 
+\end{itemize}
+
+\paragraph{}
+The modules that have been completed are indicated in Figure \ref{figure:progress}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/progress}
+    \caption{Overall progress}
+    \label{figure:progress}
+\end{figure}

@@ -1,0 +1,121 @@
+\chapter{Evaluation Plan} \label{evplan}
+
+\section{Environment}
+
+\paragraph{}
+All the experiments will be done in an EC2 instance on Amazon Web Services (AWS). The instance will optimally have 4 virtual CPU cores, 32 GB memory and running Ubuntu 16.04. All the algorithms including the proposed sketch will be implemented using Python. 
+
+\section{Datasets}
+
+\paragraph{}
+4 datasets have been chosen to evaluate the performance of the proposed sketching technique. Three of the datasets are real world graphs while the fourth dataset will be generated randomly. Details of these datasets are as below. 
+
+\subsection{unicorn-wget-dataset}
+
+\begin{itemize}
+    \item \textbf{URL} - \url{https://dataverse.harvard.edu/dataverse/unicorn-wget}
+    \item \textbf{Description} - A dataset containing source and target IP addresses of computers in a simulated attack network.
+    \item \textbf{Node count} - 166,980
+    \item \textbf{Edge count} - 27,796,805
+\end{itemize}
+
+\subsection{web-NotreDame}
+
+\begin{itemize}
+    \item \textbf{URL} - \url{https://snap.stanford.edu/data/web-NotreDame.html}
+    \item \textbf{Description} - Nodes represent pages from University of Notre Dame (domain nd.edu) and directed edges represent hyperlinks between them.
+    \item \textbf{Node count} - 325,729
+    \item \textbf{Edge count} - 1,497,134
+\end{itemize}
+
+\subsection{email-EuAll}
+
+\begin{itemize}
+    \item \textbf{URL} - \url{https://snap.stanford.edu/data/email-EuAll.html}
+    \item \textbf{Description} - The network was generated using email data from a large European research institution for a period from October 2003 to May 2005 (18 months).
+    \item \textbf{Node count} - 265,214
+    \item \textbf{Edge count} - 420,045
+\end{itemize}
+
+\subsection{Randomly generated dataset}
+
+\begin{itemize}
+    \item \textbf{Description} - A randomly generated graph.
+    \item \textbf{Node count} - 500,000
+    \item \textbf{Edge count} - 100,000,000
+\end{itemize}
+
+\section{Metrics} \label{metrics}
+
+\paragraph{}
+Following metrics will be used to measure the performance of sketching algorithms. 
+
+\subsection{Average relative error}
+
+\paragraph{}
+Relative error is defined as,
+
+\begin{equation}
+    er(Q) =  \frac{\tilde{f}'(Q) - f(Q)}{f(Q)} = \frac{\tilde{f}'(Q)}{f(Q)} -1 
+\end{equation}
+
+\paragraph{}
+Given a set of m queries, $\{ Q_1 , ....., Q_m \}$, average relative error is defined by averaging the relative errors over all queries $Q_i$ for \(i \in [1,m]\) as,
+
+\begin{equation}
+    e(Q) =  \frac{\sum_{i=1}^{k} er(Q_i)}{m}
+\end{equation}
+
+\subsection{Number of effective queries}
+
+\paragraph{}
+A query is said to be effective if the error, $\tilde{f}'(Q) - f(Q), < G_0$,  where $G_0$ is a predefined value.
+
+\begin{equation}
+    g(Q) =  \frac{\left | \{\,q\, |   \left |\tilde{f}'(q) - f(q)\right | \leq G_0, \,q \, \epsilon  \,Q\} \, \right|}{|Q|}*100
+\end{equation}
+
+\section{Experiments}
+
+\paragraph{}
+Five types of experiments will be performed on all the datasets for all the implemented sketching algorithms. 
+
+\subsection{Edge queries}
+
+\begin{enumerate}
+    \item Heavy edges - Studying the performance when estimating heavy edges
+    \item Compare with gSketch
+    \item Compare with TCM
+    \item Compare with GSS
+    \item Same space for a set of problems
+\end{enumerate}
+
+\subsection{Node queries}
+
+\begin{enumerate}
+    \item Heavy nodes - Studying the performance when estimating heavy nodes
+    \item Conditional heavy hitters - Studying the performance when finding the most popular neighbors to the most popular nodes 
+\end{enumerate}
+
+\subsection{Path queries}
+
+\begin{enumerate}
+    \item Reachability queries - Studying the performance when finding the reachability between two nodes
+\end{enumerate}
+
+\subsection{Graph analytics}
+
+\begin{enumerate}
+    \item Subgraph queries - Studying the performance when estimating subgraph queries
+    \item Heavy triangle connections 
+\end{enumerate}
+
+\subsection{Efficiency}
+
+\paragraph{}
+Measuring the efficiency of the proposed sketch with respect to the metrics given in section \ref{metrics} while changing, 
+
+\begin{itemize}
+    \item Number of hash functions
+    \item Allocated memory 
+\end{itemize}
