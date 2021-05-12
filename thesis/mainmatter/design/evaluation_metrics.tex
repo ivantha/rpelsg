@@ -1,0 +1,41 @@
+\section{Evaluation metrics}
+\label{section:design_evaluation_metrics}
+
+\subsection{Average relative error}
+\label{section:metrics_are}
+
+\paragraph{}
+The average relative error is defined as,
+
+\begin{equation}
+    er(Q) =  \frac{\tilde{f}'(Q) - f(Q)}{f(Q)} = \frac{\tilde{f}'(Q)}{f(Q)} -1
+\end{equation}
+
+\paragraph{}
+Given a set of m queries, $\{ Q_1 , ....., Q_m \}$, the average relative error is defined by averaging the relative errors over all queries $Q_i$ for \(i \in [1,m]\) as,
+
+\begin{equation}
+    e(Q) =  \frac{\sum_{i=1}^{k} er(Q_i)}{m}
+\end{equation}
+
+\subsection{Number of effective queries}
+\label{section:metrics_neq}
+
+\paragraph{}
+A query is said to be effective if the error, $\tilde{f}'(Q) - f(Q), < G_0$,  where $G_0$ is a predefined value. The number of effective queries is defined as,
+
+\begin{equation}
+    g(Q) =  \left | \{\,q\, |   \left |\tilde{f}'(q) - f(q)\right | \leq G_0, \,q \, \epsilon  \,Q\} \, \right|
+\end{equation}
+
+This can also be expressed as a percentage of effective queries as,
+
+\begin{equation}
+    g(Q) =  \frac{\left | \{\,q\, |   \left |\tilde{f}'(q) - f(q)\right | \leq G_0, \,q \, \epsilon  \,Q\} \, \right|}{|Q|}*100
+\end{equation}
+
+\subsection{Intersection accuracy}
+\label{section:metrics_inter}
+
+\paragraph{}
+The results for the top-k heavy nodes and edges in \autoref{section:heavy_nodes} and \autoref{section:heavy_edges} will be evaluated using an intersection metric\cite{fagin_comparing_2003}. If X is the top-k results generated through the sketch and Y is the top-k results generated through the original stream, the inter accuracy is defined as \(|X \cap Y|/k\). The range of inter-accuracy is between 0 and 1 where 1 is resulted when all the k items being matched and 0 is resulted when none of the items matched.

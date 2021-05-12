@@ -1,0 +1,60 @@
+\section{Edge-weight distribution}
+
+\subsection*{Purpose}
+
+\paragraph{}
+To compare the edge weight distribution of the original graph stream and the graph depicted by the summarized sketch.
+
+\subsection*{Results}
+
+\begin{figure}[H]
+    \centering \includegraphics[width=0.85\textwidth]{results/ewd/unicorn-wget-ewd-fullgraph}
+    \vspace{-0.5cm}
+    \caption{Edge weight distribution of FullGraph for unicorn-wget dataset}
+    \label{fig:unicorn-wget-ewd-fullgraph}
+\end{figure}
+
+\begin{figure}[H]
+    \centering \includegraphics[width=0.85\textwidth]{results/ewd/unicorn-wget-ewd-countmin_1024}
+    \vspace{-0.5cm}
+    \caption{Edge weight distribution of CountMin for unicorn-wget dataset}
+    \label{fig:unicorn-wget-ewd-countmin_1024}
+\end{figure}
+
+\begin{figure}[H]
+    \centering \includegraphics[width=0.85\textwidth]{results/ewd/unicorn-wget-ewd-gsketch_1024}
+    \vspace{-0.5cm}
+    \caption{Edge weight distribution of gSketch for unicorn-wget dataset}
+    \label{fig:unicorn-wget-ewd-gsketch_1024}
+\end{figure}
+
+\begin{figure}[H]
+    \centering \includegraphics[width=0.85\textwidth]{results/ewd/unicorn-wget-ewd-tcm_1024}
+    \vspace{-0.5cm}
+    \caption{Edge weight distribution of TCM for unicorn-wget dataset}
+    \label{fig:unicorn-wget-ewd-tcm_1024}
+\end{figure}
+
+\begin{figure}[H]
+    \centering \includegraphics[width=0.85\textwidth]{results/ewd/unicorn-wget-ewd-gmatrix_1024}
+    \vspace{-0.5cm}
+    \caption{Edge weight distribution of GMatrix for unicorn-wget dataset}
+    \label{fig:unicorn-wget-ewd-gmatrix_1024}
+\end{figure}
+
+\begin{figure}[H]
+    \centering \includegraphics[width=0.85\textwidth]{results/ewd/unicorn-wget-ewd-alpha_1024}
+    \vspace{-0.5cm}
+    \caption{Edge weight distribution of Alpha for unicorn-wget dataset}
+    \label{fig:unicorn-wget-ewd-alpha_1024}
+\end{figure}
+
+\subsection*{Observations and inferences}
+
+\paragraph{}
+CountMin in \autoref{fig:unicorn-wget-ewd-countmin_1024}, gSketch in \autoref{fig:unicorn-wget-ewd-gsketch_1024} and TCM in \autoref{fig:unicorn-wget-ewd-tcm_1024} have preserved the shape of the original edge weight distribution depicted in \autoref{fig:unicorn-wget-ewd-fullgraph}. However Alpha in \autoref{fig:unicorn-wget-ewd-alpha_1024} has a slightly distorted distribution shape while the GMatrix in \autoref{fig:unicorn-wget-ewd-gmatrix_1024} has some significant changes with respect to the original stream.
+
+\subsection*{Conclusion}
+
+\paragraph{}
+The proposed sketch Alpha is not a good candidate for preserving the edge weight distribution of a graph stream.

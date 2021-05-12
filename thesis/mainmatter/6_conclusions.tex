@@ -1,0 +1,33 @@
+\chapter{Conclusions}
+
+\section{Introduction}
+
+\paragraph{}
+This chapter will discuss the conclusion of the research in \autoref{section:conclusion_rq} and \autoref{section:conclusion_rp}. Limitations of the carried out work will be discussed in \autoref{section:conclusion_limitations}. The chapter will conclude after discussing the future work of the research in brief in \autoref{section:conclusion_future}.
+
+\section{Conclusion about research questions}
+\label{section:conclusion_rq}
+
+\paragraph{}
+The first research question in \autoref{section:research_questions} is, \textit{‘What are the tradeoffs of existing graph summarization techniques?’}. The tradeoffs of existing graph summarization techniques have been discussed thoroughly in \autoref{section:results_n_evaluation} with respect to different graph properties.
+
+\paragraph{}
+The second research question in \autoref{section:research_questions} is, \textit{‘How to improve upon existing streaming graph summarization sketches in order to increase the accuracy of the queries answered through these sketches while keeping the memory constant?’}. The Alpha sketch has been proposed through this research as an extension for the GMatrix sketch using the sketch partitioning technique. It is able to answer queries with a significantly lower average relative error with the same amount of memory in comparison to the existing state-of-the-art sketching technique, TCM, as indicated in \autoref{section:results_are}. Thus Alpha answers the second research question on a way to improve the accuracy of the queries over the existing sketching techniques.
+
+\section{Conclusion about research problem}
+\label{section:conclusion_rp}
+
+\paragraph{}
+There are many streaming graph summarization algorithms. However, there doesn’t exist a proper survey on streaming graph summarization, benchmarking all these algorithms against each other. We have achieved this during our research and produced a test suit that could be used to run the benchmarking tasks in the future. Furthermore, we have produced Alpha, an improved sketch over the existing sketching techniques which utilizes partitioning to reduce the average relative error of the queries.
+
+\section{Limitations}
+\label{section:conclusion_limitations}
+
+\paragraph{}
+A major limitation of the work that was carried out is the fact that the test suite was implemented in Python. This helped in reducing the implementation time of the test suite. However, as Python is an interpreted language, it is much slower than a low-level language than C or C++. Therefore the testing procedure took considerable time in running the sketching algorithms against the selected datasets. This was a clear hindrance on testing much larger datasets.
+
+\section{Implications for further research}
+\label{section:conclusion_future}
+
+\paragraph{}
+This is an embarrassingly parallel query framework model, therefore the model should be evaluated on top of a parallel framework. Furthermore, there are many aspects that could be considered before the Alpha sketch is to be used in a practical scenario such as sliding windows and data partitioning across multiple machines.

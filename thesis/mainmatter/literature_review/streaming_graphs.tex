@@ -1,0 +1,10 @@
+\section{Streaming graphs}
+
+\paragraph{}
+Graphs can be divided into two as static graphs and streaming (dynamic) graphs. Static graphs are those which do not change over time while streaming graphs are the ones which do get updated over time. These update operations could be insertion or deletion of nodes and edges.
+
+\paragraph{}
+Determining the properties of streaming graphs is relatively strenuous than static graphs as they are constantly evolving. Usual graph algorithms cannot be run on streaming graphs due to their dynamic nature. Either the updating queries has to be stopped or a separate snapshot of the past should be used while running the static graph algorithms on a streaming model. If there is a need for processing the graph while streaming, separate streaming graph algorithms have to be devised\cite{mcgregor_graph_2014}. This is made even more difficult with the speed with which the graph is being updated. High throughput of update queries requires any other types of queries to be run efficiently and as fast as possible in an unblocking manner.
+
+\paragraph{}
+Real-world streaming graphs could grow very large in size. Therefore these graphs are often stored as partitions in different machines over a network rather than in a single location.

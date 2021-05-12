@@ -1,0 +1,20 @@
+\section{Graph partitioning}
+
+\paragraph{}
+The size of modern datasets has become too large to be fit into a single machine. It has become unrealistic to try to process the graphs mapped to these massive datasets while keeping them in the memory of a single node. Hence there exists a need to partition those large scale graphs into multiple machines. The communication between groups should be minimal to run graph algorithms on the whole graph effectively.
+
+\paragraph{}
+However, graph partitioning is an NP-hard problem\cite{noauthor_simplified_nodate}. Therefore the graph partitioning algorithms are only able to give sub-optimal solutions as of this date and thus a good streaming graph partitioning algorithm is impossible\cite{stanton_streaming_2012}.
+
+\subsection{Online and offline graph partitioning}
+
+\paragraph{}
+Graph partitioning algorithms can be mainly divided into two, such that, Online Graph Partitioning Algorithms and Offline Graph Partitioning Algorithms. The offline partitioning algorithms such as METIS\cite{karypis_fast_1998}, Chaco\cite{hendrickson_chaco_1993}, SBV-cut\cite{kim_sbv-cut:_2012} need to load the entire graph into the memory for the algorithm to be run. But the online partitioning algorithms like PreferBig\cite{stanton_streaming_2012} and HoVerCut\cite{sajjad_boosting_2016} keeps a buffer of the edge streams and process them when the buffer gets full.
+
+\subsection{Edge-cut and Vertex-cut methods}
+
+\paragraph{}
+Graph partitioning can also be divided according to the cutting method; which is Edge-cut and Vertex-cut\cite{xie_s-powergraph_nodate}. Edge-cut tries to evenly assign the vertices to each partition by cutting the vertices while the vertex-cut ties to evenly assign the edges to each partition by cutting the vertices. The edge-cut method could leave some partitions with a higher number of edges than others. Therefore the vertex-cut techniques generally achieve better performance than edge-cut techniques\cite{gonzalez_powergraph_nodate} for graphs which obeys the power-law degree distribution.
+
+\paragraph{}
+It is difficult to evaluate the properties of a graph with high volume and throughput even after the partitioning process as the whole graph would have to be processed despite the partitioning. Graph summarization is a technique used in dealing with these massive graphs.

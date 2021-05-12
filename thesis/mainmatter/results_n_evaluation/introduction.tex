@@ -1,0 +1,36 @@
+\section{Introduction}
+
+\paragraph{}
+This chapter will include the results of all the benchmarking tests that were done using the test suite in \autoref{section:test_suite}. Different sizes of each sketch were considered in benchmarking to ensure that the identified qualities were retained with the increase/decrease of the allocated memory. The proposed solution, Alpha, has been compared against the existing graph summarization sketches; CountMin, gSketch, TCM and GMatrix under the following criteria, which will be explained in detail in the subsequent sections.
+
+\begin{enumerate}
+    \item Build-time test
+    \item Average Relative Error of edge queries
+    \item Number of Effective Queries
+    \item k-Top heavy nodes
+    \item k-Top heavy edges
+    \item Degree distribution
+    \item Edge-weight distribution
+    \item Edge insertion time
+          % \item Clustering
+          % \item PageRank
+\end{enumerate}
+
+\paragraph{}
+Restating what is already mentioned in the \autoref{section:design}, the tested sketches can be mainly categorized into two classes.
+
+\begin{enumerate}
+    \item The sketches which support only the edge frequency queries i.e CountMin and gSketch.
+    \item The sketches which support many graph queries in general i.e TCM, GMatrix, Alpha
+\end{enumerate}
+
+\paragraph{}
+The objectives of this chapter are,
+
+\begin{enumerate}
+    \item To compare the benchmarking results of the sketching techniques in order to identify the strengths and weaknesses of each sketch in different scenarios.
+    \item To compare the proposed algorithm, Alpha, against the sketching techniques of its own class; TCM and GMatrix.
+\end{enumerate}
+
+\paragraph{}
+We refrain from a direct comparison between Alpha and the edge frequency sketches in many cases as they vary highly in functionality.

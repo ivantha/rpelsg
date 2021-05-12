@@ -1,0 +1,10 @@
+\chapter*{Abstract}
+
+\paragraph{}
+The amount of collected data on data repositories have vastly increased with the advent of the internet. It has become increasingly difficult to deal with these massive datasets due to their sheer volume and the throughput of data. Many of these data streams can be mapped into graphs, which in turn helps in discovering some of the underlying properties of the stream. The underlying graph keeps evolving as the data keeps getting streamed. It is difficult to evaluate the properties of these streaming graphs due to their dynamic nature. 
+
+\paragraph{}
+These massive streaming graphs can be summarized such that some of their properties can be approximately calculated using the summaries. In many of the real-world scenarios involving large streaming graphs, obtaining an approximate answer is sufficient as the cost of obtaining an exact answer can be too high. CountMin, gSketch, TCM and gMatrix are some of the major streaming graph summarization techniques. 
+
+\paragraph{}
+This dissertation explains our contribution to streaming graph property evaluation through summarization. The primary contribution is devising the sketching technique Alpha, which is able to minimize the average relative error of the queries beyond the existing summarization techniques while taking the same amount of memory. Alpha is able to do this through partitioning using a sample of the original graph stream. Our next contribution is conducting a survey on streaming graph summarization techniques by benchmarking the widely used sketches against each other and assessing their strengths and weaknesses against different types of queries. 

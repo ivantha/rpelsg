@@ -1,0 +1,16 @@
+\section{Graphs in the real world}
+
+\paragraph{}
+There are many real-world datasets that can be mapped into graphs. As an example, the users in a social network and the interactions between them\cite{mishra_modelling_2014}, details about the packet transfer in a computer network\cite{ahmat_graph_nodate} and a large citation database with authors of the research papers and their publications\cite{cui_citation_nodate} are some of the real-world scenarios that could be mapped into graphs perfectly. This makes the discovery of the properties of the original dataset more feasible using graphs algorithms. Apart from the computation needs, datasets are often represented as graphs for visualization purposes as well\cite{wang_survey_2015}.
+
+\paragraph{}
+With the increase of the number of devices connected to the internet and the reduction of the cost of the storage media, the amount of collected data has grown by an exponential rate. Due to the sheer volume of the original datasets, the graphs produced from these datasets are also massive in size. Real-world graphs have various other properties such as empirically, most real-world graphs sparse and obey skewed power-law degree distribution\cite{xie_distributed_2014}.
+
+\paragraph{}
+The properties of a graph that needs to be retrieved vary widely with the application scenario. As an example, in a social network, it would be vital in finding the heavy hitter edges depicting the interaction between users or reachability of nodes showing how close the specific users are related. Model of a computer network would benefit with queries in finding heavy hitter nodes indicating possible destinations and sources of attacks originating within the network.
+
+\paragraph{}
+Keeping these massive graphs in memory has become unrealistic with the large capacity that is required to store them. There are many challenges that lie in utilizing massive graphs to derive knowledge through their properties while keeping them stored in secondary storage devices. This becomes easily evident in a scenario of a social network like Facebook\cite{ching_one_2015} or Twitter\cite{kwak_what_2010} where millions of user accounts interact with each other adding a large number of edges to the graph in a unit time.
+
+\paragraph{}
+Most importantly, many of the real-world scenarios get mapped into graph streams rather than static graphs. Modern datasets do not stay small nor do they stay static. Retrieving the properties of this constantly evolving graph in realtime poses many difficulties\cite{kumarage_efficient_2017}.

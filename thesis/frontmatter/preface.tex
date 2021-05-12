@@ -1,0 +1,13 @@
+\chapter*{Preface}
+
+\paragraph{}
+The purpose of this dissertation is to introduce the work carried out through the research ‘Realtime Property Evaluation of Large Streaming Graphs’. The first phase of the work lies in benchmarking the existing graph summarization techniques against chosen datasets. Here we have implemented CountMin\cite{cormode_improved_2003}, gSketch\cite{zhao_gsketch:_2011}, TCM\cite{tang_graph_2016} and GMatrix\cite{khan_query-friendly_2016} sketches according to the algorithms described in their original work. 5 datasets were chosen in benchmarking the summarization sketches; unicorn-wget\cite{DVN/5H4TDI_2018}, email-EuAll\cite{leskovec_graph_2007}, cit-HepPh\cite{leskovec_graphs_2005, gehrke_overview_2003}, gen-scale-free and gen-small-world. Here the gen-scale-free and gen-small-world are randomly generated graphs with power law distribution and small world property respectively. 
+
+\paragraph{}
+We have implemented our own test suite in order to carry out the benchmarking of the sketches. More details about this suite will be discussed in \autoref{section:implementation}.
+
+\paragraph{}
+The second phase of the work consisting of introducing Alpha, our proposed streaming graph summarization sketch. Here we have combined the partitioning technique introduced in gSketch with GMatrix in devising Alpha. 
+
+\paragraph{}
+We claim anything else mentioned in this dissertation without a specific reference to any third party work as our own. 

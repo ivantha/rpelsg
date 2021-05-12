@@ -1,0 +1,57 @@
+\section{Sources of data}
+\label{section:design_sources_of_data}
+
+\paragraph{}
+Real-world graph streams had to be used in order to benchmark the sketching algorithms against each other.  The process of finding and preprocessing datasets will be addressed in \autoref{section:sod_datasets} and \autoref{section:soc_preprocessing} respectively.
+
+\subsection{Datasets}
+\label{section:sod_datasets}
+
+\paragraph{}
+5 datasets were chosen to carry out the benchmarking tests in this research. These were chosen to represent different application domains. The chosen datasets are as follows.
+
+\subsubsection{unicorn-wget\cite{DVN/5H4TDI_2018}}
+
+\paragraph{}
+unicorn-wget is a dataset created from capturing the packet information of the network activity of a simulated network. Experiments were run for over an hour, with recurrent wget commands issued throughout the experiments (one for every 120 seconds). This dataset was created at Harvard University and consist of 5 parts.
+
+\begin{enumerate}
+    \item Hour-Long Wget Benign Dataset (Base Graph)
+    \item Hour-Long Wget Benign Dataset (Streaming Graph)
+    \item Hour-Long Wget Attack Dataset (Base Graph)
+    \item Hour-Long Wget Attack Dataset (Streaming Graph)
+    \item Hour-Long Wget Attack Dataset (Raw)
+\end{enumerate}
+
+\paragraph{}
+Hour-Long Wget Benign Dataset (Base Graph) which consist of 17,778 nodes and 2,779,726 edges was choosen for the experiment. From this 10\% of the edges were chosen using the reservoir sampling in order to minimize the running time of the sketching algorithms.
+
+\subsubsection{email-EuAll\cite{leskovec_graph_2007}}
+
+\paragraph{}
+The network was generated using email data from a large European research institution. The dataset consist of the emails sent out in a period of 18 months. The dataset contains sender, receiver and the time of origination of each email. Given a set of email messages, each node corresponds to an email address. A directed edge has been created between nodes i and j, if i sent at least one message to j. This dataset consist of 265,214 nodes and 420,045 edges\cite{noauthor_snap_nodate_email}.
+
+\subsubsection{cit-HepPh\cite{leskovec_graphs_2005, gehrke_overview_2003}}
+
+\paragraph{}
+cit-HepPh (high energy physics phenomenology) citation graph is from the e-print arXiv. It has 34,546 papers (nodes) and 421,578 citations (edges). If a paper i cites paper j, the graph contains a directed edge from i to j\cite{noauthor_snap_nodate_hep}.
+
+\subsubsection{gen-scale-free}
+
+\paragraph{}
+This is a randomly generated dataset which obeys the power-law distribution. gen-scale-free contains 100,000 nodes and 400,000 edges. This dataset is generated according to the work, ‘The Degree Sequence of a Scale-Free Random Graph Process’
+\cite{bollobas_degree_2001}.
+
+\subsubsection{gen-small-world}
+
+\paragraph{}
+This is a randomly generated dataset which has the small-world property. gen-small-world contains 100,000 nodes and 199,997 edges. This dataset is generated according to the work, ‘Random pseudofractal scale-free networks with small-world effect’\cite{wang_random_2006}.
+
+\subsection{Data preprocessing}
+\label{section:soc_preprocessing}
+
+\paragraph{}
+Each dataset was preprocessed using a Python script. The script is available in appendix \ref{appendix:preprocessor}. A graph data stream is usually represented by its list of edges. The original dataset was preprocessed in a way such that the output only contained a list of \lbrack source\_id, target\_id\rbrack\space which described the edges of the graph.
+
+\paragraph{}
+Each dataset was stored in our own private server so that the preprocessor could download the graph stream on the fly and convert it to the appropriate format.
