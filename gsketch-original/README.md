@@ -1,1 +1,0 @@
-# rpelsg-gsketch-original

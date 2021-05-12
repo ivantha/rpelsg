@@ -1,0 +1,52 @@
+\section{Methodology}
+
+\paragraph{}
+The project will deal with large scale streaming and dynamic graphs. 
+Therefore the first step would be obtaining available dataset of large 
+natural graphs. One type of dataset that we will mainly focus on is the 
+interactions of users in a social network. There are existing crawlers 
+which are able to scrape things like tweets and facebook posts. We will also 
+use a web crawler as suggested in the original work, to build a graph while 
+the crawler is traversing through the web. “This is an unbounded graph since 
+we do not know how large the graph would be and the graph keeps building while 
+the crawler keeps traversing.”[11] And when it is within the acceptable 
+boundary conditions of the research, we will use synthetic graphs to test 
+out the algorithms and various corner cases. 
+
+\paragraph{}
+Then we will spend time on preparing an adequate environment for the sketching 
+and partitioning operations to be run. There exists number of graph frameworks 
+to facilitate graph computations such as Pregel, GraphLab, 
+Distributed GraphLab, Giraph, Giraph++.  And data streaming frameworks 
+like Apache Flink will be studied and used for the development purposes.  
+
+\paragraph{}
+Many streaming graph partitioning and sketching algorithms proposed by the 
+previous researches haven’t made the codebase available along with the paper. 
+So these will be re-implemented to be run on our environment of choice. In 
+the researches where the sketching algorithms were proposed, there were 
+evaluated against different types of queries, i.e edge queries, node queries 
+and path queries. Reevaluating those with a similar set of parameters will 
+help us in clearly differentiating the strengths and weaknesses of each 
+sketching method. 
+
+\paragraph{}
+Hereafter, the implemented sketching mechanisms will be tested in evaluating 
+other graph properties like KNN and K-furthest neighbor. There are various 
+evaluating techniques proposed by the previous researches in evaluating the 
+sketching mechanisms such as Average Relative Error and Number of Effective 
+Queries\cite{kumarage_efficient_2017}. And other resource factors such as memory 
+usage will also be measured in each test. 
+
+\paragraph{}
+After proper evaluation of the strengths and weaknesses of existing methods 
+with respect to different graph properties, we will research on improving those 
+methods. And we will attempt at proposing how which technique performs better 
+when evaluating each graph property. 
+
+\paragraph{}
+In the final phase of the project, we will focus on evaluating the models on 
+top of a parallel framework as the future work of the original research 
+suggests\cite{kumarage_efficient_2017}. And then we will re-evaluate the proposed 
+improvements on top of the parallel framework to report any performance 
+gained in running them parallelly. 

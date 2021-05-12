@@ -1,0 +1,39 @@
+\section{Project Scope and Delimitations}
+
+\subsection{In Scope}
+\begin{enumerate}
+    \item Project will improve upon the existing streaming graph sketching techniques. 
+    \item Efficiency of running queries on various graph properties after the sketching process will be improved.
+    \item New sketching techniques will be evaluated on a parallel framework.
+\end{enumerate}
+
+\subsection{Out of Scope}
+
+\paragraph{}
+There exists number of methods for graph partitioning. The effect of these 
+partitioning techniques will affect the results of the query efficiency and 
+thus they will be considered during the experimentation phase and in presenting 
+results. However no significant work or separate evaluation will be done with 
+regard to graph partitioning. Improving partitioning techniques will be 
+considered as out of scope for this research. 
+
+\paragraph{}
+Graph summarization could be mainly subdivided into Aggregation based, 
+Attribute based, Compression and Application oriented. This research won’t 
+explore the compression type graph summarization techniques. Much focus will 
+be given to aggregation based sketching techniques. 
+
+\paragraph{}
+There are many security concerns with regard to the partitioning of streaming 
+graphs and running sketching algorithms in a distributed environment. However 
+the security aspects of sketch creation and partitioning will be considered 
+as out of scope for this research as they are trivial to the holistic view 
+of the research question, i.e, efficient sketching of streaming graphs. 
+
+\paragraph{}
+To summarize, following work will be considered as out of scope for this project. 
+
+\begin{enumerate}
+    \item Graph partitioning methods will not be improved upon.
+    \item Security aspects of the above algorithms with regards to a distributed environment will not be considered.
+\end{enumerate}

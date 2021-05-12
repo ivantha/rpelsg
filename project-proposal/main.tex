@@ -1,0 +1,92 @@
+% !TEX TS-program = xelatex
+% !TEX encoding = UTF-8 Unicode
+
+\documentclass[a4paper, 12pt]{report}
+\usepackage[]{geometry}
+% \usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{url}
+
+% add references to TOC
+\usepackage[nottoc,notlof,notlot]{tocbibind} 
+
+% rename Bibilography to References
+\addto\captionsenglish{\renewcommand{\bibname}{References}}
+
+% change section numbering to start from 1.0
+\renewcommand*\thesection{\arabic{section}.0}
+\renewcommand*\thesubsection{\arabic{section}.\arabic{subsection}}
+
+% font
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\setmainfont{Times}
+
+% font size
+\usepackage{titlesec}
+\usepackage{sectsty}
+\sectionfont{\fontsize{16}{18}\selectfont}
+\subsectionfont{\fontsize{14}{16}\selectfont}
+
+% chapter - remove title and change size
+\titleformat{\chapter}[display]{\normalfont\bfseries}{}{0pt}{\LARGE}
+
+\input{sections/cover.tex}
+
+\begin{document}
+
+\maketitle
+
+\input{sections/signatures.tex}
+
+\tableofcontents
+\clearpage
+
+% listoffigures and listoftables in the same page
+\listoffigures
+\begingroup
+\let\clearpage\relax
+\listoftables
+\endgroup
+\clearpage
+
+\input{sections/introduction.tex}
+\clearpage
+
+\input{sections/research_questions.tex}
+\clearpage
+
+\input{sections/objectives.tex}
+\clearpage
+
+\input{sections/contribution.tex}
+\clearpage
+
+\input{sections/methodology.tex}
+\clearpage
+
+\input{sections/scope.tex}
+\clearpage
+
+\input{sections/timeline.tex}
+\clearpage
+
+\input{sections/budget.tex}
+\clearpage
+
+\input{sections/statement.tex}
+\clearpage
+
+\input{sections/standards.tex}
+\clearpage
+
+% \addcontentsline{toc}{section}{References}
+\bibliographystyle{unsrt}
+\bibliography{cat}
+
+\end{document}
