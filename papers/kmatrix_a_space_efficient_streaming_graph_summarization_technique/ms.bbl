@@ -1,0 +1,160 @@
+\begin{thebibliography}{10}
+
+\bibitem{brin_anatomy_1998}
+S.~Brin and L.~Page, ``The anatomy of a large-scale hypertextual {Web} search
+  engine,'' {\em Computer Networks and ISDN Systems}, vol.~30, pp.~107--117,
+  Apr. 1998.
+\newblock PageRank.
+
+\bibitem{page_pagerank_nodate}
+L.~Page, ``The {PageRank} {Citation} {Ranking}: {Bringing} {Order} to the
+  {Web},''
+\newblock PageRank.
+
+\bibitem{ching_one_2015}
+A.~Ching, S.~Edunov, M.~Kabiljo, D.~Logothetis, and S.~Muthukrishnan, ``One
+  trillion edges: graph processing at {Facebook}-scale,'' {\em Proceedings of
+  the VLDB Endowment}, vol.~8, pp.~1804--1815, Aug. 2015.
+\newblock Large graphs, Giraph.
+
+\bibitem{mcgregor_graph_2014}
+A.~McGregor, ``Graph stream algorithms: a survey,'' {\em ACM SIGMOD Record},
+  vol.~43, pp.~9--20, May 2014.
+\newblock Stream algorithms, Survey.
+
+\bibitem{liu_graph_2018}
+Y.~Liu, T.~Safavi, A.~Dighe, and D.~Koutra, ``Graph {Summarization} {Methods}
+  and {Applications}: {A} {Survey},'' {\em ACM Computing Surveys}, vol.~51,
+  pp.~1--34, June 2018.
+\newblock Survey.
+
+\bibitem{seo_effective_2018}
+H.~Seo, K.~Park, Y.~Han, H.~Kim, M.~Umair, K.~U. Khan, and Y.-K. Lee, ``An
+  effective graph summarization and compression technique for a large-scaled
+  graph,'' {\em The Journal of Supercomputing}, Jan. 2018.
+\newblock Compression.
+
+\bibitem{dunne_motif_2013}
+C.~Dunne and B.~Shneiderman, ``Motif simplification: improving network
+  visualization readability with fan, connector, and clique glyphs,'' in {\em
+  Proceedings of the {SIGCHI} {Conference} on {Human} {Factors} in {Computing}
+  {Systems} - {CHI} '13}, (Paris, France), p.~3247, ACM Press, 2013.
+\newblock Cisualization.
+
+\bibitem{jin_eco_nodate}
+L.~Jin and D.~Koutra, ``{ECO} : {Comparative} {Visualization} of
+  {Time}-{Evolving} {Network} {Summaries},'' p.~8.
+\newblock Visualization.
+
+\bibitem{zhang_discovery-driven_2010}
+N.~Zhang, Y.~Tian, and J.~M. Patel, ``Discovery-driven graph summarization,''
+  in {\em 2010 {IEEE} 26th {International} {Conference} on {Data} {Engineering}
+  ({ICDE} 2010)}, (Long Beach, CA, USA), pp.~880--891, IEEE, 2010.
+\newblock Summarization.
+
+\bibitem{shoaran_zero-knowledge_2013}
+M.~Shoaran, A.~Thomo, and J.~H. Weber-Jahnke, ``Zero-knowledge private graph
+  summarization,'' in {\em 2013 {IEEE} {International} {Conference} on {Big}
+  {Data}}, (Silicon Valley, CA, USA), pp.~597--605, IEEE, Oct. 2013.
+\newblock Privacy.
+
+\bibitem{cilibrasi_clustering_2005}
+R.~Cilibrasi and P.~M.~B. Vitanyi, ``Clustering by {Compression},'' {\em IEEE
+  TRANSACTIONS ON INFORMATION THEORY}, vol.~51, no.~4, p.~21, 2005.
+\newblock Clustering.
+
+\bibitem{hutchison_compression_2006}
+M.~van Leeuwen, J.~Vreeken, and A.~Siebes, ``Compression {Picks} {Item} {Sets}
+  {That} {Matter},'' in {\em Knowledge {Discovery} in {Databases}: {PKDD} 2006}
+  (D.~Hutchison, T.~Kanade, J.~Kittler, J.~M. Kleinberg, F.~Mattern, J.~C.
+  Mitchell, M.~Naor, O.~Nierstrasz, C.~Pandu~Rangan, B.~Steffen, M.~Sudan,
+  D.~Terzopoulos, D.~Tygar, M.~Y. Vardi, G.~Weikum, J.~Fürnkranz, T.~Scheffer,
+  and M.~Spiliopoulou, eds.), vol.~4213, pp.~585--592, Berlin, Heidelberg:
+  Springer Berlin Heidelberg, 2006.
+\newblock Classification.
+
+\bibitem{chakrabarti_fully_nodate}
+D.~Chakrabarti, D.~S. Modha, S.~Papadimitriou, and C.~Faloutsos, ``Fully
+  {Automatic} {Cross}-associations,'' p.~12.
+\newblock Community detection.
+
+\bibitem{smets_odd_2011}
+K.~Smets and J.~Vreeken, ``The {Odd} {One} {Out}: {Identifying} and
+  {Characterising} {Anomalies},'' in {\em Proceedings of the 2011 {SIAM}
+  {International} {Conference} on {Data} {Mining}}, pp.~804--815, Society for
+  Industrial and Applied Mathematics, Apr. 2011.
+\newblock Outlier detection.
+
+\bibitem{akoglu_opavion_2012}
+L.~Akoglu, D.~H. Chau, U.~Kang, D.~Koutra, and C.~Faloutsos, ``{OPAvion}:
+  mining and visualization in large graphs,'' in {\em Proceedings of the 2012
+  international conference on {Management} of {Data} - {SIGMOD} '12},
+  (Scottsdale, Arizona, USA), p.~717, ACM Press, 2012.
+\newblock Outlier detection.
+
+\bibitem{mampaey_tell_2011}
+M.~Mampaey, N.~Tatti, and J.~Vreeken, ``Tell me what i need to know: succinctly
+  summarizing data with itemsets,'' in {\em Proceedings of the 17th {ACM}
+  {SIGKDD} international conference on {Knowledge} discovery and data mining -
+  {KDD} '11}, (San Diego, California, USA), p.~573, ACM Press, 2011.
+\newblock Pattern set mining.
+
+\bibitem{prakash_spotting_2012}
+B.~A. Prakash, J.~Vreeken, and C.~Faloutsos, ``Spotting {Culprits} in
+  {Epidemics}: {How} {Many} and {Which} {Ones}?,'' in {\em 2012 {IEEE} 12th
+  {International} {Conference} on {Data} {Mining}}, (Brussels, Belgium),
+  pp.~11--20, IEEE, Dec. 2012.
+\newblock Infection.
+
+\bibitem{cormode_improved_2003}
+G.~Cormode and S.~Muthukrishnan, ``An {Improved} {Data} {Stream} {Summary}:
+  {The} {Count}-{Min} {Sketch} and its {Applications},'' p.~18, 2003.
+\newblock CountMin.
+
+\bibitem{zhao_gsketch:_2011}
+P.~Zhao, C.~C. Aggarwal, and M.~Wang, ``{gSketch}: on query estimation in graph
+  streams,'' {\em Proceedings of the VLDB Endowment}, vol.~5, pp.~193--204,
+  Nov. 2011.
+\newblock gSketch.
+
+\bibitem{tang_graph_2016}
+N.~Tang, Q.~Chen, and P.~Mitra, ``Graph {Stream} {Summarization}: {From} {Big}
+  {Bang} to {Big} {Crunch},'' in {\em Proceedings of the 2016 {International}
+  {Conference} on {Management} of {Data} - {SIGMOD} '16}, (San Francisco,
+  California, USA), pp.~1481--1496, ACM Press, 2016.
+\newblock TCM.
+
+\bibitem{khan_query-friendly_2016}
+A.~Khan and C.~Aggarwal, ``Query-friendly compression of graph streams,'' in
+  {\em 2016 {IEEE}/{ACM} {International} {Conference} on {Advances} in {Social}
+  {Networks} {Analysis} and {Mining} ({ASONAM})}, (San Francisco, CA, USA),
+  pp.~130--137, IEEE, Aug. 2016.
+\newblock gMatrix.
+
+\bibitem{DVN/5H4TDI_2018}
+X.~Han, ``{Hour-Long Wget Benign Dataset (Base Graph)},'' 2018.
+
+\bibitem{leskovec_graph_2007}
+J.~Leskovec, J.~Kleinberg, and C.~Faloutsos, ``Graph evolution: {Densification}
+  and shrinking diameters,'' {\em ACM Transactions on Knowledge Discovery from
+  Data}, vol.~1, pp.~2--es, Mar. 2007.
+\newblock email-EuAll.
+
+\bibitem{noauthor_snap_nodate_email}
+``{SNAP}: {Network} datasets: {EU} email network.''
+\newblock email-EuAll.
+
+\bibitem{leskovec_graphs_2005}
+J.~Leskovec, J.~Kleinberg, and C.~Faloutsos, ``Graphs over time: densification
+  laws, shrinking diameters and possible explanations,'' in {\em Proceeding of
+  the eleventh {ACM} {SIGKDD} international conference on {Knowledge} discovery
+  in data mining - {KDD} '05}, (Chicago, Illinois, USA), p.~177, ACM Press,
+  2005.
+\newblock Evolving, cit-HepPh.
+
+\bibitem{gehrke_overview_2003}
+J.~Gehrke, P.~Ginsparg, and J.~Kleinberg, ``Overview of the 2003 {KDD} {Cup},''
+  {\em ACM SIGKDD Explorations Newsletter}, vol.~5, p.~149, Dec. 2003.
+\newblock cit-HepPh.
+
+\end{thebibliography}

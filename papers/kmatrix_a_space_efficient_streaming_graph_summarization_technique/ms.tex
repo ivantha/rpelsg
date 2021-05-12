@@ -1,0 +1,62 @@
+\documentclass[conference]{IEEEtran}
+% \IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Multiline equations
+\interdisplaylinepenalty=2500
+
+% Subfigure
+\ifCLASSOPTIONcompsoc
+    \usepackage[caption=false, font=normalsize, labelfont=sf, textfont=sf]{subfig}
+\else
+    \usepackage[caption=false, font=footnotesize]{subfig}
+\fi
+
+% Ceil and Floor
+\usepackage{mathtools}
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+\begin{document}
+
+\title{kMatrix: A Space Efficient Streaming Graph Summarization Technique}
+
+\author{\IEEEauthorblockN{Oshan Mudannayake}
+    \IEEEauthorblockA{\textit{University of Colombo School of Computing}\\
+        Colombo, Sri Lanka \\
+        oshan.ivantha@gmail.com}
+    \and
+    \IEEEauthorblockN{Nalin Ranasinghe}
+    \IEEEauthorblockA{\textit{University of Colombo School of Computing}\\
+        Colombo, Sri Lanka \\
+        dnr@ucsc.cmb.ac.lk}
+}
+
+\maketitle
+
+\input{content/abstract.tex}
+
+\begin{IEEEkeywords}
+    streaming graphs, summarization, graph querying 
+\end{IEEEkeywords}
+
+\input{content/introduction.tex}
+\input{content/background.tex}
+\input{content/related_work.tex}
+\input{content/approach.tex}
+\input{content/evaluation.tex}
+\input{content/future_work.tex}
+\input{content/conclusion.tex}
+
+\bibliographystyle{ieeetr}
+\bibliography{ms}
+
+\end{document}
