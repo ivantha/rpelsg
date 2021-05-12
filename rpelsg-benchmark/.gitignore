@@ -4,3 +4,4 @@ venv
 output/
 reports/
 *.txt
+!requirements.txt
