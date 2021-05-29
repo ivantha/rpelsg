@@ -1,4 +1,9 @@
 \section{Related Work}
+\label{sec:related_work}
+
+Summarizing a graph can have many benefits\cite{liu_graph_2018} apart from the speedup of graph algorithms and queries, such as, reduction of data volume and storage\cite{seo_effective_2018}, visualization\cite{dunne_motif_2013, jin_eco_nodate}, noise elimination\cite{zhang_discovery-driven_2010}, privacy preservation\cite{shoaran_zero-knowledge_2013}. Graph summarization has a wide range of industrial and research applications as well. Some of them are clustering\cite{cilibrasi_clustering_2005}, classification\cite{hutchison_compression_2006}, community detection\cite{chakrabarti_fully_nodate}, outlier detection\cite{smets_odd_2011, akoglu_opavion_2012}, pattern set mining\cite{mampaey_tell_2011} and finding sources of infection in large graphs\cite{prakash_spotting_2012}. Throughout this work, our aim lies in query optimization through graph summarization.
+
+Streaming graph summarization is much more complex than summarizing a static graph due to the constant data flow. Since the underlying graph is updated continuously, the summarization process also has to be done in realtime. Almost any static graph summarization technique can be used with a streaming graph snapshot in a specific timestamp. However, mining information using aggregate time snapshots of data could prove to be a less than ideal solution when considering massive data streams. Thus sophisticated sparsification techniques have to be derived in order to summarize streaming graphs. 
 
 \subsection{CountMin}
 
@@ -19,7 +24,7 @@ gSketch\cite{zhao_gsketch:_2011} is an extension of CountMin data structure. But
     \item Samples of both the graph stream and the query workload are available.
 \end{itemize}
 
-In CountMin, one global sketch is created for the entire stream. By doing so, it fails to take advantage of any structural properties present in the graph stream. gSketch tries to avoid this by considering the underlying structure of the graph stream using a sample. It then proceeds to partition its allocated space, as indicated in Fig.~\ref{fig:gsketch}. The goal of this partitioning step aims to maintain a sufficient frequency uniformity within each localized sketch in a way such that the combined error of the quarry estimations over the entire graph is kept at a minimum.
+In CountMin, one global sketch is created for the entire stream. By doing so, it fails to take advantage of any structural properties present in the graph stream. gSketch tries to avoid this by considering the underlying structure of the graph stream using a sample. It then proceeds to partition its allocated space, as indicated in Fig.~\ref{fig:gsketch}. The sum of the widths of the partitions \(w_1\) and \(w_2\) is equal to the original width of the sketch, \(w\). The goal of this partitioning step aims to maintain a sufficient frequency uniformity within each localized sketch in a way such that the combined error of the quarry estimations over the entire graph is kept at a minimum.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=0.5\textwidth]{img/gsketch.png}}
@@ -29,7 +34,7 @@ In CountMin, one global sketch is created for the entire stream. By doing so, it
 
 \subsection{TCM}
 
-A disadvantage posed by all the approximate frequency count sketches like CountMin or gSketch is that they do not store the locality of the nodes. Therefore CountMin and gSketch cannot be used for conditional node queries or queries involving node connectivity. If these queries were to be run, the locality of the nodes has to be retained in the graph synopses. TCM\cite{tang_graph_2016} aims to solve this issue by storing the connectivity of the nodes in its data structure. TCM can summarize both node and edge information in constant time. Thus, it can answer a wide range of queries, unlike its predecessors. The structure of a TCM sketch is depicted in Fig.~\ref{fig:tcm}. TCM sketch could be considered as one of the pioneering works in summarizing data streams, which is directly related to our work presented in this paper.
+A disadvantage posed by all the approximate frequency count sketches like CountMin or gSketch is that they do not store the locality of the nodes. Therefore CountMin and gSketch cannot be used for conditional node queries or queries involving node connectivity. If these queries were to be run, the locality of the nodes has to be retained in the graph synopses. TCM\cite{tang_graph_2016} aims to solve this issue by storing the connectivity of the nodes in its data structure. TCM can summarize both node and edge information in constant time. Thus, it can answer a wide range of queries, unlike its predecessors. The structure of a TCM sketch is depicted in Fig.~\ref{fig:tcm}. In here \(w\) is the width of the sketch while \(d\) is the number of the hash functions. An edge \((i, j)\) of a graph stream will get hashed into the bucket at the location \((h_r(i), h_r(j))\) in the \(r\)th layer. TCM sketch could be considered as one of the pioneering works in summarizing data streams, which is directly related to our work presented in this paper.
 
 \begin{figure}[htbp]
     \centerline{\includegraphics[width=0.35\textwidth]{img/tcm.png}}

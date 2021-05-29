@@ -1,4 +1,5 @@
-\section{Approach}
+\section{Methodology}
+\label{sec:methodology}
 
 Through this research, we propose kMatrix, which is an improvement over the traditional gMatrix algorithm. The idea behind the kMatrix is to partition the 3-dimensional frequency matrix using a sample of the original graph steam as proposed in gSketch\cite{zhao_gsketch:_2011}. This idea has already been discussed in the TCM\cite{tang_graph_2016} work to a certain degree. However, we explore this approach extensively with the gMatrix data structure, which can answer reachability queries, unlike the TCM sketch. kMatrix can also answer the reachability queries, which makes it suitable for more application scenarios than TCM. The significance of our approach is that kMatrix can answer all the queries that gMatrix is able to with much higher accuracy while occupying the same amount of space as its counterpart gMatrix sketch. 
 
@@ -18,7 +19,7 @@ Fig.~\ref{fig:kmatrix} depicts the high-level view of kMatrix sketch after parti
 
 \subsubsection*{Partitioning Algorithm}
 
-Consider that the original sketch is partitioned into i sub-sketches. Let \(F(S_i)\) be the sum of the edge frequencies in the \(i\)th sketch. If \((m,n)\) is an edge in the \(i\)th sketch, let \(f(m,n)\) and \(\bar{f}(m,n)\) be its frequency and expected frequency \eqref{eq:1} respectively. 
+Consider that the original sketch is partitioned into i sub-sketches. Let \(F(S_i)\) be the sum of the edge frequencies in the \(i\)th sketch and \(w_i\) be its width. If \((m,n)\) is an edge in the \(i\)th sketch, let \(f(m,n)\) and \(\bar{f}(m,n)\) be its frequency and expected frequency \eqref{eq:1} respectively. 
 
 \begin{equation}
     \bar{f}(m,n) = \frac{F(S_i) - f(m,n)}{w_i}

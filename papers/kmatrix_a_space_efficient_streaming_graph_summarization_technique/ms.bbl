@@ -14,15 +14,15 @@ A.~Ching, S.~Edunov, M.~Kabiljo, D.~Logothetis, and S.~Muthukrishnan, ``One
   trillion edges: graph processing at {Facebook}-scale,'' {\em Proceedings of
   the VLDB Endowment}, vol.~8, pp.~1804--1815, Aug. 2015.
 
+\bibitem{mcgregor_graph_2014}
+A.~McGregor, ``Graph stream algorithms: a survey,'' {\em ACM SIGMOD Record},
+  vol.~43, pp.~9--20, May 2014.
+
 \bibitem{kumarage_efficient_2017}
 M.~S. Kumarage, Y.~Horawalavithana, and D.~Ranasinghe, ``An efficient query
   platform for streaming and dynamic natural graphs,'' in {\em 2017 {IEEE}
   {International} {Conference} on {Industrial} and {Information} {Systems}
   ({ICIIS})}, (Peradeniya), pp.~1--6, IEEE, Dec. 2017.
-
-\bibitem{mcgregor_graph_2014}
-A.~McGregor, ``Graph stream algorithms: a survey,'' {\em ACM SIGMOD Record},
-  vol.~43, pp.~9--20, May 2014.
 
 \bibitem{liu_graph_2018}
 Y.~Liu, T.~Safavi, A.~Dighe, and D.~Koutra, ``Graph {Summarization} {Methods}

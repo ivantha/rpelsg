@@ -1,4 +1,5 @@
-\section{Evaluation}
+\section{Implementation}
+\label{sec:implementation}
 
 \subsection{Experimental Setup}
 
@@ -34,10 +35,11 @@ cit-HepPh citation graph is from the e-print arXiv regarding high energy physics
 \subsubsection{Average Relative Error (ARE)}
 \label{section:metrics_are}
 
-The average relative error is defined as,
+The relative error \(er(Q)\) of a query \(Q\) is defined as \eqref{eq:9} where \(\tilde{f}'(Q)\) and \(f(Q)\) is the estimated frequency and the true frequency of the query respectively.
 
 \begin{equation}
     er(Q) =  \frac{\tilde{f}'(Q) - f(Q)}{f(Q)} = \frac{\tilde{f}'(Q)}{f(Q)} -1
+    \label{eq:9}
 \end{equation}
 
 Given a set of m queries, $\{ Q_1 , ....., Q_m \}$, the average relative error is defined by taking the average of the relative error of all queries $Q_i$ for \(i \in [1,m]\).
