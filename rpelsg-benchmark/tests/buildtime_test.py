@@ -214,5 +214,5 @@ def visualize():
 
 if __name__ == '__main__':
     print(os.path.basename(__file__).split('.')[0])
-    test(['../datasets/email-EuAll/100.txt'])
+    test(['../datasets/unicorn-wget-benign-base/10.txt'])
     visualize()
